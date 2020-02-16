@@ -8,6 +8,13 @@ class CScene
 public:
 	CScene();
 	virtual ~CScene() = 0;
+
+	virtual bool Initialize() = 0;
+	virtual void Input(float _fdTime) = 0;
+	virtual int Update(float _fdTime) = 0;
+	virtual void Late_Update(float _fdTime) = 0;
+	virtual void Render(HDC _DC, float _fdTime) = 0;
+	virtual void Release() = 0;
 };
 
 #endif

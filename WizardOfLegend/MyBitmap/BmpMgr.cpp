@@ -47,6 +47,15 @@ CMyBitmap * CBmpMgr::Get_BackBuffer() const
 	return m_pBackBuffer;
 }
 
+HDC CBmpMgr::Get_Bitmap_DC(const string & strKey)
+{
+	CMyBitmap* pBitmap = Find_Bitmap(strKey);
+	if (pBitmap)
+		return pBitmap->Get_DC();
+	else
+		return NULL;
+}
+
 void CBmpMgr::Release()
 {
 	SAFE_RELEASE(m_pBackBuffer);

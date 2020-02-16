@@ -8,6 +8,7 @@
 #include "Obj\ObjMgr.h"
 #include "MyBitmap\BmpMgr.h"
 #include "MyBitmap\MyBitmap.h"
+#include "Manager\SceneMgr.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -47,8 +48,8 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 		return false;
 
 	// 오브젝트 매니저 초기화
-	if (!CObjMgr::Get_Instance()->Initialize())
-		return false;
+	//if (!CObjMgr::Get_Instance()->Initialize())
+	//	return false;
 
 	// 스크롤 매니저 초기화
 	if (!CScrollMgr::Get_Instance()->Initialize())
@@ -59,35 +60,39 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 		return false;
 
 	// 라인 매니저 초기화 -> 나중에 라인 매니저 지울거임
-	if (!CLineMgr::Get_Instance()->Initialize())
-		return false;
+	//if (!CLineMgr::Get_Instance()->Initialize())
+	//	return false;
 	
 	// Scene 매니저 초기화
-
+	if (!CSceneMgr::Get_Instance()->Initialize())
+		return false;
 	return true;
 }
 
 void CMainGame::Input(float _fdTime)
 {
-	//CSceneMgr::Get_Instance()->Input(_fdTime);
-	CObjMgr::Get_Instance()->Input(_fdTime);
+	CSceneMgr::Get_Instance()->Input(_fdTime);
+	//CObjMgr::Get_Instance()->Input(_fdTime);
 }
 
 void CMainGame::Update(float _fdTime)
 {
-	// CSceneMgr::Get_Instance()->Update(fDeltaTime);
-	CObjMgr::Get_Instance()->Update(_fdTime);
+	CSceneMgr::Get_Instance()->Update(_fdTime);
+	//CObjMgr::Get_Instance()->Update(_fdTime);
 }
 
 void CMainGame::Late_Update(float _fdTime)
 {
-	CObjMgr::Get_Instance()->Late_Update(_fdTime);
+	CSceneMgr::Get_Instance()->Late_Update(_fdTime);
+	//CObjMgr::Get_Instance()->Late_Update(_fdTime);
 	CKeyMgr::Get_Instance()->Key_Update();
 }
 
 void CMainGame::Collision(float _fdTime)
 {
-	CObjMgr::Get_Instance()->Collision(_fdTime);
+	//CSceneMgr는 Collision 안하나?
+
+	//CObjMgr::Get_Instance()->Collision(_fdTime);
 }
 
 void CMainGame::Render(float _fdTime)
@@ -98,8 +103,9 @@ void CMainGame::Render(float _fdTime)
 	Rectangle(hBackBuffer, 0, 0, WINCX, WINCY);
 	// BitBlt(hBackBuffer, 0, 0, WINCX, WINCY, pBackGround->Get_DC(), -(int)CScrollMgr::Get_Instance()->Get_ScrollX(), -(int)CScrollMgr::Get_Instance()->Get_ScrollY(), SRCCOPY);
 
-	//CLineMgr::Get_Instance()->Render(hBackBuffer);
-	CObjMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
+	CSceneMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
+	// CLineMgr::Get_Instance()->Render(hBackBuffer);
+	//CObjMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
 
 	// 고속 전송
 	BitBlt(m_hDC, 0, 0, WINCX, WINCY,
@@ -112,9 +118,10 @@ void CMainGame::Release()
 {
 	ReleaseDC(g_hWnd, m_hDC);
 	CKeyMgr::Destroy_Instance();
-
 	CLineMgr::Destroy_Instance();
 	CScrollMgr::Destroy_Instance();
+	CBmpMgr::Destroy_Instance();
+	CSceneMgr::Destroy_Instance();
 	CPathMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
 	CTimer::Destroy_Instance();

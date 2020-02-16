@@ -1,5 +1,8 @@
 #include "../stdafx.h"
 #include "SceneMgr.h"
+#include "../Scene/Scene.h"
+#include "../Scene/Logo.h"
+#include "../Scene/TitleMenu.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -9,38 +12,47 @@ CSceneMgr::CSceneMgr()
 
 CSceneMgr::~CSceneMgr()
 {
+	Release();
 }
 
 bool CSceneMgr::Initialize()
 {
-	return false;
+	Scene_Change(CSceneMgr::SCENE_LOGO);
+	return true;
 }
 
 void CSceneMgr::Input(float _fdTime)
 {
+	m_pScene->Input(_fdTime);
 }
 
 void CSceneMgr::Update(float _fdTime)
 {
+	m_pScene->Update(_fdTime);
 }
 
 void CSceneMgr::Late_Update(float _fdTime)
 {
+	m_pScene->Late_Update(_fdTime);
 }
 
 void CSceneMgr::Collision(float _fdTime)
 {
+	//
 }
 
 void CSceneMgr::Render(HDC _DC, float _fdTime)
 {
+	if (m_pScene)
+		m_pScene->Render(_DC, _fdTime);
 }
 
 void CSceneMgr::Release()
 {
+	SAFE_DELETE(m_pScene);
 }
 
-/*
+// 코드 수정 필요: Scene 전환이 성공 실패 되게 해야함.
 void CSceneMgr::Scene_Change(SCENEID _eScene)
 {
 	m_eCurScene = _eScene;
@@ -62,8 +74,8 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 		case SCENE_EDIT:
 			break;
 		}
+
 		m_pScene->Initialize();
 		m_ePreScene = m_eCurScene;
 	}
 }
-*/

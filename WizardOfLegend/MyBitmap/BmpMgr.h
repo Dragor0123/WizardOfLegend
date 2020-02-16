@@ -17,6 +17,7 @@ public:
 		const wchar_t* pFileName, const string& strPathKey = BITMAP_PATH);
 	CMyBitmap* Find_Bitmap(const string& strKey);
 	CMyBitmap* Get_BackBuffer() const;
+	HDC Get_Bitmap_DC(const string& strKey);
 	void Release();
 
 private:
