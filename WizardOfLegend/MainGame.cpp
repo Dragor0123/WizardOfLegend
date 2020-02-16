@@ -6,6 +6,8 @@
 #include "Manager\ScrollMgr.h"
 #include "Line\LineMgr.h"
 #include "Obj\ObjMgr.h"
+#include "MyBitmap\BmpMgr.h"
+#include "MyBitmap\MyBitmap.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -52,14 +54,14 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 	if (!CScrollMgr::Get_Instance()->Initialize())
 		return false;
 
+	//// 비트맵 매니저 초기화
+	if (!CBmpMgr::Get_Instance()->Initialize(_hInst, m_hDC))
+		return false;
+
 	// 라인 매니저 초기화 -> 나중에 라인 매니저 지울거임
 	if (!CLineMgr::Get_Instance()->Initialize())
 		return false;
-
-	//// 비트맵 매니저 초기화
-	//if (!CResourcesMgr::Get_Instance()->Initialize(hInst, m_hDC))
-	//	return false;
-
+	
 	// Scene 매니저 초기화
 
 	return true;
@@ -85,14 +87,25 @@ void CMainGame::Late_Update(float _fdTime)
 
 void CMainGame::Collision(float _fdTime)
 {
+	CObjMgr::Get_Instance()->Collision(_fdTime);
 }
 
 void CMainGame::Render(float _fdTime)
 {
-	Rectangle(m_hDC, 0, 0, WINCX, WINCY);
+	CMyBitmap* pBackbuffer = CBmpMgr::Get_Instance()->Get_BackBuffer();
+	CMyBitmap* pBackGround = CBmpMgr::Get_Instance()->Load_Bitmap("Background", L"Stage1.bmp", BITMAP_PATH);
+	HDC hBackBuffer = pBackbuffer->Get_DC();
+	Rectangle(hBackBuffer, 0, 0, WINCX, WINCY);
+	// BitBlt(hBackBuffer, 0, 0, WINCX, WINCY, pBackGround->Get_DC(), -(int)CScrollMgr::Get_Instance()->Get_ScrollX(), -(int)CScrollMgr::Get_Instance()->Get_ScrollY(), SRCCOPY);
 
-	CLineMgr::Get_Instance()->Render(m_hDC);
-	CObjMgr::Get_Instance()->Render(m_hDC, _fdTime);
+	//CLineMgr::Get_Instance()->Render(hBackBuffer);
+	CObjMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
+
+	// 고속 전송
+	BitBlt(m_hDC, 0, 0, WINCX, WINCY,
+		hBackBuffer, 0, 0, SRCCOPY);
+
+	SAFE_RELEASE(pBackbuffer);
 }
 
 void CMainGame::Release()
