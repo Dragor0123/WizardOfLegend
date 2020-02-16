@@ -28,7 +28,7 @@ private:
 
 #define KEY_DOWN(key) CKeyMgr::Get_Instance()->Key_Down(key)
 #define KEY_UP(key) CKeyMgr::Get_Instance()->Key_Up(key)
-#define KEY_PRESSING(key) CKeyMgr::Get_Instance()->Key_Down(key)
+#define KEY_PRESSING(key) CKeyMgr::Get_Instance()->Key_Pressing(key)
 
 
 #endif

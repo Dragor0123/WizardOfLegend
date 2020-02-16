@@ -1,17 +1,15 @@
 #include "stdafx.h"
 #include "Ref.h"
 
-
 CRef::CRef()
-	: m_iRef(1), m_bEnable(true), m_bDead(true)
+	: m_iRef(1), m_strTag("")
 {
 }
 
 CRef::CRef(const CRef & _other)
-	: m_iRef(1), m_bEnable(_other.m_bEnable), m_bDead(_other.m_bDead)
+	: m_iRef(1), m_strTag(_other.m_strTag)
 {
 }
-
 
 CRef::~CRef()
 {

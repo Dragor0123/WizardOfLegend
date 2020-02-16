@@ -3,7 +3,6 @@
 #ifndef __STRUCT_H__
 #define __STRUCT_H__
 
-/*
 typedef struct tagInfo
 {
 	// 좌표의 자료형을 float으로 설정한 이유는 수학적 연산이 들어갈 경우
@@ -29,7 +28,6 @@ typedef struct tagInfo
 		iCY = _cy;
 	}
 }INFO;
-*/
 
 typedef struct tagLinePos
 {

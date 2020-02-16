@@ -14,7 +14,7 @@ void Safe_Delete(T& _obj)
 }
 
 template <typename T>
-class CObjCmp
+class CObjDistCmp
 {
 public:
 	bool operator()(T _a, T _b)
@@ -22,5 +22,54 @@ public:
 		return _a->Get_TargetDist() < _b->Get_TargetDist();
 	}
 };
+
+
+template <typename T>
+void Safe_Delete_VecList(T& _con)
+{
+	typename T::iterator iter;
+	typename T::iterator iterEnd = _con.end();
+
+	for (iter = _con.begin(); iter != iterEnd; ++iter)
+		SAFE_DELETE((*iter));
+
+	_con.clear();
+}
+
+template <typename T>
+void Safe_Delete_Map(T& _con)
+{
+	typename T::iterator iter;
+	typename T::iterator iterEnd = _con.end();
+
+	for (iter = _con.begin(); iter != iterEnd; ++iter)
+		SAFE_DELETE(iter->second);
+
+	_con.clear();
+}
+
+template <typename T>
+void Safe_Release_VecList(T& _con)
+{
+	typename T::iterator iter;
+	typename T::iterator iterEnd = _con.end();
+
+	for (iter = _con.begin(); iter != iterEnd; ++iter)
+		SAFE_RELEASE((*iter));
+
+	_con.clear();
+}
+
+template <typename T>
+void Safe_Release_Map(T& _con)
+{
+	typename T::iterator iter;
+	typename T::iterator iterEnd = _con.end();
+
+	for (iter = _con.begin(); iter != iterEnd; ++iter)
+		SAFE_RELEASE(iter->second);
+
+	_con.clear();
+}
 
 #endif // !__TEMPLATE_H__

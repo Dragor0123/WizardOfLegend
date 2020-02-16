@@ -25,16 +25,12 @@ public:
 
 public:
 	// Getter
-	bool Get_Enable() const { return m_bEnable; }
-	bool Is_Dead() const { return m_bDead; }
+	const string& Get_Tag() const { return m_strTag; }
 	// Setter
-	void Set_Enable(bool _bEnable) { m_bEnable = _bEnable; }
-	void Die() { m_bDead = false; }
-
+	void Set_Tag(const string& _strTag) { m_strTag = _strTag; }
 protected:
 	int			m_iRef;
-	bool		m_bEnable;
-	bool		m_bDead;
+	string		m_strTag;
 };
 
 #endif
