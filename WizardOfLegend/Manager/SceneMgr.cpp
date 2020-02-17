@@ -21,11 +21,6 @@ bool CSceneMgr::Initialize()
 	return true;
 }
 
-void CSceneMgr::Input(float _fdTime)
-{
-	m_pScene->Input(_fdTime);
-}
-
 void CSceneMgr::Update(float _fdTime)
 {
 	m_pScene->Update(_fdTime);
@@ -38,7 +33,7 @@ void CSceneMgr::Late_Update(float _fdTime)
 
 void CSceneMgr::Collision(float _fdTime)
 {
-	//
+	m_pScene->Collision(_fdTime);
 }
 
 void CSceneMgr::Render(HDC _DC, float _fdTime)
@@ -69,7 +64,7 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 		case SCENE_MENU:
 			m_pScene = new CTitleMenu;
 			break;
-		case SCENE_STAGE:
+		case SCENE_STAGE1:
 			break;
 		case SCENE_EDIT:
 			break;

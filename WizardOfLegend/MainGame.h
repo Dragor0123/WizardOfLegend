@@ -14,7 +14,6 @@ public:
 	void Logic();
 
 private:
-	void Input(float _fdTime);
 	void Update(float _fdTime);		
 	void Late_Update(float _fdTime);
 	void Collision(float _fdTime);

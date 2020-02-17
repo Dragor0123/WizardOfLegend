@@ -48,28 +48,4 @@ void Safe_Delete_Map(T& _con)
 	_con.clear();
 }
 
-template <typename T>
-void Safe_Release_VecList(T& _con)
-{
-	typename T::iterator iter;
-	typename T::iterator iterEnd = _con.end();
-
-	for (iter = _con.begin(); iter != iterEnd; ++iter)
-		SAFE_RELEASE((*iter));
-
-	_con.clear();
-}
-
-template <typename T>
-void Safe_Release_Map(T& _con)
-{
-	typename T::iterator iter;
-	typename T::iterator iterEnd = _con.end();
-
-	for (iter = _con.begin(); iter != iterEnd; ++iter)
-		SAFE_RELEASE(iter->second);
-
-	_con.clear();
-}
-
 #endif // !__TEMPLATE_H__

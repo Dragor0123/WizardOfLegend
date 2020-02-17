@@ -11,7 +11,7 @@ namespace MOVEDIR
 namespace OBJID
 {
 	//UI가 들어갈 수도 있음
-	enum ID { PLAYER, MONSTER, BULLET, GOODS, NPC, CARD, ALTAR, ORB, PORTAL, MOUSE, END };
+	enum ID { PLAYER, MONSTER, BULLET, GOODS, NPC, CARD, ALTAR, ORB, PORTAL, UI, MOUSE, END };
 }
 
 #endif // !__ENUM_H__

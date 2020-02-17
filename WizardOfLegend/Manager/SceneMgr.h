@@ -12,11 +12,10 @@ class CSceneMgr : public Singleton<CSceneMgr>
 	friend class Singleton<CSceneMgr>;
 
 public:
-	enum SCENEID { SCENE_LOGO, SCENE_MENU, SCENE_STAGE, SCENE_EDIT, SCENE_END };
+	enum SCENEID { SCENE_LOGO, SCENE_MENU, SCENE_STAGE1, SCENE_EDIT, SCENE_END };
 
 public:
 	bool Initialize();
-	void Input(float _fdTime);
 	void Update(float _fdTime);
 	void Late_Update(float _fdTime);
 	void Collision(float _fdTime);

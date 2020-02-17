@@ -2,72 +2,50 @@
 #include "BmpMgr.h"
 #include "MyBitmap.h"
 
-bool CBmpMgr::Initialize(HINSTANCE _hInst, HDC _DC)
-{
-	m_hInst = _hInst;
-	m_hDC = _DC;
-	m_pBackBuffer = Load_Bitmap("Backbuffer", L"Backbuffer.bmp", BITMAP_PATH);
-
-	return true;
-}
-
-CMyBitmap * CBmpMgr::Load_Bitmap(const string & strKey, const wchar_t * pFileName, const string & strPathKey)
-{
-	CMyBitmap* pBitmap = Find_Bitmap(strKey);
-	if (pBitmap)
-		return pBitmap;
-
-	pBitmap = new CMyBitmap;
-
-	if (!pBitmap->Load_Bitmap(m_hInst, m_hDC, strKey, pFileName, strPathKey))
-	{
-		SAFE_RELEASE(pBitmap);
-		return nullptr;
-	}
-
-	pBitmap->AddRef();
-	m_mapStrBmp.emplace(strKey, pBitmap);
-
-	return pBitmap;
-}
-
-CMyBitmap * CBmpMgr::Find_Bitmap(const string & strKey)
-{
-	auto iter = m_mapStrBmp.find(strKey);
-	if (m_mapStrBmp.end() == iter)
-		return nullptr;
-
-	iter->second->AddRef();
-	return iter->second;
-}
-
-CMyBitmap * CBmpMgr::Get_BackBuffer() const
-{
-	m_pBackBuffer->AddRef();
-	return m_pBackBuffer;
-}
-
-HDC CBmpMgr::Get_Bitmap_DC(const string & strKey)
-{
-	CMyBitmap* pBitmap = Find_Bitmap(strKey);
-	if (pBitmap)
-		return pBitmap->Get_DC();
-	else
-		return NULL;
-}
-
-void CBmpMgr::Release()
-{
-	SAFE_RELEASE(m_pBackBuffer);
-	Safe_Release_Map(m_mapStrBmp);
-}
-
 CBmpMgr::CBmpMgr()
-	: m_hInst(NULL), m_hDC(NULL), m_pBackBuffer(nullptr)
 {
 }
 
 CBmpMgr::~CBmpMgr()
 {
 	Release();
+}
+
+bool CBmpMgr::Initialize()
+{
+	if (!Insert_Bmp(L"Bitmap/BackBuffer.bmp", "BackBuffer"))
+		return false;
+	return true;
+}
+
+bool CBmpMgr::Insert_Bmp(const TCHAR * _pFilePath, const string & _strImageKey)
+{
+	auto iter = m_mapStrBmp.find(_strImageKey);
+
+	if (m_mapStrBmp.end() == iter)
+	{
+		CMyBitmap* pBmp = new CMyBitmap;
+		if (!pBmp->Load_Bmp(_pFilePath)) {
+			SAFE_DELETE(pBmp);
+			MessageBox(NULL, L"파일 없음", L"파일 없음", MB_OK);
+			return false;
+		}
+
+		m_mapStrBmp.emplace(_strImageKey, pBmp);
+	}
+	return true;
+}
+
+HDC CBmpMgr::Find_Image(const string & _strImageKey)
+{
+	auto iter = m_mapStrBmp.find(_strImageKey);
+	if (m_mapStrBmp.end() == iter)
+		return NULL;
+
+	return iter->second->Get_MemDC();
+}
+
+void CBmpMgr::Release()
+{
+	Safe_Delete_Map(m_mapStrBmp);
 }

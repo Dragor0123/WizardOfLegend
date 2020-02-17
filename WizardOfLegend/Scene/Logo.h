@@ -12,10 +12,11 @@ public:
 	virtual ~CLogo();
 
 	// Inherited via CScene
+	virtual void Key_Check();
 	virtual bool Initialize();
-	virtual void Input(float _fdTime);
 	virtual int Update(float _fdTime);
 	virtual void Late_Update(float _fdTime);
+	virtual void Collision(float _fdTime);
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
 };

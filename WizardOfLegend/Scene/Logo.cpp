@@ -13,36 +13,39 @@ CLogo::~CLogo()
 {
 }
 
-bool CLogo::Initialize()
+void CLogo::Key_Check()
 {
-	if (CBmpMgr::Get_Instance()->Load_Bitmap("Logo", L"Logo\\Logo.bmp", BITMAP_PATH))
-		return true;
-	else
-		return false;
-}
-
-void CLogo::Input(float _fdTime)
-{
-	if (KEY_DOWN(VK_RETURN))
-	{
+	if (KEY_DOWN(VK_RETURN)) {
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_MENU);
 	}
 }
 
+bool CLogo::Initialize()
+{
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Logo/Logo.bmp", "Logo"))
+		return false;
+	else
+		return true;
+}
+
 int CLogo::Update(float _fdTime)
 {
-	return 0;
+	return OBJ_NOEVENT;
 }
 
 void CLogo::Late_Update(float _fdTime)
+{
+	Key_Check();
+}
+
+void CLogo::Collision(float _fdTime)
 {
 }
 
 void CLogo::Render(HDC _DC, float _fdTime)
 {
-	HDC hMemDC = CBmpMgr::Get_Instance()->Get_Bitmap_DC("Logo");
-	if (hMemDC != NULL)
-		BitBlt(_DC, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
+	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("Logo");
+	BitBlt(_DC, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
 }
 
 void CLogo::Release()

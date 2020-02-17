@@ -13,16 +13,11 @@
 
 //#define HPBARX 460
 
-// °æ·Î
-#define ROOT_PATH	"RootPath"
-#define BITMAP_PATH "BitmapPath"
-
 #define OBJ_NOEVENT 0
 #define OBJ_DEAD 1
 
 #define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARR(p) if(p) { delete[] p; p = nullptr;}
-#define SAFE_RELEASE(p) if(p) { p->Release(); p = nullptr;}
 
 #define PI  3.1415926535897f
 #define GRAVITY 9.80665f

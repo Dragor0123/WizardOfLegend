@@ -12,12 +12,9 @@ class CBmpMgr : public Singleton<CBmpMgr>
 	friend class Singleton<CBmpMgr>;
 
 public:
-	bool Initialize(HINSTANCE _hInst, HDC _DC);
-	CMyBitmap* Load_Bitmap(const string& strKey,
-		const wchar_t* pFileName, const string& strPathKey = BITMAP_PATH);
-	CMyBitmap* Find_Bitmap(const string& strKey);
-	CMyBitmap* Get_BackBuffer() const;
-	HDC Get_Bitmap_DC(const string& strKey);
+	bool Initialize();
+	bool Insert_Bmp(const TCHAR* _pFilePath, const string& _strImageKey);
+	HDC Find_Image(const string& _strImageKey);
 	void Release();
 
 private:
@@ -28,9 +25,6 @@ private:
 
 private:
 	unordered_map<string, CMyBitmap*> m_mapStrBmp;
-	HINSTANCE		m_hInst;
-	HDC				m_hDC;
-	CMyBitmap*		m_pBackBuffer;
 };
 
 #endif
