@@ -12,7 +12,7 @@
 //#define BOTTOM_CAPTION 100
 
 //#define HPBARX 460
-
+#define MAGENTA_COLOR RGB(255, 0, 255)
 #define OBJ_NOEVENT 0
 #define OBJ_DEAD 1
 
@@ -21,5 +21,9 @@
 
 #define PI  3.1415926535897f
 #define GRAVITY 9.80665f
+
+// Tile
+#define TILECX 64
+#define TILECY 64
 
 #endif // !__DEFINE_H__

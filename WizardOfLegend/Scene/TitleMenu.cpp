@@ -17,6 +17,7 @@ CTitleMenu::CTitleMenu()
 
 CTitleMenu::~CTitleMenu()
 {
+	Release();
 }
 
 bool CTitleMenu::Initialize()

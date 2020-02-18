@@ -146,8 +146,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case VK_ESCAPE:
-			g_bGameLoop = false;
-			DestroyWindow(hWnd);
+			//g_bGameLoop = false;
+			//DestroyWindow(hWnd);
 			break;
 		}
 		break;

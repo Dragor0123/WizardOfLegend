@@ -29,6 +29,15 @@ typedef struct tagInfo
 	}
 }INFO;
 
+typedef struct tagFrame
+{
+	int		iFrameStart;	// frame x축 0번째
+	int		iFrameEnd;		// frame x축 마지막
+	int		iFrameScene;	//frame Y축
+	DWORD	dwFrameSpeed;
+	DWORD	dwFrameTime;
+}FRAME;
+
 typedef struct tagLinePos
 {
 	tagLinePos() { ZeroMemory(this, sizeof(tagLinePos)); }

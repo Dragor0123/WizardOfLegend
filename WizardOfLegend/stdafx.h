@@ -18,6 +18,8 @@
 #include <memory.h>
 #include <tchar.h>
 #include <crtdbg.h>
+#include <time.h>
+
 // TODO: reference additional headers your program requires here
 
 #pragma comment(lib, "msimg32")

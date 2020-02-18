@@ -35,6 +35,7 @@ void CMainGame::Logic()
 bool CMainGame::Initialize(HINSTANCE _hInst)
 {
 	m_hInst = _hInst;
+	srand(unsigned(time(NULL)));
 
 	m_hDC = GetDC(g_hWnd);
 	// 타이머 초기화

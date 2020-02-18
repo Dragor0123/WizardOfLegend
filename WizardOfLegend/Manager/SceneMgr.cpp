@@ -3,6 +3,7 @@
 #include "../Scene/Scene.h"
 #include "../Scene/Logo.h"
 #include "../Scene/TitleMenu.h"
+#include "../Scene/Stage1.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -64,7 +65,12 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 		case SCENE_MENU:
 			m_pScene = new CTitleMenu;
 			break;
+		case SCENE_HOUSE:
+			break;
+		case SCENE_PLAZA:
+			break;
 		case SCENE_STAGE1:
+			m_pScene = new CStage1;
 			break;
 		case SCENE_EDIT:
 			break;
