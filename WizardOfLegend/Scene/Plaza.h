@@ -1,15 +1,14 @@
 #pragma once
 
-#ifndef __TILEEDIT_H__
-#define __TILEEDIT_H__
-
+#ifndef __PLAZA_H__
+#define __PLAZA_H__
 #include "Scene.h"
 
-class CTileEdit : public CScene
+class CPlaza : public CScene
 {
 public:
-	CTileEdit();
-	virtual ~CTileEdit();
+	CPlaza();
+	virtual ~CPlaza();
 
 	// Inherited via CScene
 	virtual bool Initialize();
@@ -18,19 +17,7 @@ public:
 	virtual void Collision(float _fdTime);
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
-
 	virtual void Key_Check();
-
-private:
-	bool Reload_TileMgr();
-
-private:
-	int							m_iRow;
-	int							m_iCol;
-	CObj*						m_pTileForPick;
-	TILEENUM::ID				m_curTileID;
-	TILEENUM::OPTION			m_eTileOpt;
-
 };
 
 #endif

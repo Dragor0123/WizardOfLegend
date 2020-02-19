@@ -66,6 +66,9 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 	if (!CSceneMgr::Get_Instance()->Initialize())
 		return false;
 
+	if (!CTileMgr::Get_Instance()->Initialize("PlazaTile"))
+		return false;
+
 	return true;
 }
 

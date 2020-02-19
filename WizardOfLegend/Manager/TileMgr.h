@@ -13,7 +13,7 @@ class CTileMgr : public Singleton<CTileMgr>
 	friend void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst);
 
 public:
-	bool Initialize();
+	bool Initialize(const string& _strKey);
 	void Update(float _fdTime);
 	void Late_Update(float _fdTime);
 	void Render(HDC _DC, float _fdTime);
@@ -31,8 +31,8 @@ public:
 	void Catching_Tile(POINT& _pt,
 		int* _iDrawRow, int* _iDrawCol, TILEENUM::OPTION* _eOption);
 
-	void Save_Tile();
-	void Load_Tile();
+	void Save_Tile(const string& _strImageKey);
+	void Load_Tile(const string& _strImageKey);
 
 private:
 	CTileMgr();
@@ -42,6 +42,7 @@ private:
 
 private:
 	vector<CObj*>		m_vecTile;
+	unordered_map<string, wstring> m_mapFile;
 };
 
 #endif

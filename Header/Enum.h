@@ -16,7 +16,7 @@ namespace OBJID
 
 namespace TILEENUM
 {
-	enum ID { ID_FIRE, ID_HOUSE, ID_PLAZA, ID_ICE, ID_END};
+	enum ID { ID_PLAZA, ID_FIRE, ID_HOUSE, ID_ICE, ID_END};
 	enum OPTION { OPT_MOVE, OPT_STOP, OPT_DROP, OPT_END };
 }
 

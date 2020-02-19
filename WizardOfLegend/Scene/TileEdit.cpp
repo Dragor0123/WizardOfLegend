@@ -8,9 +8,11 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/Tile.h"
 #include "../Manager/ScrollMgr.h"
+#include "../Obj/PlazaTile.h"
 
 CTileEdit::CTileEdit()
-	: m_iRow(0), m_iCol(0), m_pTileForPick(nullptr), m_eTileOpt(TILEENUM::OPT_MOVE)
+	: m_iRow(0), m_iCol(0), m_pTileForPick(nullptr),
+	m_eTileOpt(TILEENUM::OPT_MOVE), m_curTileID(TILEENUM::ID_FIRE)
 {
 }
 
@@ -24,9 +26,8 @@ bool CTileEdit::Initialize()
 {
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/fireMapTile.bmp", "FireTile"))
 		return false;
-	CTileMgr::Get_Instance()->Initialize();
+	CTileMgr::Get_Instance()->Initialize("FireTile");
 	m_pTileForPick = CAbstractFactory<CFireTile>::Create(float(1120 - (TILECX >> 1)), float(80 - (TILECY >> 1)));
-	CObjMgr::Get_Instance()->Initialize();
 	return true;
 }
 
@@ -37,14 +38,12 @@ int CTileEdit::Update(float _fdTime)
 	dynamic_cast<CTile*>(m_pTileForPick)->Set_DrawID_Row(m_iRow);
 	dynamic_cast<CTile*>(m_pTileForPick)->Set_Option(m_eTileOpt);
 	CTileMgr::Get_Instance()->Update(_fdTime);
-	CObjMgr::Get_Instance()->Update(_fdTime);
 	return 0;
 }
 
 void CTileEdit::Late_Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Late_Update(_fdTime);
-	CObjMgr::Get_Instance()->Late_Update(_fdTime);
 }
 
 void CTileEdit::Collision(float _fdTime)
@@ -61,14 +60,12 @@ void CTileEdit::Render(HDC _DC, float _fdTime)
 	m_pTileForPick->Render(hOneTileDC, _fdTime, 0, 0);
 	swprintf_s(szText, L"타일옵션: %d", (int)(m_eTileOpt));
 	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
-	CObjMgr::Get_Instance()->Render(_DC, _fdTime);
 	ReleaseDC(g_hWnd, hOneTileDC);
 }
 
 void CTileEdit::Release()
 {
 	CTileMgr::Destroy_Instance();
-	CObjMgr::Destroy_Instance();
 	SAFE_DELETE(m_pTileForPick);
 }
 
@@ -116,12 +113,44 @@ void CTileEdit::Key_Check()
 		}
 	}
 
+	if (KEY_DOWN('2')) {
+		m_curTileID = TILEENUM::ID_FIRE;
+		if (!Reload_TileMgr()) {
+			MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
+		}
+	}
+	else if (KEY_DOWN('1')) {
+ 		m_curTileID = TILEENUM::ID_PLAZA;
+		if (!Reload_TileMgr()) {
+			MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
+		}
+	}
+
+	string strKey;
+	switch (m_curTileID)
+	{
+	case TILEENUM::ID_FIRE:
+		strKey = "FireTile";
+		break;
+	case TILEENUM::ID_HOUSE:
+		break;
+	case TILEENUM::ID_PLAZA:
+		strKey = "PlazaTile";
+		break;
+	case TILEENUM::ID_ICE:
+		break;
+	case TILEENUM::ID_END:
+		break;
+	default:
+		break;
+	}
+
 	if (KEY_DOWN('O')) {
-		CTileMgr::Get_Instance()->Save_Tile();
+		CTileMgr::Get_Instance()->Save_Tile(strKey);
 		MessageBox(NULL, L"타일 저장!", L"SAVE", MB_OK);
 	}
 	if (KEY_DOWN('L')) {
-		CTileMgr::Get_Instance()->Load_Tile();
+		CTileMgr::Get_Instance()->Load_Tile(strKey);
 		MessageBox(NULL, L"타일 불러오기!", L"LOAD", MB_OK);
 	}
 
@@ -159,4 +188,35 @@ void CTileEdit::Key_Check()
 			MessageBox(NULL, L"CTileMgr: m_vecTile 범위 초과 ", L"out_of_range", MB_OK);
 		}
 	}
+}
+
+bool CTileEdit::Reload_TileMgr()
+{
+	CTileMgr::Get_Instance()->Release();
+	SAFE_DELETE(m_pTileForPick);
+	float fTileX = float(1120 - (TILECX >> 1));
+	float fTileY = float(80 - (TILECY >> 1));
+
+	switch (m_curTileID)
+	{
+	case TILEENUM::ID_FIRE:
+		CTileMgr::Get_Instance()->Initialize("FireTile");
+		if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/fireMapTile.bmp", "FireTile"))
+			return false;
+		m_pTileForPick = CAbstractFactory<CFireTile>::Create(fTileX, fTileY);
+		return true;
+	case TILEENUM::ID_HOUSE:
+		break;
+	case TILEENUM::ID_PLAZA:
+		CTileMgr::Get_Instance()->Initialize("PlazaTile");
+		if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/plazaTile.bmp", "PlazaTile"))
+			return false;
+		m_pTileForPick = CAbstractFactory<CPlazaTile>::Create(fTileX, fTileY);
+		return true;
+	case TILEENUM::ID_ICE:
+		break;
+	default:
+		break;
+	}
+	return false;
 }

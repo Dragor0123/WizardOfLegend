@@ -5,6 +5,7 @@
 #include "../MyBitmap/MyBitmap.h"
 #include "../Obj/Tile.h"
 #include "../Obj/FireTile.h"
+#include "../Obj/PlazaTile.h"
 
 CTileMgr::CTileMgr()
 {
@@ -13,11 +14,15 @@ CTileMgr::CTileMgr()
 CTileMgr::~CTileMgr()
 {
 	Release();
+	m_mapFile.clear();
 }
 
 
-bool CTileMgr::Initialize()
+bool CTileMgr::Initialize(const string & _strKey)
 {
+	m_mapFile.emplace(string("FireTile"), wstring(L"../Data/FireTile.dat"));
+	m_mapFile.emplace(string("PlazaTile"), wstring(L"../Data/PlazaTile.dat"));
+	m_vecTile.clear();
 	m_vecTile.reserve(TILE_NUMX * TILE_NUMY);
 
 	for (int i = 0; i < TILE_NUMY; ++i)
@@ -27,7 +32,10 @@ bool CTileMgr::Initialize()
 			float fX = (float)(TILECX * j) + (TILECX >> 1);
 			float fY = (float)(TILECY * i) + (TILECY >> 1);
 			CObj* pObj = nullptr;
-			pObj = CAbstractFactory<CFireTile>::Create(fX, fY);
+			if (_strKey == "FireTile")
+				pObj = CAbstractFactory<CFireTile>::Create(fX, fY);
+			else if (_strKey == "PlazaTile")
+				pObj = CAbstractFactory<CPlazaTile>::Create(fX, fY);
 			m_vecTile.push_back(pObj);
 		}
 	}
@@ -64,6 +72,7 @@ void CTileMgr::Render(HDC _DC, float _fdTime)
 	}
 }
 
+// 벡터만 클리어한다. map_File은 소멸자에서 직접
 void CTileMgr::Release()
 {
 	Safe_Delete_VecList(m_vecTile);
@@ -132,9 +141,25 @@ void CTileMgr::Catching_Tile(POINT & _pt, int * _iDrawRow, int * _iDrawCol, TILE
 }
 
 // 지금 Save Load가 fire tile일 경우에만 적용됨.
-void CTileMgr::Save_Tile()
+void CTileMgr::Save_Tile(const string& _strImageKey)
 {
-	HANDLE hFile = CreateFile(L"../Data/FireTile.dat"
+	auto iter = m_mapFile.find(_strImageKey);
+	wstring wstrFilePath;
+	if (m_mapFile.end() == iter)
+	{
+		size_t cn = 0;
+		TCHAR szBuff[64];
+		mbstowcs_s(&cn, szBuff, 64, _strImageKey.c_str(), 63);
+		wstrFilePath = L"../Data/";
+		wstrFilePath += szBuff;
+		wstrFilePath += L".dat";
+		m_mapFile.emplace(_strImageKey, wstrFilePath);
+	}
+	else {
+		wstrFilePath = iter->second;
+	}
+
+	HANDLE hFile = CreateFile(wstrFilePath.c_str()
 		, GENERIC_WRITE, NULL, NULL
 		, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile == NULL) {
@@ -157,9 +182,17 @@ void CTileMgr::Save_Tile()
 	CloseHandle(hFile);
 }
 
-void CTileMgr::Load_Tile()
+void CTileMgr::Load_Tile(const string& _strImageKey)
 {
-	HANDLE hFile = CreateFile(L"../Data/FireTile.dat"
+	auto iter = m_mapFile.find(_strImageKey);
+
+	if (m_mapFile.end() == iter) {
+		MessageBox(NULL, L"Key에 해당하는 파일경로가 없음", L"CTileMgr::Load_Tile", MB_OK);
+		return;
+	}
+
+	wstring wstrFilePath = iter->second;
+	HANDLE hFile = CreateFile(wstrFilePath.c_str()
 		, GENERIC_READ, NULL, NULL
 		, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -185,7 +218,13 @@ void CTileMgr::Load_Tile()
 		if (0 == dwByte)
 			break;
 
-		CObj*	pObj = CAbstractFactory<CFireTile>::Create(tInfo.fX, tInfo.fY);
+		CObj*	pObj = nullptr;
+		if (_strImageKey == "FireTile"){
+			pObj = CAbstractFactory<CFireTile>::Create(tInfo.fX, tInfo.fY);
+		}
+		else if (_strImageKey == "PlazaTile") {
+			pObj = CAbstractFactory<CPlazaTile>::Create(tInfo.fX, tInfo.fY);
+		}
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Row(iDrawRow);
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Col(iDrawCol);
 		dynamic_cast<CTile*>(pObj)->Set_Option(eOption);

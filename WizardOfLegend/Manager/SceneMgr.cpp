@@ -5,6 +5,7 @@
 #include "../Scene/TitleMenu.h"
 #include "../Scene/Stage1.h"
 #include "../Scene/TileEdit.h"
+#include "../Scene/Plaza.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -69,6 +70,7 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 		case SCENE_HOUSE:
 			break;
 		case SCENE_PLAZA:
+			m_pScene = new CPlaza;
 			break;
 		case SCENE_STAGE1:
 			m_pScene = new CStage1;
@@ -78,7 +80,8 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		}
 
-		m_pScene->Initialize();
+		// 마지막에 지워줄 것
+		assert(m_pScene->Initialize());
 		m_ePreScene = m_eCurScene;
 	}
 }
