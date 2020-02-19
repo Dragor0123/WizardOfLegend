@@ -4,11 +4,13 @@
 #define __TILEMGR_H__
 
 #include "Singleton.h"
+#include "../Manager/CollisionMgr.h"
 
 class CObj;
 class CTileMgr : public Singleton<CTileMgr>
 {
 	friend class Singleton<CTileMgr>;
+	friend void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst);
 
 public:
 	bool Initialize();

@@ -8,6 +8,7 @@
 #define MAX_LOADSTRING 100
 
 // Global Variables:
+bool g_FPS_ON = false;
 bool g_bGameLoop = true;
 HWND g_hWnd;
 HINSTANCE hInst;                                // current instance
@@ -148,6 +149,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case VK_ESCAPE:
 			//g_bGameLoop = false;
 			//DestroyWindow(hWnd);
+			break;
+
+		case VK_F1:
+			g_FPS_ON = (g_FPS_ON) ? false : true;
 			break;
 		}
 		break;

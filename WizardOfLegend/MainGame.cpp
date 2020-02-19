@@ -12,12 +12,20 @@
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
 {
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//#ifdef _DEBUG
+//	// 콘솔창을 생성시켜주는 함수이다.
+//	AllocConsole();
+//#endif //DEBUG
 }
 
 
 CMainGame::~CMainGame()
 {
 	Release();
+//#ifdef _DEBUG
+//	FreeConsole();
+//#endif //DEBUG
 }
 
 void CMainGame::Logic()
@@ -75,8 +83,7 @@ void CMainGame::Late_Update(float _fdTime)
 
 void CMainGame::Collision(float _fdTime)
 {
-	//CSceneMgr는 Collision 안하나?
-	//CSceneMgr::Get_Instance()->Collision(_fdTime)
+	CSceneMgr::Get_Instance()->Collision(_fdTime);
 }
 
 void CMainGame::Render(float _fdTime)
@@ -87,6 +94,11 @@ void CMainGame::Render(float _fdTime)
 	CSceneMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
 
 	BitBlt(m_hDC, 0, 0, WINCX, WINCY, hBackBuffer, 0, 0, SRCCOPY);
+
+	if (!g_FPS_ON)
+		Render_Mouse_Pt();
+	else
+		Render_FPS();
 }
 
 void CMainGame::Release()
@@ -99,4 +111,24 @@ void CMainGame::Release()
 	CObjMgr::Destroy_Instance();
 	CTimer::Destroy_Instance();
 	ReleaseDC(g_hWnd, m_hDC);
+}
+
+void CMainGame::Render_Mouse_Pt()
+{
+	POINT	pt = {};
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+	pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+	pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
+	// 마우스를 활성화 비활성화 시켜서 Render를 안할수 있겠지...
+	TCHAR szBuff[16] = L"";
+	swprintf_s(szBuff, L"좌표(%d, %d)", (int)(pt.x), (int)(pt.y));
+	SetWindowText(g_hWnd, szBuff);
+}
+
+void CMainGame::Render_FPS()
+{
+	TCHAR szFPS[32] = L"";
+	swprintf_s(szFPS, 32, L"FPS : %.f", CTimer::Get_Instance()->Get_FPS());
+	SetWindowText(g_hWnd, szFPS);
 }

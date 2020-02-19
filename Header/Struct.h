@@ -47,14 +47,14 @@ typedef struct tagLinePos
 	float fY;
 }LINEPOS;
 
-typedef struct tagLineInfo
-{
-	tagLineInfo() { ZeroMemory(this, sizeof(tagLineInfo)); }
-	tagLineInfo(const LINEPOS& _tLeft, const LINEPOS& _tRight)
-		: tLeftPos(_tLeft), tRightPos(_tRight) {}
-
-	LINEPOS tLeftPos;
-	LINEPOS tRightPos;
-}LINEINFO;
+//typedef struct tagLineInfo
+//{
+//	tagLineInfo() { ZeroMemory(this, sizeof(tagLineInfo)); }
+//	tagLineInfo(const LINEPOS& _tLeft, const LINEPOS& _tRight)
+//		: tLeftPos(_tLeft), tRightPos(_tRight) {}
+//
+//	LINEPOS tLeftPos;
+//	LINEPOS tRightPos;
+//}LINEINFO;
 
 #endif // !__STRUCT_H__

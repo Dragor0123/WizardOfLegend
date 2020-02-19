@@ -44,11 +44,23 @@ void CTileMgr::Late_Update(float _fdTime)
 
 void CTileMgr::Render(HDC _DC, float _fdTime)
 {
-	for (auto& Tile : m_vecTile)
+	int iCullX = abs((int)CScrollMgr::Get_Instance()->Get_ScrollX() / TILECX);
+	int iCullY = abs((int)CScrollMgr::Get_Instance()->Get_ScrollY() / TILECY);
+
+	int iCullEndX = iCullX + WINCX / TILECX + 2;
+	int iCullEndY = iCullY + WINCY / TILECY + 2;
+
+	for (int i = iCullY; i < iCullEndY; ++i)
 	{
-		Tile->Render(_DC, _fdTime, 
-			CScrollMgr::Get_Instance()->Get_ScrollX(),
-			CScrollMgr::Get_Instance()->Get_ScrollY());
+		for (int j = iCullX; j < iCullEndX; ++j)
+		{
+			int iIndx = i * TILE_NUMX + j;
+
+			if (0 > iIndx || m_vecTile.size() <= (size_t)iIndx)
+				continue;
+
+			m_vecTile[iIndx]->Render(_DC, _fdTime, CScrollMgr::Get_Instance()->Get_ScrollX(), CScrollMgr::Get_Instance()->Get_ScrollY());
+		}
 	}
 }
 

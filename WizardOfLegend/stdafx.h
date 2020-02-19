@@ -19,6 +19,9 @@
 #include <tchar.h>
 #include <crtdbg.h>
 #include <time.h>
+#include <conio.h>
+
+//crtdbg랑 conio.h 는 최종본에서 빼자
 
 // TODO: reference additional headers your program requires here
 

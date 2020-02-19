@@ -21,6 +21,7 @@ public:
 	
 	// Setter
 	void Set_TimeScale(float _ftScale) { m_fTimeScale = m_fTimeScale; }
+
 private:
 	CTimer();
 	~CTimer();
@@ -36,7 +37,6 @@ private:
 	// 나중에 생각하기
 	float			m_fFPS;
 	float			m_fFPSTime;
-	int				m_iFrameMax;
 	int				m_iFrame;
 };
 

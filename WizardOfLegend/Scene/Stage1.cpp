@@ -22,7 +22,7 @@ bool CStage1::Initialize()
 		return false;
 
 	CTileMgr::Get_Instance()->Load_Tile();
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create();
+	CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 300.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
 
 	return true;
@@ -43,6 +43,7 @@ void CStage1::Late_Update(float _fdTime)
 
 void CStage1::Collision(float _fdTime)
 {
+	CObjMgr::Get_Instance()->Collision(_fdTime);
 }
 
 void CStage1::Render(HDC _DC, float _fdTime)

@@ -19,6 +19,8 @@ private:
 	void Collision(float _fdTime);
 	void Render(float _fdTime);
 	void Release();
+	void Render_Mouse_Pt();
+	void Render_FPS();
 
 private:
 	CMainGame();

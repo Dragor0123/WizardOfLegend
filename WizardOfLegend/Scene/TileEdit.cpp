@@ -75,13 +75,13 @@ void CTileEdit::Release()
 void CTileEdit::Key_Check()
 {
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
-		CScrollMgr::Get_Instance()->Set_ScrollX(50.f);
+		CScrollMgr::Get_Instance()->Set_ScrollX(5.f);
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
-		CScrollMgr::Get_Instance()->Set_ScrollX(-50.f);
+		CScrollMgr::Get_Instance()->Set_ScrollX(-5.f);
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_UP))
-		CScrollMgr::Get_Instance()->Set_ScrollY(50.f);
+		CScrollMgr::Get_Instance()->Set_ScrollY(5.f);
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
-		CScrollMgr::Get_Instance()->Set_ScrollY(-50.f);
+		CScrollMgr::Get_Instance()->Set_ScrollY(-5.f);
 
 	if (KEY_DOWN('A')) {
 		--m_iCol;
@@ -131,8 +131,8 @@ void CTileEdit::Key_Check()
 		GetCursorPos(&pt);
 		ScreenToClient(g_hWnd, &pt);
 
-		pt.x -= CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= CScrollMgr::Get_Instance()->Get_ScrollY();
+		pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
 
 		try {
 			CTileMgr::Get_Instance()->Picking_Tile(pt, m_iRow, m_iCol, m_eTileOpt);
@@ -149,8 +149,8 @@ void CTileEdit::Key_Check()
 		GetCursorPos(&pt);
 		ScreenToClient(g_hWnd, &pt);
 
-		pt.x -= CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= CScrollMgr::Get_Instance()->Get_ScrollY();
+		pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+		pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
 		try {
 			CTileMgr::Get_Instance()->Catching_Tile(pt, &m_iRow, &m_iCol, &m_eTileOpt);
 		}
