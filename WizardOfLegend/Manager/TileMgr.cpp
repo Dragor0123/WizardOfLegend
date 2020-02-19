@@ -228,6 +228,7 @@ void CTileMgr::Load_Tile(const string& _strImageKey)
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Row(iDrawRow);
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Col(iDrawCol);
 		dynamic_cast<CTile*>(pObj)->Set_Option(eOption);
+
 		m_vecTile.emplace_back(pObj);
 	}
 	CloseHandle(hFile);

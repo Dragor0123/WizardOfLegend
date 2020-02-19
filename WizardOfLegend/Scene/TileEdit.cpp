@@ -9,10 +9,11 @@
 #include "../Obj/Tile.h"
 #include "../Manager/ScrollMgr.h"
 #include "../Obj/PlazaTile.h"
+#include "../Manager/SceneMgr.h"
 
 CTileEdit::CTileEdit()
 	: m_iRow(0), m_iCol(0), m_pTileForPick(nullptr),
-	m_eTileOpt(TILEENUM::OPT_MOVE), m_curTileID(TILEENUM::ID_FIRE)
+	m_eTileOpt(TILEENUM::OPT_MOVE), m_curTileID(TILEENUM::ID_FIRE), m_bCursorEnable(true)
 {
 }
 
@@ -65,12 +66,16 @@ void CTileEdit::Render(HDC _DC, float _fdTime)
 
 void CTileEdit::Release()
 {
-	CTileMgr::Destroy_Instance();
 	SAFE_DELETE(m_pTileForPick);
+	CTileMgr::Destroy_Instance();
 }
 
 void CTileEdit::Key_Check()
 {
+	if (KEY_DOWN(VK_TAB)) {
+		m_bCursorEnable = (m_bCursorEnable) ? false : true;
+	}
+
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LEFT))
 		CScrollMgr::Get_Instance()->Set_ScrollX(5.f);
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RIGHT))
@@ -80,39 +85,6 @@ void CTileEdit::Key_Check()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_DOWN))
 		CScrollMgr::Get_Instance()->Set_ScrollY(-5.f);
 
-	if (KEY_DOWN('A')) {
-		--m_iCol;
-		if (m_iCol < 0)
-			m_iCol = CTileMgr::Get_Instance()->Get_Tile_Col_Max("FireTile") - 1;
-	}
-	if (KEY_DOWN('D')) {
-		++m_iCol;
-		if (m_iCol >= CTileMgr::Get_Instance()->Get_Tile_Col_Max("FireTile"))
-			m_iCol = 0;
-	}
-	if (KEY_DOWN('W')) {
-		--m_iRow;
-		if (m_iRow < 0)
-			m_iRow = CTileMgr::Get_Instance()->Get_Tile_Row_Max("FireTile") - 1;
-	}
-	if (KEY_DOWN('S')) {
-		++m_iRow;
-		if (m_iRow >= CTileMgr::Get_Instance()->Get_Tile_Row_Max("FireTile"))
-			m_iRow = 0;
-	}
-
-	if (KEY_DOWN('R')) {
-		if (m_eTileOpt < TILEENUM::OPT_END - 1){
-			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt + 1);
-		}
-	}
-
-	if (KEY_DOWN('T')) {
-		if (m_eTileOpt > TILEENUM::OPT_MOVE) {
-			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt - 1);
-		}
-	}
-
 	if (KEY_DOWN('2')) {
 		m_curTileID = TILEENUM::ID_FIRE;
 		if (!Reload_TileMgr()) {
@@ -120,7 +92,7 @@ void CTileEdit::Key_Check()
 		}
 	}
 	else if (KEY_DOWN('1')) {
- 		m_curTileID = TILEENUM::ID_PLAZA;
+		m_curTileID = TILEENUM::ID_PLAZA;
 		if (!Reload_TileMgr()) {
 			MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
 		}
@@ -145,47 +117,81 @@ void CTileEdit::Key_Check()
 		break;
 	}
 
-	if (KEY_DOWN('O')) {
-		CTileMgr::Get_Instance()->Save_Tile(strKey);
-		MessageBox(NULL, L"타일 저장!", L"SAVE", MB_OK);
+	if (KEY_DOWN('A')) {
+		--m_iCol;
+		if (m_iCol < 0)
+			m_iCol = CTileMgr::Get_Instance()->Get_Tile_Col_Max(strKey) - 1;
 	}
-	if (KEY_DOWN('L')) {
-		CTileMgr::Get_Instance()->Load_Tile(strKey);
-		MessageBox(NULL, L"타일 불러오기!", L"LOAD", MB_OK);
+	if (KEY_DOWN('D')) {
+		++m_iCol;
+		if (m_iCol >= CTileMgr::Get_Instance()->Get_Tile_Col_Max(strKey))
+			m_iCol = 0;
+	}
+	if (KEY_DOWN('W')) {
+		--m_iRow;
+		if (m_iRow < 0)
+			m_iRow = CTileMgr::Get_Instance()->Get_Tile_Row_Max(strKey) - 1;
+	}
+	if (KEY_DOWN('S')) {
+		++m_iRow;
+		if (m_iRow >= CTileMgr::Get_Instance()->Get_Tile_Row_Max(strKey))
+			m_iRow = 0;
 	}
 
-	if (KEY_DOWN(VK_LBUTTON))
-	{
-		POINT pt = {};
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
-
-		pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		try {
-			CTileMgr::Get_Instance()->Picking_Tile(pt, m_iRow, m_iCol, m_eTileOpt);
+	if (KEY_DOWN('R')) {
+		if (m_eTileOpt < TILEENUM::OPT_END - 1){
+			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt - 1);
 		}
-		catch (const std::out_of_range&)
+	}
+
+	if (KEY_DOWN('T')) {
+		if (m_eTileOpt > TILEENUM::OPT_MOVE) {
+			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt + 1);
+		}
+	}
+
+	if (m_bCursorEnable) {
+		if (KEY_DOWN('O')) {
+			CTileMgr::Get_Instance()->Save_Tile(strKey);
+			MessageBox(NULL, L"타일 저장!", L"SAVE", MB_OK);
+		}
+		if (KEY_DOWN('L')) {
+			CTileMgr::Get_Instance()->Load_Tile(strKey);
+			MessageBox(NULL, L"타일 불러오기!", L"LOAD", MB_OK);
+		}
+		if (KEY_DOWN(VK_LBUTTON))
 		{
-			MessageBox(NULL, L"CTileMgr: m_vecTile 범위 초과 ", L"out_of_range", MB_OK);
-		}
-	}
+			POINT pt = {};
+			GetCursorPos(&pt);
+			ScreenToClient(g_hWnd, &pt);
 
-	if (KEY_DOWN(VK_RBUTTON))
-	{
-		POINT pt = {};
-		GetCursorPos(&pt);
-		ScreenToClient(g_hWnd, &pt);
+			pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+			pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
-		pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
-		try {
-			CTileMgr::Get_Instance()->Catching_Tile(pt, &m_iRow, &m_iCol, &m_eTileOpt);
+			try {
+				CTileMgr::Get_Instance()->Picking_Tile(pt, m_iRow, m_iCol, m_eTileOpt);
+			}
+			catch (const std::out_of_range&)
+			{
+				MessageBox(NULL, L"CTileMgr: m_vecTile 범위 초과 ", L"out_of_range", MB_OK);
+			}
 		}
-		catch (const std::out_of_range&)
+
+		if (KEY_DOWN(VK_RBUTTON))
 		{
-			MessageBox(NULL, L"CTileMgr: m_vecTile 범위 초과 ", L"out_of_range", MB_OK);
+			POINT pt = {};
+			GetCursorPos(&pt);
+			ScreenToClient(g_hWnd, &pt);
+
+			pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+			pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
+			try {
+				CTileMgr::Get_Instance()->Catching_Tile(pt, &m_iRow, &m_iCol, &m_eTileOpt);
+			}
+			catch (const std::out_of_range&)
+			{
+				MessageBox(NULL, L"CTileMgr: m_vecTile 범위 초과 ", L"out_of_range", MB_OK);
+			}
 		}
 	}
 }

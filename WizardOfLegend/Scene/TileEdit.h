@@ -30,7 +30,7 @@ private:
 	CObj*						m_pTileForPick;
 	TILEENUM::ID				m_curTileID;
 	TILEENUM::OPTION			m_eTileOpt;
-
+	bool						m_bCursorEnable;
 };
 
 #endif
