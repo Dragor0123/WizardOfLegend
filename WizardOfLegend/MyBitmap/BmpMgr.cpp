@@ -36,6 +36,15 @@ bool CBmpMgr::Insert_Bmp(const TCHAR * _pFilePath, const string & _strImageKey)
 	return true;
 }
 
+CMyBitmap * CBmpMgr::Find_MyBitmap(const string & _strImageKey)
+{
+	auto iter = m_mapStrBmp.find(_strImageKey);
+	if (m_mapStrBmp.end() == iter)
+		return NULL;
+
+	return iter->second;
+}
+
 HDC CBmpMgr::Find_Image(const string & _strImageKey)
 {
 	auto iter = m_mapStrBmp.find(_strImageKey);

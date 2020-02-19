@@ -17,6 +17,9 @@ public:
 
 	bool Initialize() { return true; }
 
+public:
+	void Scroll_Lock();
+
 private:
 	CScrollMgr();
 	~CScrollMgr();

@@ -11,6 +11,7 @@ public:
 
 public:
 	HDC Get_MemDC() { return m_hMemDC; }
+	HBITMAP Get_Bitmap() const { return m_hBitmap; }
 	bool Load_Bmp(const TCHAR* _pFilePath);
 	void Release();
 

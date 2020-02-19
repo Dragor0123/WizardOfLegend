@@ -25,7 +25,6 @@ public:
 		CObj* pObj = new T;
 		pObj->Initialize();
 		pObj->Set_Pos(_x, _y);
-
 		return pObj;
 	}
 

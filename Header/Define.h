@@ -25,5 +25,7 @@
 // Tile
 #define TILECX 64
 #define TILECY 64
+#define TILE_NUMX 92
+#define TILE_NUMY 80
 
 #endif // !__DEFINE_H__

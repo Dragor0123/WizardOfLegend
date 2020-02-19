@@ -4,6 +4,7 @@
 #include "../Scene/Logo.h"
 #include "../Scene/TitleMenu.h"
 #include "../Scene/Stage1.h"
+#include "../Scene/TileEdit.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -73,6 +74,7 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			m_pScene = new CStage1;
 			break;
 		case SCENE_EDIT:
+			m_pScene = new CTileEdit;
 			break;
 		}
 

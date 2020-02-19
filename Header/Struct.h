@@ -40,7 +40,7 @@ typedef struct tagFrame
 
 typedef struct tagLinePos
 {
-	tagLinePos() { ZeroMemory(this, sizeof(tagLinePos)); }
+	tagLinePos() { fX = 0.f, fY = 0.f; }
 	tagLinePos(float _x, float _y) : fX(_x), fY(_y) {}
 
 	float fX;

@@ -3,11 +3,11 @@
 #include "Manager\KeyMgr.h"
 #include "Manager\Timer.h"
 #include "Manager\ScrollMgr.h"
-#include "Line\LineMgr.h"
 #include "Obj\ObjMgr.h"
 #include "MyBitmap\BmpMgr.h"
 #include "MyBitmap\MyBitmap.h"
 #include "Manager\SceneMgr.h"
+#include "Manager\TileMgr.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -70,6 +70,7 @@ void CMainGame::Late_Update(float _fdTime)
 {
 	CSceneMgr::Get_Instance()->Late_Update(_fdTime);
 	CKeyMgr::Get_Instance()->Key_Update();
+	CScrollMgr::Get_Instance()->Scroll_Lock();
 }
 
 void CMainGame::Collision(float _fdTime)
@@ -90,11 +91,12 @@ void CMainGame::Render(float _fdTime)
 
 void CMainGame::Release()
 {
-	ReleaseDC(g_hWnd, m_hDC);
 	CKeyMgr::Destroy_Instance();
 	CScrollMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance();
 	CSceneMgr::Destroy_Instance();
+	CTileMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
 	CTimer::Destroy_Instance();
+	ReleaseDC(g_hWnd, m_hDC);
 }

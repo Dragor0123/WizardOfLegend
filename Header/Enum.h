@@ -14,4 +14,10 @@ namespace OBJID
 	enum ID { PLAYER, MONSTER, BULLET, GOODS, NPC, CARD, ALTAR, ORB, PORTAL, UI, MOUSE, END };
 }
 
+namespace TILEENUM
+{
+	enum ID { ID_FIRE, ID_HOUSE, ID_PLAZA, ID_ICE, ID_END};
+	enum OPTION { OPT_MOVE, OPT_STOP, OPT_DROP, OPT_END };
+}
+
 #endif // !__ENUM_H__
