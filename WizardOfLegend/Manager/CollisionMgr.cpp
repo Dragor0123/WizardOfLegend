@@ -3,8 +3,9 @@
 #include "CollisionMgr.h"
 #include "../Manager/TileMgr.h"
 #include "../Obj/Tile.h"
-#include "../Obj/Player.h"
 #include "../Manager/ScrollMgr.h"
+#include "../Obj/Player.h"
+#include "../Obj/MoveObj.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -23,7 +24,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 
 	for (auto& dstObj : _Dst) {
 		for (auto& srcObj : _Src) {
-			if (IntersectRect(&rc, &dstObj->Get_Rect(), &srcObj->Get_Rect())) {
+			if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect())) {
 				dstObj->Set_Dead();
 				srcObj->Set_Dead();
 			}
@@ -31,7 +32,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 	}
 }
 
-// _Dst의 원소와 _Src의 원소가 부딪히면 _Dst가 _Src를 밀어내는 충돌함수
+// _Src : 밀리는 놈, _Dst : 미는 놈
 void CCollisionMgr::Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src)
 {
 	if (_Src.empty() || _Dst.empty())
@@ -127,9 +128,8 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _circle, list<CObj*>& _rec
 }
 */
 
-
 // 첫번째 인자가 밀린다.
-void CCollisionMgr::CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY)
+bool CCollisionMgr::CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY)
 {
 	if (Check_RectRect(_Pusher, _Pushee, _pfX, _pfY))
 	{
@@ -139,75 +139,85 @@ void CCollisionMgr::CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX,
 			else
 				_Pushee->Set_PosY(-*_pfY);
 		}
-		else {	// 좌우 충돌
+		else {	// 좌우 충돌 (*_pfX < *_pfY)
 			if (_Pusher->Get_HitInfo().fX < _Pushee->Get_HitInfo().fX)
 				_Pushee->Set_PosX(*_pfX);
 			else
 				_Pushee->Set_PosX(-*_pfX);
 		}
-
-		//if (dynamic_cast<CPlayer*>(_Pushee))
-		//	static_cast<CPlayer*>(_Pushee)->OffSet();
+		return true;
 	}
+	return false;
 }
 
+// 수정합시다!
 void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 {
 	if (CTileMgr::Get_Instance()->m_vecTile.empty())
 		return;
 
 	for (auto& dstObj : _Dst) {
-		//float fBottomY = dstObj->Get_HitInfo().fY + float(dstObj->Get_HitInfo().iCY >> 1);
-
-		//std::pair<float, float> fPair[2] = { 
-		//	make_pair(dstObj->Get_HitInfo().fX, dstObj->Get_HitInfo().fY),
-		//	make_pair(dstObj->Get_HitInfo().fX, fBottomY)
-		//};
 
 		float fX = dstObj->Get_HitInfo().fX;
 		float fY = dstObj->Get_HitInfo().fY;
 		const vector<CObj*>& refVec = CTileMgr::Get_Instance()->m_vecTile;
 
-		int col = (int)(fX / TILECX);
-		int row = (int)(fY / TILECY);
-		for (int r = row - 1; r < row + 2; ++r)
+		float left = dstObj->Get_HitInfo().fX - (float)(dstObj->Get_HitInfo().iCX >> 1);
+		float right = left + (float)(dstObj->Get_HitInfo().iCX);
+		float top = dstObj->Get_HitInfo().fY - (float)(dstObj->Get_HitInfo().iCY >> 1);
+		float bottom = top + (float)(dstObj->Get_HitInfo().iCY);
+	
+		int idxCol = (int)(fX / TILECX);
+		int idxRow = (int)(fY / TILECY);
+
+		for (int r = idxRow - 1; r <= idxRow + 1; ++r)
 		{
-			for (int c = col - 1; c < col + 2; ++c)
+			for (int c = idxCol - 1; c <= idxCol + 1; ++c)
 			{
-				if (r == row && c == col)
+
+				if (r == idxRow && c == idxCol)
 					continue;
 				int iIdx = r * TILE_NUMX + c;
 				if (iIdx < 0 || refVec.size() <= (size_t)iIdx)
 					continue;
+
 				if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx])->Get_Option())
 				{
 					float fX = 0.f, fY = 0.f;
-					CollisionRectPush(dstObj, refVec[iIdx], &fX, &fY);
-					if (dynamic_cast<CPlayer*>(dstObj))
-					{
-						if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
-							static_cast<CPlayer*>(dstObj)->Dash_Off();
-					}
-					dstObj->Update_Rect();
-					dstObj->Update_HitRect();
 
+					if (CollisionRectPush(dstObj, refVec[iIdx], &fX, &fY))
+					{
+						if (dynamic_cast<CPlayer*>(dstObj))
+						{
+							if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+								static_cast<CPlayer*>(dstObj)->Dash_Off();
+						}
+					}
 				}
 			}
 		}
-
 	}
 }
 
 
-// int iIdx = row * TILE_NUMX + col;
-//if (0 == i) {
-//	if (iIdx - 1 > 0)
-//	if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx - 1])->Get_Option())
-//		CollisionRectPush(dstObj, refVec[iIdx - 1]);
-//	if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx - 1 * TILECX])->Get_Option())
-//		CollisionRectPush(dstObj, refVec[iIdx - 1 * TILECX]);
-//}
+/*
+if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx])->Get_Option())
+					{
+						float fX = 0.f, fY = 0.f;
+						CollisionRectPush(dstObj, refVec[iIdx], &fX, &fY);
 
+						if (fX != 0.f || fY != 0.f)
+						{
+							if (dynamic_cast<CPlayer*>(dstObj))
+							{
+								if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+									static_cast<CPlayer*>(dstObj)->Dash_Off();
+							}
+						}
+					}
+
+
+*/
 
 bool CCollisionMgr::Is_PointInRect(const POINT & _pt, LPRECT _lpRC)
 {
@@ -226,20 +236,20 @@ bool CCollisionMgr::Is_PointInCircle(const POINT & _pt, const POINT & _cPt, floa
 
 bool CCollisionMgr::Check_CircleCircle(CObj * _Dst, CObj * _Src)
 {
-	float fDistance = Get_Distance(_Dst->Get_Info(), _Src->Get_Info());
-	float rad1 = float(_Dst->Get_Info().iCX >> 1);
-	float rad2 = float(_Src->Get_Info().iCX >> 1);
+	float fDistance = Get_Distance(_Dst->Get_HitInfo(), _Src->Get_HitInfo());
+	float rad1 = float(_Dst->Get_HitInfo().iCX >> 1);
+	float rad2 = float(_Src->Get_HitInfo().iCX >> 1);
 
 	return (rad1 + rad2) >= fDistance;
 }
 
 bool CCollisionMgr::Check_CircleRect(CObj * _circle, CObj * _rect)
 {
-	LONG _cX = LONG(_circle->Get_Info().fX);
-	LONG _cY = LONG(_circle->Get_Info().fY);
-	LONG _radius = LONG(_circle->Get_Info().iCX >> 1);
+	LONG _cX = LONG(_circle->Get_HitInfo().fX);
+	LONG _cY = LONG(_circle->Get_HitInfo().fY);
+	LONG _radius = LONG(_circle->Get_HitInfo().iCX >> 1);
 
-	const RECT& _rc = _rect->Get_Rect();
+	const RECT& _rc = _rect->Get_HitRect();
 	POINT circlePt = { _cX, _cY };
 
 	if ((_rc.left <= _cX && _cX <= _rc.right) ||
@@ -280,13 +290,13 @@ bool CCollisionMgr::Check_RectRect(CObj* _lhs, CObj* _rhs, float* _fX, float* _f
 {
 	// fdX : 두 사각형의 x좌표 거리
 	// fdY : 두 사각형의 y좌표 거리
-	float	fdX = abs(_lhs->Get_Info().fX - _rhs->Get_Info().fX);
-	float	fdY = abs(_lhs->Get_Info().fY - _rhs->Get_Info().fY);
+	float	fdX = abs(_lhs->Get_HitInfo().fX - _rhs->Get_HitInfo().fX);
+	float	fdY = abs(_lhs->Get_HitInfo().fY - _rhs->Get_HitInfo().fY);
 
 	// fCX : 두 사각형의 가로길이의 절반의 합 (반지름?의 합)
 	// fCY : 두 사각형의 세로길이의 절반의 합
-	float	fCX = (float)((_lhs->Get_Info().iCX + _rhs->Get_Info().iCX) >> 1);
-	float	fCY = (float)((_lhs->Get_Info().iCY + _rhs->Get_Info().iCY) >> 1);
+	float	fCX = (float)((_lhs->Get_HitInfo().iCX + _rhs->Get_HitInfo().iCX) >> 1);
+	float	fCY = (float)((_lhs->Get_HitInfo().iCY + _rhs->Get_HitInfo().iCY) >> 1);
 
 	if (fCX > fdX && fCY > fdY)
 	{

@@ -3,11 +3,15 @@
 #ifndef __COLLISIONMGR_H__
 #define __COLLISIONMGR_H__
 
+class CObj;
+
 class CCollisionMgr
 {
 public:
 	static void Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src);
-	static void Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src); //사각형 충돌시 밀기
+
+	// 사각형 충돌시 밀기 _Src : 밀리는 놈, _Dst : 미는 놈
+	static void Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src); 
 	static void Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src);
 	//static void Collision_CircleRect(list<CObj*>& _circle, list<CObj*>& _rect);
 	static void Collision_Obj_Tile(list<CObj*>& _Dst);
@@ -19,7 +23,8 @@ public:
 
 private:
 	// 두번째 인자가 첫번째 인자를 밀어버린다.
-	static void CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY);
+	static bool CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY);
+
 private:
 	CCollisionMgr();
 	~CCollisionMgr();

@@ -5,7 +5,8 @@
 
 namespace MOVEDIR
 {
-	enum MD { MD_BACK = -1, MD_NONE, MD_FRONT};
+	enum FB { MD_BACK = -1, MD_NONE, MD_FRONT};
+	enum DIR { MD_LEFT, MD_RIGHT, MD_TOP, MD_BOT, MD_LT, MD_LB, MD_RT, MD_RB, MD_MIDDLE };
 }
 
 namespace OBJID

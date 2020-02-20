@@ -44,7 +44,7 @@ void CPlaza::Late_Update(float _fdTime)
 
 void CPlaza::Collision(float _fdTime)
 {
-	CObjMgr::Get_Instance()->Collision(_fdTime);
+	CScene::Collision(_fdTime);
 }
 
 void CPlaza::Render(HDC _DC, float _fdTime)

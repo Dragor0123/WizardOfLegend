@@ -49,7 +49,7 @@ void CTileEdit::Late_Update(float _fdTime)
 
 void CTileEdit::Collision(float _fdTime)
 {
-	//
+	return;
 }
 
 void CTileEdit::Render(HDC _DC, float _fdTime)
@@ -138,20 +138,20 @@ void CTileEdit::Key_Check()
 			m_iRow = 0;
 	}
 
-	if (KEY_DOWN('R')) {
-		if (m_eTileOpt < TILEENUM::OPT_END - 1){
-			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt - 1);
-		}
-	}
-
 	if (KEY_DOWN('T')) {
-		if (m_eTileOpt > TILEENUM::OPT_MOVE) {
+		if (m_eTileOpt < TILEENUM::OPT_END - 1){
 			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt + 1);
 		}
 	}
 
+	if (KEY_DOWN('R')) {
+		if (m_eTileOpt > TILEENUM::OPT_MOVE) {
+			m_eTileOpt = (TILEENUM::OPTION)(m_eTileOpt - 1);
+		}
+	}
+
 	if (m_bCursorEnable) {
-		if (KEY_DOWN('O')) {
+		if (KEY_DOWN('9')) {
 			CTileMgr::Get_Instance()->Save_Tile(strKey);
 			MessageBox(NULL, L"타일 저장!", L"SAVE", MB_OK);
 		}

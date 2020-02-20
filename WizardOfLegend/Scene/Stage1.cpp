@@ -5,6 +5,7 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/Player.h"
 #include "../Manager/TileMgr.h"
+#include "../Obj/Sandbag.h"
 
 CStage1::CStage1()
 {
@@ -22,8 +23,10 @@ bool CStage1::Initialize()
 		return false;
 
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 300.f);
+	CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 400.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
+
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CSandbag>::Create(800.f, 650.f));
 
 	return true;
 }
@@ -43,7 +46,7 @@ void CStage1::Late_Update(float _fdTime)
 
 void CStage1::Collision(float _fdTime)
 {
-	CObjMgr::Get_Instance()->Collision(_fdTime);
+	CScene::Collision(_fdTime);
 }
 
 void CStage1::Render(HDC _DC, float _fdTime)

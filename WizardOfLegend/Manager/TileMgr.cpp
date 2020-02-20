@@ -140,7 +140,6 @@ void CTileMgr::Catching_Tile(POINT & _pt, int * _iDrawRow, int * _iDrawCol, TILE
 	return;
 }
 
-// 지금 Save Load가 fire tile일 경우에만 적용됨.
 void CTileMgr::Save_Tile(const string& _strImageKey)
 {
 	auto iter = m_mapFile.find(_strImageKey);

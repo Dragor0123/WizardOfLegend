@@ -80,6 +80,7 @@ void CTitleMenu::Late_Update(float _fdTime)
 
 void CTitleMenu::Collision(float _fdTime)
 {
+	return;
 }
 
 // 아무버튼 : x = 408

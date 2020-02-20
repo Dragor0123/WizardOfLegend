@@ -40,6 +40,7 @@ void CLogo::Late_Update(float _fdTime)
 
 void CLogo::Collision(float _fdTime)
 {
+	return;
 }
 
 void CLogo::Render(HDC _DC, float _fdTime)
