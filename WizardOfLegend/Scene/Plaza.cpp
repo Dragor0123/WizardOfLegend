@@ -56,7 +56,7 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 void CPlaza::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::BULLET);
+//	CObjMgr::Get_Instance()->Delete_ID(OBJID::BULLET);
 	CTileMgr::Destroy_Instance();
 }
 

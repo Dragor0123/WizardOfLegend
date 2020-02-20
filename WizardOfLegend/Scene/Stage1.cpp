@@ -61,7 +61,7 @@ void CStage1::Render(HDC _DC, float _fdTime)
 void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::BULLET);
+	//CObjMgr::Get_Instance()->Delete_ID(OBJID::P_BULLET);
 	CTileMgr::Destroy_Instance();
 }
 
