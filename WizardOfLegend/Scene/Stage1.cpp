@@ -50,10 +50,7 @@ void CStage1::Collision(float _fdTime)
 }
 
 void CStage1::Render(HDC _DC, float _fdTime)
-{
-	//HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("Background");
-	//BitBlt(_DC, fScrollX, fScrollY, 1920, 1200, hMemDC, 0, 0, SRCCOPY);
-	
+{	
 	CTileMgr::Get_Instance()->Render(_DC, _fdTime);
 	CObjMgr::Get_Instance()->Render(_DC, _fdTime);
 }
@@ -61,7 +58,7 @@ void CStage1::Render(HDC _DC, float _fdTime)
 void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	//CObjMgr::Get_Instance()->Delete_ID(OBJID::P_BULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::FABLE);
 	CTileMgr::Destroy_Instance();
 }
 

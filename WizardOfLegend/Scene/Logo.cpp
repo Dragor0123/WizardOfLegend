@@ -11,6 +11,7 @@ CLogo::CLogo()
 
 CLogo::~CLogo()
 {
+	Release();
 }
 
 void CLogo::Key_Check()

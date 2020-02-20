@@ -4,7 +4,9 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "../Obj/Player.h"
 #include "../Obj/ObjMgr.h"
-
+#include "../Obj/TeleCircle.h"
+#include "../Obj/FButton.h"
+#include "../Obj/MyButton.h"
 
 CPlaza::CPlaza()
 {
@@ -23,9 +25,16 @@ bool CPlaza::Initialize()
 	}
 
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 300.f);
+
+	CObj*	pObj = CAbstractFactory<CPlayer>::Create(500.f, 600.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
 
+	CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(1800.f, 2380.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::FABLE, pTeleCircle);
+
+	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(1800.f, 2380.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pTeleFButton);
+	dynamic_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 	return true;
 }
 
@@ -56,7 +65,7 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 void CPlaza::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-//	CObjMgr::Get_Instance()->Delete_ID(OBJID::BULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::FABLE);
 	CTileMgr::Destroy_Instance();
 }
 

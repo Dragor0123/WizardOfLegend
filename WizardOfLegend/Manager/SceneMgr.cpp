@@ -6,6 +6,7 @@
 #include "../Scene/Stage1.h"
 #include "../Scene/TileEdit.h"
 #include "../Scene/Plaza.h"
+#include "../Obj/ObjMgr.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -32,6 +33,7 @@ void CSceneMgr::Update(float _fdTime)
 void CSceneMgr::Late_Update(float _fdTime)
 {
 	m_pScene->Late_Update(_fdTime);
+	CObjMgr::Get_Instance()->Late_Delete();
 }
 
 void CSceneMgr::Collision(float _fdTime)

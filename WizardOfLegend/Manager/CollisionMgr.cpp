@@ -6,6 +6,7 @@
 #include "../Manager/ScrollMgr.h"
 #include "../Obj/Player.h"
 #include "../Obj/MoveObj.h"
+#include "../Obj/FAble.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -22,11 +23,31 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 	if (_Src.empty() || _Dst.empty())
 		return;
 
-	for (auto& dstObj : _Dst) {
-		for (auto& srcObj : _Src) {
-			if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect())) {
-				dstObj->Set_Dead();
-				srcObj->Set_Dead();
+	if (dynamic_cast<CPlayer*>(_Dst.front()))
+	{ // Dst가 플레이어일 경우
+		for (auto& dstObj : _Dst)
+		{
+			if (dynamic_cast<CFAble*>(_Src.front())){ //Src가 F_able일 경우
+				for (auto& srcObj : _Src) {
+					if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+						static_cast<CFAble*>(srcObj)->Enable_FButton();
+					else
+						static_cast<CFAble*>(srcObj)->Disable_FButton();
+				}
+			}
+			else { // Src가 F_able이 아닐 경우
+
+			}
+		}
+	}
+	else // Dst가 플레이어가 아닐 경우
+	{
+		for (auto& dstObj : _Dst) {
+			for (auto& srcObj : _Src) {
+				if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect())) {
+					dstObj->Set_Dead();
+					srcObj->Set_Dead();
+				}
 			}
 		}
 	}
@@ -37,7 +58,7 @@ void CCollisionMgr::Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src)
 {
 	if (_Src.empty() || _Dst.empty())
 		return;
-
+	
 	for (auto& dstObj : _Dst)
 	{
 		for (auto& srcObj : _Src)

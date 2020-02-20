@@ -12,7 +12,8 @@ namespace MOVEDIR
 namespace OBJID
 {
 	//UI가 들어갈 수도 있음
-	enum ID { PLAYER, MONSTER, P_BULLET, M_BULLET, NPC, CARD, ALTAR, ORB, PORTAL, GOODS, UI, MOUSE, END };
+	// FABLE을 npc, card(item, arcana), telecircle로 나눠야 함
+	enum ID { PLAYER, MONSTER, P_BULLET, M_BULLET, FABLE, ORB, PORTAL, GOODS, OBSTACLE, UNDERDECO, UI, MOUSE, END };
 }
 
 namespace ARCANA
