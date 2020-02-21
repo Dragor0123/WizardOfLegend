@@ -47,6 +47,18 @@ public:
 		pObj->Initialize();
 		return pObj;
 	}
+
+	// Bullet Àü¿ë
+	static CObj* Create(float _x, float _y, float _fAngle,
+		const string& _frameKey)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_x, _y);
+		pObj->Set_Angle(_fAngle);
+		pObj->Set_FrameKey(_frameKey);
+		pObj->Initialize();
+		return pObj;
+	}
 };
 
 #endif // !__AbstractFactory_H__

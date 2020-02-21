@@ -36,5 +36,8 @@
 #include <string>
 #include <cassert>
 
+//
+#include <memory>
+
 using namespace std;
 #include "Include.h"

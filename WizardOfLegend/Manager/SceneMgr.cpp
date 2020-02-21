@@ -1,6 +1,5 @@
 #include "../stdafx.h"
 #include "SceneMgr.h"
-#include "../Scene/Scene.h"
 #include "../Scene/Logo.h"
 #include "../Scene/TitleMenu.h"
 #include "../Scene/Stage1.h"
@@ -71,6 +70,7 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			delete m_pScene;
 			m_pScene = nullptr;
 		}
+
 		switch (m_eCurScene)
 		{
 		case SCENE_LOGO:

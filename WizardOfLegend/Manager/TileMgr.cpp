@@ -22,7 +22,8 @@ bool CTileMgr::Initialize(const string & _strKey)
 {
 	m_mapFile.emplace(string("FireTile"), wstring(L"../Data/FireTile.dat"));
 	m_mapFile.emplace(string("PlazaTile"), wstring(L"../Data/PlazaTile.dat"));
-	m_vecTile.clear();
+
+	Safe_Delete_VecList(m_vecTile);
 	m_vecTile.reserve(TILE_NUMX * TILE_NUMY);
 
 	for (int i = 0; i < TILE_NUMY; ++i)
@@ -184,7 +185,6 @@ void CTileMgr::Save_Tile(const string& _strImageKey)
 void CTileMgr::Load_Tile(const string& _strImageKey)
 {
 	auto iter = m_mapFile.find(_strImageKey);
-
 	if (m_mapFile.end() == iter) {
 		MessageBox(NULL, L"Key에 해당하는 파일경로가 없음", L"CTileMgr::Load_Tile", MB_OK);
 		return;

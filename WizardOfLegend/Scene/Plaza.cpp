@@ -23,6 +23,8 @@ bool CPlaza::Initialize()
 		return false;
 	}
 
+	if (!CTileMgr::Get_Instance()->Initialize("PlazaTile"))
+		return false;
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
 
 	CObj*	pObj = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
@@ -65,14 +67,13 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 void CPlaza::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAZA_UI);
 	// NPC들 제거
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::NPC);
+	
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	// 장애물들 제거
 	//
-
-	CTileMgr::Destroy_Instance();
 }
 
 void CPlaza::Key_Check()

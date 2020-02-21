@@ -7,6 +7,10 @@
 #include "../Obj/Player.h"
 #include "../Obj/MoveObj.h"
 #include "../Obj/FAble.h"
+#include "../Obj/Bullet.h"
+#include "../Obj/LineBullet.h"
+#include "../Obj/ScrewBullet.h"
+#include "../Obj/MeeleBullet.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -171,13 +175,13 @@ bool CCollisionMgr::CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX,
 	return false;
 }
 
-// 수정합시다!
 void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 {
 	if (CTileMgr::Get_Instance()->m_vecTile.empty())
 		return;
 
-	for (auto& dstObj : _Dst) {
+	for (auto& dstObj : _Dst)
+	{
 
 		float fX = dstObj->Get_HitInfo().fX;
 		float fY = dstObj->Get_HitInfo().fY;
@@ -206,18 +210,43 @@ void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 				{
 					float fX = 0.f, fY = 0.f;
 
-					if (CollisionRectPush(dstObj, refVec[iIdx], &fX, &fY))
+
+					if (Check_RectRect(refVec[iIdx], dstObj, &fX, &fY))
 					{
-						if (dynamic_cast<CPlayer*>(dstObj))
+						if (dynamic_cast<CMeeleBullet*>(dstObj))
+							continue;
+
+						if (dynamic_cast<CBullet*>(dstObj))
 						{
-							if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
-								static_cast<CPlayer*>(dstObj)->Dash_Off();
+							// 수정 요함
+							static_cast<CBullet*>(dstObj)->Set_Collision(true);
+						}
+						else
+						{	// dstObj가 Bullet류가 아닐 때
+							if (fX > fY) { // 상하 충돌
+								if (refVec[iIdx]->Get_HitInfo().fY < dstObj->Get_HitInfo().fY)
+									dstObj->Set_PosY(fY);
+								else
+									dstObj->Set_PosY(-fY);
+							}
+							else {	// 좌우 충돌 (*_pfX < *_pfY)
+								if (refVec[iIdx]->Get_HitInfo().fX < dstObj->Get_HitInfo().fX)
+									dstObj->Set_PosX(fX);
+								else
+									dstObj->Set_PosX(-fX);
+							}
+
+							if (dynamic_cast<CPlayer*>(dstObj))
+							{
+								if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+									static_cast<CPlayer*>(dstObj)->Dash_Off();
+							}
 						}
 					}
-				}
+				} // if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx])->Get_Option())
 			}
 		}
-	}
+	} // 	for (auto& dstObj : _Dst)
 }
 
 

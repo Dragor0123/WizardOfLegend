@@ -4,8 +4,7 @@
 #define __SCENEMGR_H__
 
 #include "Singleton.h"
-
-class CScene;
+#include "../Scene/Scene.h"
 
 class CSceneMgr : public Singleton<CSceneMgr>
 {
@@ -34,7 +33,7 @@ private:
 	CSceneMgr& operator=(const CSceneMgr&) = delete;
 
 private:
-	CScene*				m_pScene;	// 현재 Scene의 주소를 가지고 있는 포인터
+	CScene*				m_pScene;
 	SCENEID				m_ePreScene;
 	SCENEID				m_eCurScene;
 };

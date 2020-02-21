@@ -22,6 +22,8 @@ bool CStage1::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/fireMapTile.bmp", "FireTile"))
 		return false;
 
+	if (!CTileMgr::Get_Instance()->Initialize("FireTile"))
+		return false;
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
 	// CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 400.f);
 	// CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
@@ -62,7 +64,7 @@ void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
-	CTileMgr::Destroy_Instance();
+	//CTileMgr::Destroy_Instance();
 }
 
 void CStage1::Key_Check()
