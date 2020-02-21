@@ -5,6 +5,7 @@
 
 // 클래스로 정의하는 이유
 // 조금이라도 객체 지향에 가깝게 코드를 구현하기 위해서이다.
+
 class CObj;
 template <typename T>
 class CAbstractFactory
@@ -33,6 +34,16 @@ public:
 		CObj* pObj = new T;
 		pObj->Set_Pos(_x, _y);
 		pObj->Set_Angle(_fAngle);
+		pObj->Initialize();
+		return pObj;
+	}
+
+	// NPC, Monster, Obstacle 전용
+	static CObj* Create(float _x, float _y, const string& _frameKey)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_x, _y);
+		pObj->Set_FrameKey(_frameKey);
 		pObj->Initialize();
 		return pObj;
 	}

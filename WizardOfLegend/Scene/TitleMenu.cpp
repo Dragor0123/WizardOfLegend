@@ -40,19 +40,19 @@ bool CTitleMenu::Initialize()
 
 	CObj*	pObj = CAbstractFactory<CMyButton>::Create(492.f, 360.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Start");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pObj);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
 
 	pObj = CAbstractFactory<CMyButton>::Create(492.f, 420.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Edit");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pObj);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
 
 	pObj = CAbstractFactory<CMyButton>::Create(492.f, 480.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Developer");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pObj);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
 
 	pObj = CAbstractFactory<CMyButton>::Create(492.f, 540.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Exit");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pObj);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
 
 	return true;
 }
@@ -108,14 +108,14 @@ void CTitleMenu::Render(HDC _DC, float _fdTime)
 		, RGB(255, 0, 255));
 	}
 
-	if (m_bTitleLogoUp){
+	if (172 == iLogoY){
 		CObjMgr::Get_Instance()->Render(_DC, _fdTime);
 	}
 }
 
 void CTitleMenu::Release()
 {
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::UI);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::MENU_UI);
 }
 
 void CTitleMenu::Key_Check()
@@ -124,7 +124,7 @@ void CTitleMenu::Key_Check()
 		for (int i = 0; i < 0xff; ++i)
 		{
 			if (i == VK_CONTROL || i == VK_LSHIFT || i == VK_RSHIFT || i == VK_SHIFT ||
-				i == VK_CAPITAL || i == VK_ESCAPE || i == VK_SCROLL || i == VK_F1 || i == VK_F2)
+				i == VK_CAPITAL || i == VK_ESCAPE || i == VK_SCROLL || (i >= VK_F1 && i <= VK_F19))
 				continue;
 			if (KEY_DOWN(i))
 			{

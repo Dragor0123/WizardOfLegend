@@ -7,6 +7,7 @@
 #include "../Scene/TileEdit.h"
 #include "../Scene/Plaza.h"
 #include "../Obj/ObjMgr.h"
+#include "KeyMgr.h"
 
 CSceneMgr::CSceneMgr()
 	: m_pScene(nullptr), m_eCurScene(SCENE_END), m_ePreScene(SCENE_END)
@@ -27,13 +28,15 @@ bool CSceneMgr::Initialize()
 
 void CSceneMgr::Update(float _fdTime)
 {
+	if (KEY_DOWN(VK_F3))
+		g_HitBox_On = (g_HitBox_On) ? false : true;
+
 	m_pScene->Update(_fdTime);
 }
 
 void CSceneMgr::Late_Update(float _fdTime)
 {
 	m_pScene->Late_Update(_fdTime);
-	CObjMgr::Get_Instance()->Late_Delete();
 }
 
 void CSceneMgr::Collision(float _fdTime)
@@ -52,6 +55,11 @@ void CSceneMgr::Release()
 	SAFE_DELETE(m_pScene);
 }
 
+int CSceneMgr::Get_Current_SceneID()
+{
+	return (int)m_eCurScene;
+}
+
 // 코드 수정 필요: Scene 전환이 성공 실패 되게 해야함.
 void CSceneMgr::Scene_Change(SCENEID _eScene)
 {
@@ -59,8 +67,10 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 
 	if (m_ePreScene != m_eCurScene)
 	{
-		SAFE_DELETE(m_pScene);
-
+		if (m_pScene) {
+			delete m_pScene;
+			m_pScene = nullptr;
+		}
 		switch (m_eCurScene)
 		{
 		case SCENE_LOGO:
@@ -68,8 +78,6 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		case SCENE_MENU:
 			m_pScene = new CTitleMenu;
-			break;
-		case SCENE_HOUSE:
 			break;
 		case SCENE_PLAZA:
 			m_pScene = new CPlaza;

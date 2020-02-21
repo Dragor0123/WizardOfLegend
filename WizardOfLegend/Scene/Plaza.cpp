@@ -6,7 +6,6 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/TeleCircle.h"
 #include "../Obj/FButton.h"
-#include "../Obj/MyButton.h"
 
 CPlaza::CPlaza()
 {
@@ -26,15 +25,16 @@ bool CPlaza::Initialize()
 
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
 
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create(500.f, 600.f);
+	CObj*	pObj = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
 
-	CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(1800.f, 2380.f);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::FABLE, pTeleCircle);
+	CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(2050.f, 1050.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::TELECIR, pTeleCircle);
 
-	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(1800.f, 2380.f);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::UI, pTeleFButton);
+	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(2050.f, 1035.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pTeleFButton);
 	dynamic_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
+
 	return true;
 }
 
@@ -65,7 +65,13 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 void CPlaza::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::FABLE);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAZA_UI);
+	// NPC들 제거
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::NPC);
+	// 장애물들 제거
+	//
+
 	CTileMgr::Destroy_Instance();
 }
 

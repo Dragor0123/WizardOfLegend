@@ -12,7 +12,7 @@ class CSceneMgr : public Singleton<CSceneMgr>
 	friend class Singleton<CSceneMgr>;
 
 public:
-	enum SCENEID { SCENE_LOGO, SCENE_MENU, SCENE_HOUSE, SCENE_PLAZA, SCENE_STAGE1, SCENE_EDIT, SCENE_END };
+	enum SCENEID { SCENE_LOGO, SCENE_MENU, SCENE_PLAZA, SCENE_STAGE1, SCENE_EDIT, SCENE_END };
 
 public:
 	bool Initialize();
@@ -21,6 +21,8 @@ public:
 	void Collision(float _fdTime);
 	void Render(HDC _DC, float _fdTime);
 	void Release();
+
+	int Get_Current_SceneID();
 
 public:
 	void Scene_Change(SCENEID _eScene);

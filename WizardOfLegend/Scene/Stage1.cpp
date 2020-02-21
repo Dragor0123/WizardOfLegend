@@ -23,8 +23,11 @@ bool CStage1::Initialize()
 		return false;
 
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 400.f);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
+	// CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 400.f);
+	// CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
+
+	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+	rPlayer->Set_Pos(2664, 1535);
 
 	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CSandbag>::Create(800.f, 650.f));
 
@@ -58,7 +61,7 @@ void CStage1::Render(HDC _DC, float _fdTime)
 void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::FABLE);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	CTileMgr::Destroy_Instance();
 }
 

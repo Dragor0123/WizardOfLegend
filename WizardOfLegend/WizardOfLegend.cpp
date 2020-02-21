@@ -8,6 +8,7 @@
 #define MAX_LOADSTRING 100
 
 // Global Variables:
+bool g_HitBox_On = false;
 bool g_FPS_ON = false;
 bool g_bGameLoop = true;
 HWND g_hWnd;
