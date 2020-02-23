@@ -38,7 +38,7 @@ public:
 		return pObj;
 	}
 
-	// NPC, Monster, Obstacle 전용
+	// NPC, Monster, Obstacle, UnderDeco 전용
 	static CObj* Create(float _x, float _y, const string& _frameKey)
 	{
 		CObj* pObj = new T;

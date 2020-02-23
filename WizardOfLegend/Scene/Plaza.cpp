@@ -23,9 +23,8 @@ CPlaza::~CPlaza()
 
 bool CPlaza::Initialize()
 {
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/plazaTile.bmp", "PlazaTile")) {
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/plazaTile.bmp", "PlazaTile"))
 		return false;
-	}
 
 	if (!CTileMgr::Get_Instance()->Initialize("PlazaTile"))
 		return false;
@@ -44,7 +43,7 @@ bool CPlaza::Initialize()
 	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 	//	CAbstractFactory<CArcher>::Create(732.f, 738.f));
 	
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
 		CAbstractFactory<CEarthLoad>::Create(2058.f, 641.f));
 
 	return true;

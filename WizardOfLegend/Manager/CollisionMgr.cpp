@@ -249,26 +249,6 @@ void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 	} // 	for (auto& dstObj : _Dst)
 }
 
-
-/*
-if (TILEENUM::OPT_MOVE != static_cast<CTile*>(refVec[iIdx])->Get_Option())
-					{
-						float fX = 0.f, fY = 0.f;
-						CollisionRectPush(dstObj, refVec[iIdx], &fX, &fY);
-
-						if (fX != 0.f || fY != 0.f)
-						{
-							if (dynamic_cast<CPlayer*>(dstObj))
-							{
-								if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
-									static_cast<CPlayer*>(dstObj)->Dash_Off();
-							}
-						}
-					}
-
-
-*/
-
 bool CCollisionMgr::Is_PointInRect(const POINT & _pt, LPRECT _lpRC)
 {
 	if ((_lpRC->left <= _pt.x && _pt.x <= _lpRC->right) &&

@@ -32,4 +32,8 @@
 //MONSTER
 #define DEFAULT_DETECT_RAD 370.f
 
+
+//Bullet & Skill
+#define G_BULLET_LIFETIME_LIMIT 3.0f
+
 #endif // !__DEFINE_H__
