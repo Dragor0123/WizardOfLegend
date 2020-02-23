@@ -118,15 +118,15 @@ void CMainGame::Release()
 
 void CMainGame::Render_Mouse_Pt()
 {
-	//POINT	pt = {};
-	//GetCursorPos(&pt);
-	//ScreenToClient(g_hWnd, &pt);
-	//pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
-	//pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
-	//// 마우스를 활성화 비활성화 시켜서 Render를 안할수 있겠지...
-	//TCHAR szBuff[32] = L"";
-	//swprintf_s(szBuff, L"마우스 좌표(%d, %d)", (int)(pt.x), (int)(pt.y));
-	//SetWindowText(g_hWnd, szBuff);
+	POINT	pt = {};
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+	pt.x -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollX();
+	pt.y -= (LONG)CScrollMgr::Get_Instance()->Get_ScrollY();
+	// 마우스를 활성화 비활성화 시켜서 Render를 안할수 있겠지...
+	TCHAR szBuff[32] = L"";
+	swprintf_s(szBuff, L"마우스 좌표(%d, %d)", (int)(pt.x), (int)(pt.y));
+	SetWindowText(g_hWnd, szBuff);
 }
 
 void CMainGame::Render_FPS()

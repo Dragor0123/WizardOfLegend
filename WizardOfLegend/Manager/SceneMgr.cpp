@@ -66,7 +66,7 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 
 	if (m_ePreScene != m_eCurScene)
 	{
-		if (m_pScene) {
+ 		if (m_pScene) {
 			delete m_pScene;
 			m_pScene = nullptr;
 		}

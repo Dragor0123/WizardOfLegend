@@ -64,7 +64,7 @@ void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
-	//CTileMgr::Destroy_Instance();
+	CBmpMgr::Get_Instance()->Delete_Bmp("FireTile");
 }
 
 void CStage1::Key_Check()

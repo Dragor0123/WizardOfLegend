@@ -39,12 +39,14 @@ int CTileEdit::Update(float _fdTime)
 	dynamic_cast<CTile*>(m_pTileForPick)->Set_DrawID_Row(m_iRow);
 	dynamic_cast<CTile*>(m_pTileForPick)->Set_Option(m_eTileOpt);
 	CTileMgr::Get_Instance()->Update(_fdTime);
+	CObjMgr::Get_Instance()->Update(_fdTime);
 	return 0;
 }
 
 void CTileEdit::Late_Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Late_Update(_fdTime);
+	CObjMgr::Get_Instance()->Late_Update(_fdTime);
 }
 
 void CTileEdit::Collision(float _fdTime)
@@ -57,6 +59,7 @@ void CTileEdit::Render(HDC _DC, float _fdTime)
 	TCHAR szText[32] = L"";
 	HDC hOneTileDC = GetDC(g_hWnd);
 	CTileMgr::Get_Instance()->Render(_DC, _fdTime);
+	CObjMgr::Get_Instance()->Render(_DC, _fdTime);
 
 	m_pTileForPick->Render(hOneTileDC, _fdTime, 0, 0);
 	swprintf_s(szText, L"타일옵션: %d", (int)(m_eTileOpt));

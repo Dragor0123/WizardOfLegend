@@ -14,6 +14,7 @@ class CBmpMgr : public Singleton<CBmpMgr>
 public:
 	bool Initialize();
 	bool Insert_Bmp(const TCHAR* _pFilePath, const string& _strImageKey);
+	bool Delete_Bmp(const string& _strImageKey);
 	CMyBitmap* Find_MyBitmap(const string& _strImageKey);
 	HDC Find_Image(const string& _strImageKey);
 	void Release();

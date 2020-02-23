@@ -28,4 +28,8 @@
 #define TILE_NUMX 92
 #define TILE_NUMY 80
 
+
+//MONSTER
+#define DEFAULT_DETECT_RAD 370.f
+
 #endif // !__DEFINE_H__

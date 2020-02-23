@@ -108,7 +108,11 @@ void CTitleMenu::Render(HDC _DC, float _fdTime)
 		, RGB(255, 0, 255));
 	}
 
-	if (172 == iLogoY){
+	const CObjMgr* pObjMgr = CObjMgr::Get_Instance();
+	if (!pObjMgr->Get_listObj(OBJID::MOUSE).empty())
+		pObjMgr->Get_listObj(OBJID::MOUSE).front()->Render(_DC, _fdTime);
+
+	if (172 >= iLogoY){
 		CObjMgr::Get_Instance()->Render(_DC, _fdTime);
 	}
 }

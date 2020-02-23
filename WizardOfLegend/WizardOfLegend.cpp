@@ -155,6 +155,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case VK_F1:
 			g_FPS_ON = (g_FPS_ON) ? false : true;
 			break;
+		case VK_F2:
+			g_HitBox_On = (g_HitBox_On) ? false : true;
 		}
 		break;
     case WM_DESTROY:

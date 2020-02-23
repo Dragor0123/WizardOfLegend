@@ -4,6 +4,14 @@
 #define __TEMPLATE_H__
 
 template <typename T>
+inline void Swap(T& _a, T& _b)
+{
+	T temp = _a;
+	_a = _b;
+	_b = temp;
+}
+
+template <typename T>
 void Safe_Delete(T& _obj)
 {
 	if (_obj)

@@ -6,6 +6,10 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/TeleCircle.h"
 #include "../Obj/FButton.h"
+// 나중에 없애줄것. 플라자엔 몬스터 없음.
+#include "../Obj/Archer.h"
+#include "../Obj/Swordman.h"
+#include "../Obj/EarthLoad.h"
 
 CPlaza::CPlaza()
 {
@@ -36,6 +40,12 @@ bool CPlaza::Initialize()
 	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(2050.f, 1035.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pTeleFButton);
 	dynamic_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
+
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(732.f, 738.f));
+	
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+		CAbstractFactory<CEarthLoad>::Create(2058.f, 641.f));
 
 	return true;
 }
@@ -74,6 +84,8 @@ void CPlaza::Release()
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	// 장애물들 제거
 	//
+
+	CBmpMgr::Get_Instance()->Delete_Bmp("PlazaTile");
 }
 
 void CPlaza::Key_Check()

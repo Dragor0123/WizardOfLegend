@@ -36,6 +36,17 @@ bool CBmpMgr::Insert_Bmp(const TCHAR * _pFilePath, const string & _strImageKey)
 	return true;
 }
 
+bool CBmpMgr::Delete_Bmp(const string & _strImageKey)
+{
+	auto iter = m_mapStrBmp.find(_strImageKey);
+	if (m_mapStrBmp.end() == iter)
+	{
+		return false;
+	}
+	m_mapStrBmp.erase(iter);
+	return true;
+}
+
 CMyBitmap * CBmpMgr::Find_MyBitmap(const string & _strImageKey)
 {
 	auto iter = m_mapStrBmp.find(_strImageKey);
