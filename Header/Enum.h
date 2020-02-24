@@ -13,20 +13,16 @@ namespace OBJID
 {
 	//UI가 들어갈 수도 있음
 	// FABLE을 npc, card(item, arcana), telecircle로 나눠야 함
-	//  
-	// PLAYER : 2,
-	// MONSTER : 3,
-	// BOSS : 4,
-	// P_RECTBULLET :5,
-	// P_CIRBULLET : 6,
-	// M_RECTBULLET : 7,
-	// M_CIRBULLET : 8
-	enum ID { UNDERDECO, TELECIR,
+
+	enum ID
+	{
+		UNDERDECO, TELECIR,
 		PLAYER, MONSTER, BOSS,
 		P_RECTBULLET, P_CIRBULLET,
 		M_RECTBULLET, M_CIRBULLET,
-		NPC, CARD, ORB, PORTAL, GOODS, OBSTACLE,
-		MENU_UI, PLAZA_UI, STAGE1_UI, MOUSE, END };
+		NPC, CARD, OBSTACLE, ORB, PORTAL, GOODS,
+		MENU_UI, PLAZA_UI, STAGE1_UI, MOUSE, END
+	};
 }
 
 namespace COLLISION

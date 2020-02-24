@@ -21,6 +21,9 @@ public:
 	static bool Check_CircleRect(CObj* _circle, CObj* _rect);
 	static bool Check_RectRect(CObj* _lhs, CObj* _rhs, float *_fX, float * _fY);
 
+	//
+	static void Collision_End_Rect(list<CObj*>& _Dst, list<CObj*>& _Src);
+
 private:
 	// 두번째 인자가 첫번째 인자를 밀어버린다.
 	static bool CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY);

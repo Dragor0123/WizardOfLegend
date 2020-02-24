@@ -40,11 +40,11 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pTeleFButton);
 	dynamic_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-	//	CAbstractFactory<CArcher>::Create(732.f, 738.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+		CAbstractFactory<CSwordman>::Create(732.f, 738.f));
 	
 	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
-		CAbstractFactory<CEarthLoad>::Create(2058.f, 641.f));
+		CAbstractFactory<CArcher>::Create(2058.f, 641.f));
 
 	return true;
 }
@@ -76,14 +76,17 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 void CPlaza::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAZA_UI);
-	// NPC들 제거
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_CIRBULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_RECTBULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::M_CIRBULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::M_RECTBULLET);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::BOSS);
+	// F_ABLE제거
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::NPC);
-	
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
+	// UI 제거
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAZA_UI);
 	// 장애물들 제거
-	//
-
 	CBmpMgr::Get_Instance()->Delete_Bmp("PlazaTile");
 }
 

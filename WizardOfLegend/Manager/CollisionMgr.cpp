@@ -11,6 +11,7 @@
 #include "../Obj/LineBullet.h"
 #include "../Obj/ScrewBullet.h"
 #include "../Obj/MeeleBullet.h"
+#include "../Obj/Boss.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -20,6 +21,7 @@ CCollisionMgr::~CCollisionMgr()
 {
 }
 
+//  _Dst : 주체, _Src : 대상(맞는놈)
 void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 {
 	RECT rc = {};
@@ -27,37 +29,176 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 	if (_Src.empty() || _Dst.empty())
 		return;
 
-	if (dynamic_cast<CPlayer*>(_Dst.front()))
-	{ // Dst가 플레이어일 경우
+	int _DstGroupCode = _Dst.front()->Get_Collision_Code();
+	int _SrcGroupCode = _Src.front()->Get_Collision_Code();
+
+	// 플레이어일 경우
+	if (_DstGroupCode == CC_PLAYER) 
+	{
 		for (auto& dstObj : _Dst)
 		{
-			if (dynamic_cast<CFAble*>(_Src.front())){ //Src가 F_able일 경우
-				for (auto& srcObj : _Src) {
+			if (!(_SrcGroupCode & 0xC00) && (_SrcGroupCode >> 9 & 0x1)) // _SrcCode가 FABLE류이면
+			{
+				for (auto& srcObj : _Src)
+				{
 					if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 						static_cast<CFAble*>(srcObj)->Enable_FButton();
 					else
 						static_cast<CFAble*>(srcObj)->Disable_FButton();
 				}
 			}
-			else { // Src가 F_able이 아닐 경우
-
-			}
-		}
-	}
-	else // Dst가 플레이어가 아닐 경우
-	{
-		for (auto& dstObj : _Dst) {
-			for (auto& srcObj : _Src) {
-				if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect())) {
-					dstObj->Set_Dead();
-					srcObj->Set_Dead();
+			else if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
+			{
+				if (_SrcGroupCode & CC_MONSTER_BOSS) // 보스일경우
+				{
+					for (auto& srcObj : _Src)
+					{
+						float fX = 0.f, fY = 0.f;
+						if (static_cast<CBoss*>(srcObj)->Get_Hittable())
+						{
+							CollisionRectPush(srcObj, dstObj, &fX, &fY);
+						}
+						else
+						{
+							// 플레이어가 보스한테 밀리는 것도 해야하나??
+							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+								static_cast<CPlayer*>(dstObj)->Sub_Hp(17);
+						}
+					}
+				}
+				else //일반몹일경우
+				{
+					for (auto& srcObj : _Src)
+					{
+						float fX = 0.f, fY = 0.f;
+						if (srcObj->Get_Collision_Code() == CC_MONSTER_PUSHABLE)
+						{
+							CollisionRectPush(srcObj, dstObj, &fX, &fY);
+						}
+						else
+						{
+							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+								static_cast<CPlayer*>(dstObj)->Sub_Hp(17);
+						}
+					}
 				}
 			}
+			else if (!(_SrcGroupCode & 0xE00) && (_SrcGroupCode >> 8 & 0x1)) // Goods일 경우
+			{
+				// for (auto& srcObj : _Src)
+				// {
+				// 	
+				// 
+				// }
+			}
+			else if (!(_SrcGroupCode & 0x800) && (_SrcGroupCode >> 10 & 0x1)) // CC_OBSTACLE 0x400
+			{
+				// for (auto& srcObj : _Src)
+				// {
+				// 	
+				// }
+			}
+			else if (_SrcGroupCode & 0x800)	//ORB
+			{
+
+			}
 		}
 	}
+	// 총알 또는 쉴드일 경우
+	else if (_DstGroupCode & 0x0F)
+	{
+		if (0x01 <= _DstGroupCode && _DstGroupCode < CC_MSHIELD_NOREFLECT) // PLAYER BULLET
+		{
+			for (auto& dstObj : _Dst)
+			{
+				bool bCollided = false;
+				if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
+				{
+					if (_SrcGroupCode & CC_MONSTER_BOSS)
+					{
+						for (auto& srcObj : _Src)
+						{
+							if (static_cast<CBoss*>(srcObj)->Get_Hittable())
+							{
+								float fX = 0.f, fY = 0.f;
+								int dstObjCode = dstObj->Get_Collision_Code();
+								if (0x05 <= dstObjCode && dstObjCode < CC_PSHIELD_NOREFLECT) // 충돌시 밀어버리는 총알
+								{
+									bCollided = CollisionRectPush(srcObj, dstObj, &fX, &fY);
+									if (bCollided)
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+										static_cast<CBoss*>(srcObj)->Set_Boss_State(CBoss::HIT);
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									}
+								}
+								else
+								{
+									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+										static_cast<CBoss*>(srcObj)->Set_Boss_State(CBoss::HIT);
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									}
+								}
+							}
+							else
+							{
+								if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+									static_cast<CBullet*>(dstObj)->Set_Collision(true);
+							}
+						}
+					}
+					else
+					{
+						for (auto& srcObj : _Src)
+						{
+							// 일반 몹 충돌처리
+
+							float fX = 0.f, fY = 0.f;
+							int dstObjCode = dstObj->Get_Collision_Code();
+							if (0x05 <= dstObjCode && dstObjCode < CC_PSHIELD_NOREFLECT) // 총알이 몹을 밀어낸다.
+							{
+								bCollided = CollisionRectPush(srcObj, dstObj, &fX, &fY);
+								if (bCollided)
+								{
+									static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+									static_cast<CBullet*>(dstObj)->Set_Collision(true);
+								}
+							}
+							else
+							{
+								if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+								{
+									static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+									static_cast<CBullet*>(dstObj)->Set_Collision(true);
+								}
+							}
+						}
+					}
+				}// monster if문 end
+
+				// 플레이어 총알&쉴드와 장애물 검사
+
+
+				//플레이어 쉴드와 적 총알 검사
+				
+			}
+		}// 플레이어 총알 & 쉴드if문 end
+		else // MONSTER BULLET OR SHIELD
+		{
+			for (auto& dstObj : _Dst)
+			{
+
+			}
+		}
+	}
+
 }
 
-// _Src : 밀리는 놈, _Dst : 미는 놈
+// _Dst : 미는 놈, _Src : 밀리는 놈
 void CCollisionMgr::Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src)
 {
 	if (_Src.empty() || _Dst.empty())
@@ -73,6 +214,7 @@ void CCollisionMgr::Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src)
 	}
 }
 
+// _Dst : 주체, _Src : 대상(타겟)
 void CCollisionMgr::Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src)
 {
 	if (_Src.empty() || _Dst.empty())
@@ -158,13 +300,15 @@ bool CCollisionMgr::CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX,
 {
 	if (Check_RectRect(_Pusher, _Pushee, _pfX, _pfY))
 	{
-		if (*_pfX > *_pfY) { // 상하 충돌
+		if (*_pfX > *_pfY)
+		{ // 상하 충돌
 			if (_Pusher->Get_HitInfo().fY < _Pushee->Get_HitInfo().fY)
 				_Pushee->Set_PosY(*_pfY);
 			else
 				_Pushee->Set_PosY(-*_pfY);
 		}
-		else {	// 좌우 충돌 (*_pfX < *_pfY)
+		else
+		{	// 좌우 충돌 (*_pfX < *_pfY)
 			if (_Pusher->Get_HitInfo().fX < _Pushee->Get_HitInfo().fX)
 				_Pushee->Set_PosX(*_pfX);
 			else
@@ -336,4 +480,63 @@ bool CCollisionMgr::Check_RectRect(CObj* _lhs, CObj* _rhs, float* _fX, float* _f
 	}
 	else
 		return false;
+}
+
+
+// 충돌이 끝났는지 검사. Dst는 무조건 총알
+void CCollisionMgr::Collision_End_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
+{
+	RECT rc = {};
+
+	if (_Src.empty() || _Dst.empty())
+		return;
+
+	int _DstGroupCode = _Dst.front()->Get_Collision_Code();
+	int _SrcGroupCode = _Src.front()->Get_Collision_Code();
+
+	if (!(_DstGroupCode & 0x0F))
+		return;
+
+	if (0x01 <= _DstGroupCode && _DstGroupCode < CC_MSHIELD_NOREFLECT) // PLAYER BULLET과 SHIELD -> 몬스터와 검사.
+	{
+		if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
+		{
+			if (_SrcGroupCode & CC_MONSTER_BOSS)	// 보스냐
+			{
+				for (auto& srcObj : _Src)
+				{
+					bool bCollided = false;
+					for (auto& dstObj : _Dst)
+					{
+						if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							bCollided = true;
+					}
+					if (!bCollided) {
+						if (CBoss::HIT == static_cast<CBoss*>(srcObj)->Get_Boss_State())
+							static_cast<CBoss*>(srcObj)->Set_Boss_State(CBoss::IDLE);
+					}
+				}
+			}
+			else // 일반몹이냐
+			{
+				for (auto& srcObj : _Src)
+				{
+					bool bCollided = false;
+					for (auto& dstObj : _Dst)
+					{
+						if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							bCollided = true;
+					}
+					if (!bCollided) {
+						if (CMonster::HIT == static_cast<CMonster*>(srcObj)->Get_Monster_State())
+							static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::IDLE);
+					}
+				}
+			}
+		}
+	}
+	else // 몬스터 총알 -> 플레이어와 검사
+	{
+
+	}
 }
