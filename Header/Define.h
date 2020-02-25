@@ -94,9 +94,9 @@
 #define CC_NOHIT_BLOCK_OBS					0x420			// 못 때리는 데 길 막하는 것 ex) 철창
 #define CC_NOHIT_NOBLOCK_OBS				0x410			// 때리지도 못하고 막지도 않는 것 ex) Portal
 #define CC_HITTABLE_OBS						0x480			// 때릴 수 있는 모든 Obstacle 
-#define CC_HITTABLE_BLOCK_OBS				0x4C0			// 때릴 수는 있지만 지나갈 수 없는(길막)
-#define CC_HITTABLE_BLOCK_LOCK_OBS			0x4E0			// 때릴 수 있고 블락인데, 잠금까지 있음
-#define CC_HITTABLE_NOBLOCK_OBS				0x490			// 때릴수도 있고, 지나갈수있는(무빙으로 지나가면 알아서 부숴짐)
+#define CC_HITTABLE_NOBLOCK_OBS				0x4C0			// 때릴수도 있고, 지나갈수있는(무빙으로 지나가면 알아서 부숴짐)
+#define CC_HITTABLE_BLOCK_OBS				0x4E0			// 때릴 수는 있지만 지나갈 수 없는(길막)
+#define CC_HITTABLE_BLOCK_LOCK_OBS			0x4F0			// 때릴 수 있고 블락인데, 잠금까지 있음
 
 #define CC_ORB								0x800
 #define CC_ORB_HEAL							0x810

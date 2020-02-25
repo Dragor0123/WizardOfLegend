@@ -11,6 +11,7 @@ class CTileMgr : public Singleton<CTileMgr>
 {
 	friend class Singleton<CTileMgr>;
 	friend void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst);
+	friend bool CCollisionMgr::Collision_Obj_Tile(CObj * _pObj, float * _fPushedX, float * _fPushedY);
 
 public:
 	bool Initialize(const string& _strKey);

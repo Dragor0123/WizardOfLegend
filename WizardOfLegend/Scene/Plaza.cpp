@@ -10,6 +10,8 @@
 #include "../Obj/Archer.h"
 #include "../Obj/Swordman.h"
 #include "../Obj/EarthLoad.h"
+#include "../Obj/Sandbag.h"
+#include "../Obj/FireBoss.h"
 
 CPlaza::CPlaza()
 {
@@ -40,11 +42,17 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pTeleFButton);
 	dynamic_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-		CAbstractFactory<CSwordman>::Create(732.f, 738.f));
-	
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
+	//	CAbstractFactory<CEarthLoad>::Create(732.f, 738.f));
+
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(3181.f, 823.f));
+
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
+	//	CAbstractFactory<CEarthLoad>::Create(3181.f, 823.f));
+
 	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
-		CAbstractFactory<CArcher>::Create(2058.f, 641.f));
+		CAbstractFactory<CFireBoss>::Create(2050.f, 892.f));
 
 	return true;
 }

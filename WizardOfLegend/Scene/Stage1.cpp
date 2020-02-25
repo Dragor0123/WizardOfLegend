@@ -6,6 +6,7 @@
 #include "../Obj/Player.h"
 #include "../Manager/TileMgr.h"
 #include "../Obj/Sandbag.h"
+#include "../Obj/EarthLoad.h"
 
 CStage1::CStage1()
 {
@@ -25,13 +26,8 @@ bool CStage1::Initialize()
 	if (!CTileMgr::Get_Instance()->Initialize("FireTile"))
 		return false;
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
-	// CObj*	pObj = CAbstractFactory<CPlayer>::Create(400.f, 400.f);
-	// CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
-
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(2664, 1535);
-
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER, CAbstractFactory<CSandbag>::Create(800.f, 650.f));
 
 	return true;
 }
