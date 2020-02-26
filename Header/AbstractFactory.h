@@ -7,6 +7,7 @@
 // 조금이라도 객체 지향에 가깝게 코드를 구현하기 위해서이다.
 
 class CObj;
+class CArcRel;
 template <typename T>
 class CAbstractFactory
 {
@@ -38,7 +39,7 @@ public:
 		return pObj;
 	}
 
-	// NPC, Monster, Obstacle, UnderDeco 전용
+	// NPC, Monster, Obstacle, UnderDeco, Fable 전용
 	static CObj* Create(float _x, float _y, const string& _frameKey)
 	{
 		CObj* pObj = new T;
@@ -48,7 +49,17 @@ public:
 		return pObj;
 	}
 
-	// Bullet 전용
+	// Fbutton 전용
+	static CObj* Create(float _x, float _y, OBJID::ID _id)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_x, _y);
+		pObj->Set_OBJID(_id);
+		pObj->Initialize();
+		return pObj;
+	}
+
+	// Bullet & Shield;
 	static CObj* Create(float _x, float _y, float _fAngle,
 		const string& _frameKey)
 	{
@@ -56,6 +67,16 @@ public:
 		pObj->Set_Pos(_x, _y);
 		pObj->Set_Angle(_fAngle);
 		pObj->Set_FrameKey(_frameKey);
+		pObj->Initialize();
+		return pObj;
+	}
+
+	//Arcana, Relic 전용 : _frameKey에는 Bullet의 frameKey _pTarget은 플레이어
+	static CArcRel* Create(const string& _frameKey, CObj* _pTarget)
+	{
+		CArcRel* pObj = new T;
+		pObj->Set_FrameKey(_frameKey);
+		pObj->Set_Target(_pTarget);
 		pObj->Initialize();
 		return pObj;
 	}

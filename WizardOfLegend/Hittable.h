@@ -14,8 +14,8 @@ public:
 
 	void Reset_Hp() { m_iHp = m_iMaxHp; }
 	int Get_Hp() const { return m_iHp; }
-	int Get_MaxHp() const { return m_iHp; }
-
+	int Get_MaxHp() const { return m_iMaxHp; }
+	float	Get_Cur_HP_Ratio() const { return (float)m_iHp / m_iMaxHp;}
 protected:
 	int m_iHp;
 	int m_iMaxHp;

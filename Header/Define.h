@@ -15,6 +15,9 @@
 #define MAGENTA_COLOR RGB(255, 0, 255)
 #define OBJ_NOEVENT 0
 #define OBJ_DEAD 1
+#define ARCRELIC_IDLE		0
+#define ARCRELIC_DROPPED	1
+#define ARCRELIC_COOLING	2
 
 #define SAFE_DELETE(p) if(p) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARR(p) if(p) { delete[] p; p = nullptr;}

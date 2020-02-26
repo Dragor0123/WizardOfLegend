@@ -6,6 +6,7 @@
 #include "../Scene/TileEdit.h"
 #include "../Scene/Plaza.h"
 #include "../Obj/ObjMgr.h"
+#include "CtrlOwnerMgr.h"
 #include "KeyMgr.h"
 
 CSceneMgr::CSceneMgr()
@@ -66,7 +67,8 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 
 	if (m_ePreScene != m_eCurScene)
 	{
- 		if (m_pScene) {
+ 		if (m_pScene)
+		{
 			delete m_pScene;
 			m_pScene = nullptr;
 		}
@@ -92,6 +94,10 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 
 		// 마지막에 지워줄 것
 		assert(m_pScene->Initialize());
+
+		// 스테이지 개수만큼....
+		if (m_eCurScene != SCENE_LOGO && m_eCurScene != SCENE_MENU && m_eCurScene != SCENE_EDIT)
+			CCtrlOwnerMgr::Get_Instance()->GameObject_On();
 		m_ePreScene = m_eCurScene;
 	}
 }

@@ -8,6 +8,8 @@
 #include "MyBitmap\MyBitmap.h"
 #include "Manager\SceneMgr.h"
 #include "Manager\TileMgr.h"
+#include "Manager\CtrlOwnerMgr.h"
+#include "Manager\CardMgr.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -17,6 +19,7 @@ CMainGame::CMainGame()
 //	// 콘솔창을 생성시켜주는 함수이다.
 //	AllocConsole();
 //#endif //DEBUG
+
 }
 
 
@@ -66,7 +69,16 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 	if (!CSceneMgr::Get_Instance()->Initialize())
 		return false;
 
+	// 타일 매니저 초기화
 	if (!CTileMgr::Get_Instance()->Initialize("PlazaTile"))
+		return false;
+
+	// 컨트롤 매니저(키 소유권 관리자) 초기화
+	if (!CCtrlOwnerMgr::Get_Instance()->Initialize())
+		return false;
+
+	// 카드 매니저(아르카나, 렐릭) 초기화
+	if (!CCardMgr::Get_Instance()->Initialize())
 		return false;
 
 	return true;
@@ -75,6 +87,7 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 void CMainGame::Update(float _fdTime)
 {
 	CSceneMgr::Get_Instance()->Update(_fdTime);
+	CCardMgr::Get_Instance()->Update(_fdTime);
 }
 
 void CMainGame::Late_Update(float _fdTime)
@@ -82,6 +95,7 @@ void CMainGame::Late_Update(float _fdTime)
 	CSceneMgr::Get_Instance()->Late_Update(_fdTime);
 	CKeyMgr::Get_Instance()->Key_Update();
 	CScrollMgr::Get_Instance()->Scroll_Lock();
+	CCardMgr::Get_Instance()->Late_Update(_fdTime);
 }
 
 void CMainGame::Collision(float _fdTime)
@@ -95,7 +109,7 @@ void CMainGame::Render(float _fdTime)
 	Rectangle(hBackBuffer, 0, 0, WINCX, WINCY);
 
 	CSceneMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
-
+	//CCardMgr::Get_Instance()->Render();
 	BitBlt(m_hDC, 0, 0, WINCX, WINCY, hBackBuffer, 0, 0, SRCCOPY);
 
 	if (!g_FPS_ON)
@@ -108,11 +122,13 @@ void CMainGame::Release()
 {
 	CKeyMgr::Destroy_Instance();
 	CScrollMgr::Destroy_Instance();
+	CCardMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance();
 	CSceneMgr::Destroy_Instance();
 	CTileMgr::Destroy_Instance();
 	CObjMgr::Destroy_Instance();
 	CTimer::Destroy_Instance();
+	CCtrlOwnerMgr::Destroy_Instance();
 	ReleaseDC(g_hWnd, m_hDC);
 }
 

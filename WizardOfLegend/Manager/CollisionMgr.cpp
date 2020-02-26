@@ -12,6 +12,7 @@
 #include "../Obj/ScrewBullet.h"
 #include "../Obj/MeeleBullet.h"
 #include "../Obj/Boss.h"
+#include "../Obj/Shield.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -59,7 +60,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						{
 							// 플레이어가 보스한테 밀리는 것도 해야하나??
 							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-								static_cast<CPlayer*>(dstObj)->Sub_Hp(10);
+								static_cast<CPlayer*>(dstObj)->Sub_Hp(12);
 						}
 					}
 				}
@@ -81,7 +82,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						else
 						{
 							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-								static_cast<CPlayer*>(dstObj)->Sub_Hp(17);
+								static_cast<CPlayer*>(dstObj)->Sub_Hp(12);
 						}
 					}
 				}
@@ -191,11 +192,22 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							}
 							else
 							{
-								if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+								if (dynamic_cast<CBullet*>(dstObj))
 								{
-									static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
-									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
-									static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									}
+								}
+								else if (dynamic_cast<CShield*>(dstObj))
+								{
+									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CShield*>(dstObj)->Get_Att());
+										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+									}
 								}
 							}
 						}
@@ -204,20 +216,19 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 				else if (!(_SrcGroupCode & 0x800) && (_SrcGroupCode >> 10 & 0x1)) // CC_OBSTACLE 0x400
 				{ // 플레이어 총알&쉴드와 장애물 검사
 
-
-
-
-
 				}
 
 				if (dstObj->Get_Collision_Code() == CC_PSHIELD_NOREFLECT || dstObj->Get_Collision_Code() == CC_PSHIELD_REFLECT)
 				{ // 플레이어 쉴드와 적 총알 충돌검사.
 					if (_SrcGroupCode >= CC_MBULLET_NWALL_NPUSH && _SrcGroupCode <= CC_MBULLET_WALL_PUSH)
 					{
-						for (auto& srcObj : _Src)
-						{
-							// if (CC_PSHIELD_REFLECT == dstObj->Get_Collision_Code())  -> 반사 조건...
-							static_cast<CBullet*>(srcObj)->Set_Collision(true);
+						for (auto& srcObj : _Src) {
+							if (dynamic_cast<CMeeleBullet*>(srcObj))
+								continue;
+							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							{
+								static_cast<CBullet*>(srcObj)->Set_Collision(true);
+							}
 						}
 					}
 				}
@@ -229,9 +240,46 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 			for (auto& dstObj : _Dst)
 			{
 				// 먼저 플레이어와 충돌부터 시킬것!
+				if (_SrcGroupCode == 0x80)
+				{
+					for (auto& srcObj : _Src)
+					{
+						float fX = 0.f, fY = 0.f;
+						int dstObjCode = dstObj->Get_Collision_Code();
+						if (dstObjCode == CC_MBULLET_NWALL_NPUSH || dstObjCode == CC_MBULLET_WALL_NPUSH)
+						{
+							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							{
+								static_cast<CPlayer*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								static_cast<CBullet*>(dstObj)->Set_Collision(true);
+							}
+						}
+						else if (dstObjCode == CC_MBULLET_NWALL_PUSH || dstObjCode == CC_MBULLET_WALL_PUSH)
+						{
+							if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
+							{
+								static_cast<CPlayer*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								Collision_Obj_Tile(srcObj, &fX, &fY);
+								static_cast<CBullet*>(dstObj)->Set_Collision(true);
+							}
+						}
+						else if (dstObjCode == CC_MSHIELD_REFLECT || dstObjCode == CC_MSHIELD_NOREFLECT)
+						{
+							if (dynamic_cast<CShield*>(dstObj))
+							{
+								if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+								{
+									static_cast<CPlayer*>(srcObj)->Sub_Hp(static_cast<CShield*>(dstObj)->Get_Att());
+									static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								}
+							}
+						}
+					}
+				}
+				//몹의 총알 또는 쉴드가 플레이어가 아닌 다른 것과 부딪힌 경우
 
-
-				//끝.
 			}
 		}
 	} /////// dst가 총알 또는 쉴드일 경우 끝
@@ -473,7 +521,15 @@ void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 
 					if (Check_RectRect(refVec[iIdx], dstObj, &fX, &fY))
 					{	
-						if (dynamic_cast<CMeeleBullet*>(dstObj))
+						if (dynamic_cast<CShield*>(dstObj))
+							continue;
+						int code = dstObj->Get_Collision_Code();
+
+						if (CC_PBULLET_NWALL_NPUSH_DRAG == code ||
+							CC_PBULLET_NWALL_NPUSH_NDRAG == code ||
+							CC_PBULLET_NWALL_PUSH == code ||
+							CC_MBULLET_NWALL_NPUSH == code ||
+							CC_MBULLET_NWALL_PUSH == code)
 							continue;
 
 						if (dynamic_cast<CBullet*>(dstObj))

@@ -7,6 +7,8 @@
 #include "../Manager/TileMgr.h"
 #include "../Obj/Sandbag.h"
 #include "../Obj/EarthLoad.h"
+#include "../Manager/SceneMgr.h"
+#include "../Obj/FButton.h"
 
 CStage1::CStage1()
 {
@@ -34,15 +36,21 @@ bool CStage1::Initialize()
 
 int CStage1::Update(float _fdTime)
 {
-	CTileMgr::Get_Instance()->Update(_fdTime);
 	CObjMgr::Get_Instance()->Update(_fdTime);
+	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	{
+		CTileMgr::Get_Instance()->Update(_fdTime);
+	}
 	return 0;
 }
 
 void CStage1::Late_Update(float _fdTime)
 {
-	CTileMgr::Get_Instance()->Late_Update(_fdTime);
-	CObjMgr::Get_Instance()->Late_Update(_fdTime);
+	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	{
+		CTileMgr::Get_Instance()->Late_Update(_fdTime);
+		CObjMgr::Get_Instance()->Late_Update(_fdTime);
+	}
 }
 
 void CStage1::Collision(float _fdTime)
@@ -59,7 +67,7 @@ void CStage1::Render(HDC _DC, float _fdTime)
 void CStage1::Release()
 {
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
+	//CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireTile");
 }
 

@@ -13,7 +13,6 @@ namespace OBJID
 {
 	//UI가 들어갈 수도 있음
 	// FABLE을 npc, card(item, arcana), telecircle로 나눠야 함
-
 	enum ID
 	{
 		UNDERDECO, TELECIR,
@@ -22,8 +21,14 @@ namespace OBJID
 		M_RECTBULLET, M_CIRBULLET,
 		P_SHIELD, M_SHIELD,
 		NPC, CARD, OBSTACLE, ORB, PORTAL, GOODS,
-		MENU_UI, PLAZA_UI, STAGE1_UI, MOUSE, END
+		MENU_UI, STAGE_UI, 
+		INVENTORY, MOUSE, END
 	};
+}
+
+namespace KEYOWN
+{
+	enum KEYSWITCH { KS_PLAYER, KS_FABLE, KS_TITLEMENU, KS_INVENTORY, KS_INGAMEMENU, KS_END };
 }
 
 namespace COLLISION

@@ -1,2 +1,21 @@
 화살 사정거리 680.f
 드래곤 아크 1000.f
+
+
+
+	template<typename T>
+	CObj* Create_Shield(const string& _frameKey, float _fAngle)
+	{
+		CObj* pObj = CAbstractFactory<T>::Create(m_tInfo.fX, m_tInfo.fY,
+			_fAngle, _frameKey);
+		pObj->Set_Target(this);
+		return pObj;
+	}
+
+
+	if (KEY_DOWN(VK_LBUTTON))
+	{
+		CObj* pObj = Create_Shield<CGaiaShield>("", 0.f);
+		pObj->Set_Target(this);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::P_SHIELD, pObj);
+	}

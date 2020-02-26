@@ -28,6 +28,7 @@
 #pragma comment(lib, "msimg32")
 
 #include <vector>
+#include <array>
 #include <list>
 #include <map>
 #include <unordered_map>
@@ -36,8 +37,6 @@
 #include <string>
 #include <cassert>
 
-//
-#include <memory>
 
 using namespace std;
 #include "Include.h"
