@@ -17,6 +17,7 @@
 #include "../Obj/IceSphere.h"
 #include "../Obj/ObjMgr.h"
 #include "../Obj/IcicleEffect.h"
+#include "../Obj/SummonerBall.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -59,7 +60,6 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 				{
 					for (auto& srcObj : _Src)
 					{
-						float fX = 0.f, fY = 0.f;
 						if (!static_cast<CBoss*>(srcObj)->Get_Hittable())
 						{
 							// 플레이어가 보스한테 밀리는 것도 해야하나??
@@ -73,25 +73,58 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 					for (auto& srcObj : _Src)
 					{
 						float fX = 0.f, fY = 0.f;
-						if (srcObj->Get_Collision_Code() == CC_MONSTER_PUSHABLE)
+						if (srcObj->Get_Collision_Code() == CC_MONSTER_PUSHABLE) // 밀 수 있는 몹이라면?
 						{
-							if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
+							if (MEZ::MZ_FROZEN == dynamic_cast<CMonster*>(srcObj)->Get_MezState())
 							{
-								if (Collision_Obj_Tile(srcObj, &fX, &fY))
+								if (CollisionRectPush(dstObj, srcObj, &fX, &fY))
 								{
-									if (dynamic_cast<CPlayer*>(dstObj))
+									if (Collision_Obj_Tile(dstObj, &fX, &fY))
 									{
-										if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
-											static_cast<CPlayer*>(dstObj)->Dash_Off();
+										CollisionRectPush(srcObj, dstObj, &fX, &fY);
 									}
-									CollisionRectPush(dstObj, srcObj, &fX, &fY);
+								}
+							}
+							else 
+							{
+								if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
+								{
+									if (Collision_Obj_Tile(srcObj, &fX, &fY))
+									{
+										if (dynamic_cast<CPlayer*>(dstObj))
+										{
+											if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+												static_cast<CPlayer*>(dstObj)->Dash_Off();
+										}
+										CollisionRectPush(dstObj, srcObj, &fX, &fY);
+									}
 								}
 							}
 						}
 						else
-						{
-							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-								static_cast<CPlayer*>(dstObj)->Sub_Hp(12);
+						{	
+							if (dynamic_cast<CSummonerBall*>(srcObj))
+							{
+								if (static_cast<CSummonerBall*>(srcObj)->Get_Monster_State() != CMonster::ATTACK)
+									continue;
+							}
+							else if (CollisionRectPush(dstObj, srcObj, &fX, &fY))
+							{
+								if (dynamic_cast<CSummonerBall*>(srcObj))
+								{
+									if (static_cast<CSummonerBall*>(srcObj)->Get_Monster_State() == CMonster::ATTACK)
+										static_cast<CPlayer*>(dstObj)->Sub_Hp(static_cast<CSummonerBall*>(srcObj)->Get_Att());
+								}
+								else
+								{
+									static_cast<CPlayer*>(dstObj)->Sub_Hp(6);
+								}
+
+								if (Collision_Obj_Tile(dstObj, &fX, &fY))
+								{
+									CollisionRectPush(srcObj, dstObj, &fX, &fY);
+								}
+							}
 						}
 					}
 				}
@@ -544,6 +577,14 @@ bool CCollisionMgr::Collision_Obj_Tile(CObj * _pObj, float * _fPushedX, float * 
 								_pObj->Set_PosX(-*_fPushedX);
 						}
 
+						if (dynamic_cast<CSummonerBall*>(_pObj))
+						{
+							if (static_cast<CSummonerBall*>(_pObj)->Get_Monster_State() == CMonster::ATTACK)
+							{
+								static_cast<CSummonerBall*>(_pObj)->Set_Monster_State(CMonster::IDLE);
+								static_cast<CSummonerBall*>(_pObj)->Set_bAttack_Cool(false);
+							}
+						}
 						if (dynamic_cast<CPlayer*>(_pObj))
 						{
 							if (CPlayer::DASH == static_cast<CPlayer*>(_pObj)->Get_PlayerState())
@@ -607,10 +648,20 @@ void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst)
 							CC_MBULLET_NWALL_PUSH == code)
 							continue;
 
+
+						
 						if (dynamic_cast<CBullet*>(dstObj))
 						{
 							// 수정 요함
 							static_cast<CBullet*>(dstObj)->Set_Collision(true);
+						}
+						else if (dynamic_cast<CSummonerBall*>(dstObj))
+						{
+							if (static_cast<CSummonerBall*>(dstObj)->Get_Monster_State() == CMonster::ATTACK)
+							{
+								static_cast<CSummonerBall*>(dstObj)->Set_Monster_State(CMonster::IDLE);
+								static_cast<CSummonerBall*>(dstObj)->Set_bAttack_Cool(false);
+							}
 						}
 						else
 						{	// dstObj가 Bullet류가 아닐 때

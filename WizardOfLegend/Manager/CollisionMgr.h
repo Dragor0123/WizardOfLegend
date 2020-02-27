@@ -8,14 +8,16 @@ class CObj;
 class CCollisionMgr
 {
 public:
-	static void Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src);
+	static bool Collision_Obj_Tile(CObj* _pObj, float * _fPushedX, float * _fPushedY);
+	static void Collision_Obj_Tile(list<CObj*>& _Dst);
 
+
+	static void Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src);
 	// 사각형 충돌시 밀기 _Src : 밀리는 놈, _Dst : 미는 놈
 	static void Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src); 
 	static void Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src);
 	//static void Collision_CircleRect(list<CObj*>& _circle, list<CObj*>& _rect);
-	static bool Collision_Obj_Tile(CObj* _pObj, float * _fPushedX, float * _fPushedY);
-	static void Collision_Obj_Tile(list<CObj*>& _Dst);
+
 	static bool Is_PointInRect(const POINT& _pt, LPRECT _lpRC);
 	static bool Is_PointInCircle(const POINT& _pt, const POINT& _cPt, float _cRad);
 	static bool Check_CircleCircle(CObj* _Dst, CObj* _Src);

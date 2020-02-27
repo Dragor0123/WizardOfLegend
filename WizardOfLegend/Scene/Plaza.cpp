@@ -19,6 +19,8 @@
 #include "../Obj/Swordman.h"
 #include "../Obj/Gold.h"
 #include "../Obj/IcicleEffect.h"
+#include "../Obj/SummonCard.h"
+#include "../Obj/SummonerBall.h"
 
 CPlaza::CPlaza()
 {
@@ -84,14 +86,15 @@ bool CPlaza::Initialize()
 	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
 
 	///////////////////////// 나중에 지울것
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-		CAbstractFactory<CArcher>::Create(3181.f, 823.f));
-	CObj* SwordMan = CAbstractFactory<CSwordman>::Create(1000.f, 2071.f);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-		SwordMan);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	//	CAbstractFactory<CSummonerBall>::Create(3181.f, 823.f));
+	//CObj* SwordMan = CAbstractFactory<CSwordman>::Create(1000.f, 2071.f);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	//	SwordMan);
 
-	// CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
-	//	CAbstractFactory<CFireBoss>::Create(2050.f, 892.f));
+	CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+		CAbstractFactory<CSummonCard>::Create(2022.f, 2093.f, "SUMMONER_SCARD"));
+	
 
 	return true;
 }
