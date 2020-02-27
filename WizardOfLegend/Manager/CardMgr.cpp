@@ -21,6 +21,10 @@ bool CCardMgr::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/NormalDash_46_46.bmp", "NormalDash_46"))
 		return false;
 
+	// 노말 대시 (코드 넘버 4)
+	CCardMgr::Get_Instance()->Insert_CodeImage35(4);
+	CCardMgr::Get_Instance()->Insert_CodeImage46(4);
+
 	//////// 가이아실드 GaiaShieldIcon_35, GaiaShieldIcon_46
 	/// 코드넘버 0
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/GaiaShieldCard.bmp", "GaiaShieldCard"))
@@ -30,7 +34,13 @@ bool CCardMgr::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/GaiaShieldIcon_46.bmp", "GaiaShield_46"))
 		return false;
 
-	/////// 서리부채
+	///////코드넘버 3: 아이스 스피어 
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereCard.bmp", "IceSphereCard"))
+		return false;
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereIcon_35.bmp", "IceSphere_35"))
+		return false;
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereIcon_46.bmp", "IceSphere_46"))
+		return false;
 
 	return true;
 }
@@ -78,13 +88,13 @@ HDC CCardMgr::Find_Image35(int _code)
 	case 0:
 		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
 	case 1:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
+		//return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
 	case 2:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
+		//return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
 	case 3:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
+		return CBmpMgr::Get_Instance()->Find_Image("IceSphere_35");
 	case 4:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_35");
+		return CBmpMgr::Get_Instance()->Find_Image("NormalDash_35");
 	default:
 		return NULL;
 	}
@@ -101,13 +111,13 @@ HDC CCardMgr::Find_Image46(int _code)
 	case 0:
 		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
 	case 1:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
+		//return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
 	case 2:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
+		//return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
 	case 3:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
+		return CBmpMgr::Get_Instance()->Find_Image("IceSphere_46");
 	case 4:
-		return CBmpMgr::Get_Instance()->Find_Image("GaiaShield_46");
+		return CBmpMgr::Get_Instance()->Find_Image("NormalDash_46");
 	default:
 		return NULL;
 	}
@@ -134,6 +144,12 @@ bool CCardMgr::Insert_CodeImage35(int _code)
 		break;
 	case 2:
 		break;
+	case 3:
+		s35 = "IceSphere_35";
+		break;
+	case 4:
+		s35 = "NormalDash_35";
+		break;
 	default:
 		break;
 	}
@@ -154,6 +170,12 @@ bool CCardMgr::Insert_CodeImage46(int _code)
 	case 1:
 		break;
 	case 2:
+		break;
+	case 3:
+		s46 = "IceSphere_46";
+		break;
+	case 4:
+		s46 = "NormalDash_46";
 		break;
 	default:
 		break;

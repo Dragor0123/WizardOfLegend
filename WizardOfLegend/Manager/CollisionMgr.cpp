@@ -13,6 +13,10 @@
 #include "../Obj/MeeleBullet.h"
 #include "../Obj/Boss.h"
 #include "../Obj/Shield.h"
+#include "../Obj/Gold.h"
+#include "../Obj/IceSphere.h"
+#include "../Obj/ObjMgr.h"
+#include "../Obj/IcicleEffect.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -75,6 +79,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							{
 								if (Collision_Obj_Tile(srcObj, &fX, &fY))
 								{
+									if (dynamic_cast<CPlayer*>(dstObj))
+									{
+										if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+											static_cast<CPlayer*>(dstObj)->Dash_Off();
+									}
 									CollisionRectPush(dstObj, srcObj, &fX, &fY);
 								}
 							}
@@ -89,11 +98,18 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 			}
 			else if (!(_SrcGroupCode & 0xE00) && (_SrcGroupCode >> 8 & 0x1)) // Goods일 경우
 			{
-				// for (auto& srcObj : _Src)
-				// {
-				// 	
-				// 
-				// }
+				 for (auto& srcObj : _Src)
+				 {
+					 if (srcObj->Get_Collision_Code() == CC_GGOLD)
+					 {
+						 if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+						 {
+							 static_cast<CPlayer*>(dstObj)->Add_Gold(static_cast<CGold*>(srcObj)->Get_Gold());
+							 srcObj->Set_Dead();
+						 }
+					 }
+					 // 카오스잼은 생략
+				 }
 			}
 			else if (!(_SrcGroupCode & 0x800) && (_SrcGroupCode >> 10 & 0x1)) // CC_OBSTACLE 0x400
 			{ // Dst : Player , Src : OBSTACLE 
@@ -104,19 +120,37 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 					{
 						if (srcObj->Get_Collision_Code() >= CC_HITTABLE_BLOCK_OBS)
 						{ // src가 플레이어를 밀어낸다.
-							CollisionRectPush(dstObj, srcObj, &fX, &fY);
+							if (CollisionRectPush(dstObj, srcObj, &fX, &fY))
+							{
+								if (Collision_Obj_Tile(dstObj, &fX, &fY)){
+									if (dynamic_cast<CPlayer*>(dstObj))
+									{
+										if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+											static_cast<CPlayer*>(dstObj)->Dash_Off();
+									}
+								}
+							}
 						}
 						else if (CC_HITTABLE_NOBLOCK_OBS == srcObj->Get_Collision_Code() || CC_HITTABLE_OBS == srcObj->Get_Collision_Code())
 						{
 							// 상황 따라 다른데...
-							srcObj->Set_Dead();
 						}
 					}
 					else // NO_HITTABLE
 					{
 						if (CC_NOHIT_BLOCK_OBS == srcObj->Get_Collision_Code())
 						{
-							CollisionRectPush(dstObj, srcObj, &fX, &fY);
+							if (CollisionRectPush(dstObj, srcObj, &fX, &fY))
+							{
+								if (Collision_Obj_Tile(dstObj, &fX, &fY))
+								{
+									if (dynamic_cast<CPlayer*>(dstObj))
+									{
+										if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+											static_cast<CPlayer*>(dstObj)->Dash_Off();
+									}
+								}
+							}
 						}
 						else
 						{   
@@ -151,21 +185,49 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								int dstObjCode = dstObj->Get_Collision_Code();
 								if (0x05 <= dstObjCode && dstObjCode < CC_PSHIELD_NOREFLECT) // 충돌시 밀어버리는 총알
 								{
+									if (dynamic_cast<CIceSphere*>(dstObj))
+									{ // 아이스 스피어는 보스 몹을 밀어내지 않는다.
+										if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+										{
+											static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+											static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+											static_cast<CBullet*>(dstObj)->Set_Collision(true);
+										}
+									}
+									else if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
+										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
+										if (Collision_Obj_Tile(srcObj, &fX, &fY))
+										{
+											CollisionRectPush(dstObj, srcObj, &fX, &fY);
+										}
+									}
+								}
+								else if (CC_PBULLET_NWALL_NPUSH_DRAG <= dstObjCode && dstObjCode < CC_PBULLET_NWALL_PUSH) // 밀지 않는 총알.
+								{
 									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 									{
 										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
-										//만약에 쉴드가 Set_Collision을 안해도 될경우.. 예외처리한다.
-										static_cast<CBullet*>(dstObj)->Set_Collision(true);		
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									}
+								}
+								else if (dynamic_cast<CShield*>(dstObj))
+								{
+									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+									{
+										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CShield*>(dstObj)->Get_Att());
+										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
 									}
 								}
 							}
-							else
+							else // 보스가 Hittable이 아닌 경우
 							{
 								if (dstObj->Get_Collision_Code() < CC_PSHIELD_NOREFLECT) {
 									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-										static_cast<CBullet*>(dstObj)->Set_Collision(true);
-									// 쉴드는 무적상태 보스몹 부딪혀도.... 아무 효과가 없다.
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);		// 총알만 없애 준다.
 								}
 							}
 						}
@@ -177,16 +239,29 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							// 일반 몹 충돌처리
 							float fX = 0.f, fY = 0.f;
 							int dstObjCode = dstObj->Get_Collision_Code();
-							if (0x05 <= dstObjCode && dstObjCode < CC_PSHIELD_NOREFLECT) // 총알이 몹을 밀어낸다.
+							if (0x05 <= dstObjCode && dstObjCode < CC_PSHIELD_NOREFLECT) // 충돌시 밀어버리는 총알
 							{
 								if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
 								{
 									static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
 									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
-									static_cast<CBullet*>(dstObj)->Set_Collision(true);
+									if (dynamic_cast<CIceSphere*>(dstObj))
+										static_cast<CBullet*>(dstObj)->Set_Att(0);
+									else
+										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 									if (Collision_Obj_Tile(srcObj, &fX, &fY))
 									{
-										CollisionRectPush(dstObj, srcObj, &fX, &fY);
+										if (dynamic_cast<CIceSphere*>(dstObj))
+										{
+											// 몬스터가 벽과 충돌했다고 dstObj에게 알려야함.
+											static_cast<CIceSphere*>(dstObj)->Set_bMonsterWall(true);
+											CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
+												CAbstractFactory<CIcicleEffect>::Create(srcObj));
+										}
+										else
+										{
+											CollisionRectPush(dstObj, srcObj, &fX, &fY);
+										}
 									}
 								}
 							}

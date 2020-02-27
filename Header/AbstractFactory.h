@@ -80,6 +80,15 @@ public:
 		pObj->Initialize();
 		return pObj;
 	}
+
+	static CObj* Create(CObj* _pTarget)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Target(_pTarget);
+		pObj->Initialize();
+		return pObj;
+	}
+
 };
 
 #endif // !__AbstractFactory_H__

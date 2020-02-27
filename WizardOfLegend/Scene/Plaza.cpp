@@ -8,6 +8,8 @@
 #include "../Obj/FButton.h"
 #include "../Obj/Inventory.h"
 #include "../Obj/PlayerHPBar.h"
+#include "../Obj/UISkillSet.h"
+#include "../Obj/UIGold.h"
 #include "../Obj/ArcanaCard.h"
 #include "../Manager/SceneMgr.h"
 // 나중에 없애줄것. 플라자엔 몬스터 없음.
@@ -15,6 +17,8 @@
 #include "../Obj/FireBoss.h"
 #include "../Obj/Archer.h"
 #include "../Obj/Swordman.h"
+#include "../Obj/Gold.h"
+#include "../Obj/IcicleEffect.h"
 
 CPlaza::CPlaza()
 {
@@ -36,16 +40,22 @@ bool CPlaza::Initialize()
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
 
 	// 플레이어 삽입
-	CObj*	pObj = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pObj);
+	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pPlayer);
 
 	// 인벤 삽입
 	CObjMgr::Get_Instance()->Add_Object(OBJID::INVENTORY,
 		CAbstractFactory<CInventory>::Create());
 	
-	// 플레이어 HPBAR, SKILLBAR 삽입
+	// 플레이어 HPBAR, SKILLBAR 삽입, 돈 ui삽입
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
-		CAbstractFactory<CPlayerHPBar>::Create());
+		CAbstractFactory<CPlayerHPBar>::Create(pPlayer));
+
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+		CAbstractFactory<CUISkillSet>::Create());
+
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+		CAbstractFactory<CUIGold>::Create(pPlayer));
 
 	// 텔레서클 삽입
 	CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(2050.f, 1050.f);
@@ -53,14 +63,12 @@ bool CPlaza::Initialize()
 	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(2050.f, 1035.f, OBJID::STAGE_UI);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pTeleFButton);
 	static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
-
 	// 장애물, 데코레이션 삽입
 
 	// NPC 삽입
 
+	// 아르카나 카드 삽입 이따가 수정할 것. // GaiaShieldCard
 
-	// 아르카나 카드 삽입
-	////////// 이따가 수정할 것.
 	CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(2528.f, 2040.f, "GaiaShieldCard");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);
 
@@ -68,11 +76,19 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pGaiaFButton);
 	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
 
+	CObj* pIceSphereCard = CAbstractFactory<CArcanaCard>::Create(2448.f, 2040.f, "IceSphereCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pIceSphereCard);
+
+	CObj* pIceSphereFButton = CAbstractFactory<CFButton>::Create(2448.f, 2060.f, OBJID::STAGE_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pIceSphereFButton);
+	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
+
 	///////////////////////// 나중에 지울것
 	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 		CAbstractFactory<CArcher>::Create(3181.f, 823.f));
-	 CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-		CAbstractFactory<CSwordman>::Create(750.f, 662.f));
+	CObj* SwordMan = CAbstractFactory<CSwordman>::Create(1000.f, 2071.f);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+		SwordMan);
 
 	// CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
 	//	CAbstractFactory<CFireBoss>::Create(2050.f, 892.f));
