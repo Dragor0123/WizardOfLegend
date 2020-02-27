@@ -195,7 +195,9 @@ bool CCardMgr::Insert_CodeArcana(int _code, CArcRel* _Arc)
 
 int CCardMgr::Insert_Item_To_Inventory(int _code)
 {
+#ifdef _DEBUG
 	assert(!CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).empty());
+#endif
 	CObj* pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
 
 	if (_code < 0)

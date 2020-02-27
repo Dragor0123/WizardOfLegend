@@ -83,7 +83,9 @@ int CTileMgr::Get_Tile_Col_Max(const string& _strKey) const
 {
 	BITMAP bitmap;
 	CMyBitmap* myBitmap = CBmpMgr::Get_Instance()->Find_MyBitmap(_strKey);
+#ifdef _DEBUG
 	assert(myBitmap);
+#endif
 	HBITMAP hBitmap = myBitmap->Get_Bitmap();
 	if (!hBitmap)
 		return -1;
@@ -98,7 +100,9 @@ int CTileMgr::Get_Tile_Row_Max(const string& _strKey) const
 {
 	BITMAP bitmap;
 	CMyBitmap* myBitmap = CBmpMgr::Get_Instance()->Find_MyBitmap(_strKey);
+#ifdef _DEBUG
 	assert(myBitmap);
+#endif
 	HBITMAP hBitmap = myBitmap->Get_Bitmap();
 	if (!hBitmap)
 		return -1;

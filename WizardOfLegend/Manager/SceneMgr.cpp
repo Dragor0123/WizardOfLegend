@@ -92,9 +92,9 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		}
 
-		// 마지막에 지워줄 것
+#ifdef _DEBUG
 		assert(m_pScene->Initialize());
-
+#endif
 		// 스테이지 개수만큼....
 		if (m_eCurScene != SCENE_LOGO && m_eCurScene != SCENE_MENU && m_eCurScene != SCENE_EDIT)
 			CCtrlOwnerMgr::Get_Instance()->GameObject_On();
