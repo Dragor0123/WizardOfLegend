@@ -10,7 +10,7 @@ class CCollisionMgr
 public:
 	static bool Collision_Obj_Tile(CObj* _pObj, float * _fPushedX, float * _fPushedY);
 	static void Collision_Obj_Tile(list<CObj*>& _Dst);
-
+	static bool Collision_Obj_Obstacle(CObj* _pObj, float * _fPushedX, float * _fPushedY);
 
 	static void Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src);
 	// 사각형 충돌시 밀기 _Src : 밀리는 놈, _Dst : 미는 놈

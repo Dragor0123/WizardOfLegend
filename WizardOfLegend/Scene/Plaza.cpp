@@ -12,16 +12,9 @@
 #include "../Obj/UIGold.h"
 #include "../Obj/ArcanaCard.h"
 #include "../Manager/SceneMgr.h"
-// 나중에 없애줄것. 플라자엔 몬스터 없음.
-#include "../Obj/Sandbag.h"
-#include "../Obj/FireBoss.h"
-#include "../Obj/Archer.h"
-#include "../Obj/Swordman.h"
 #include "../Obj/Gold.h"
-#include "../Obj/IcicleEffect.h"
+// 나중에 없애줄것. 플라자엔 몬스터 없음.
 #include "../Obj/SummonCard.h"
-#include "../Obj/SummonerBall.h"
-
 CPlaza::CPlaza()
 {
 }
@@ -42,7 +35,8 @@ bool CPlaza::Initialize()
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
 
 	// 플레이어 삽입
-	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
+	// 원위치 (2080.f, 2356.f )
+	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2050.f, 1050.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pPlayer);
 
 	// 인벤 삽입
@@ -93,20 +87,11 @@ bool CPlaza::Initialize()
 	//	SwordMan);
 
 	CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-		CAbstractFactory<CSummonCard>::Create(2022.f, 2093.f, "SUMMONER_SCARD"));
+		CAbstractFactory<CSummonCard>::Create(3181, 823, "SUMMONERBALL_SCARD"));
 	
 
 	return true;
 }
-
-//int CPlaza::Update(float _fdTime)
-//{
-//	
-//
-//	CTileMgr::Get_Instance()->Update(_fdTime);
-//	CObjMgr::Get_Instance()->Update(_fdTime);
-//	return 0;
-//}
 
 int CPlaza::Update(float _fdTime)
 {

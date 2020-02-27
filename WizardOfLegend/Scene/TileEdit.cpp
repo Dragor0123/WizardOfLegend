@@ -100,6 +100,18 @@ void CTileEdit::Key_Check()
 			MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
 		}
 	}
+	else if (KEY_DOWN('3')) {
+		//m_curTileID = TILEENUM::ID_PLAZA;
+		//if (!Reload_TileMgr()) {
+		//	MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
+		//}
+	}
+	else if (KEY_DOWN('4')) {
+		// m_curTileID = TILEENUM::ID_PLAZA;
+		// if (!Reload_TileMgr()) {
+		// 	MessageBox(NULL, L"TileSet 바꾸기 실패", L"Reload_TileMgr", MB_OK);
+		// }
+	}
 
 	string strKey;
 	switch (m_curTileID)
@@ -107,14 +119,8 @@ void CTileEdit::Key_Check()
 	case TILEENUM::ID_FIRE:
 		strKey = "FireTile";
 		break;
-	case TILEENUM::ID_HOUSE:
-		break;
 	case TILEENUM::ID_PLAZA:
 		strKey = "PlazaTile";
-		break;
-	case TILEENUM::ID_ICE:
-		break;
-	case TILEENUM::ID_END:
 		break;
 	default:
 		break;
@@ -214,15 +220,15 @@ bool CTileEdit::Reload_TileMgr()
 			return false;
 		m_pTileForPick = CAbstractFactory<CFireTile>::Create(fTileX, fTileY);
 		return true;
-	case TILEENUM::ID_HOUSE:
-		break;
 	case TILEENUM::ID_PLAZA:
 		CTileMgr::Get_Instance()->Initialize("PlazaTile");
 		if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Tile/plazaTile.bmp", "PlazaTile"))
 			return false;
 		m_pTileForPick = CAbstractFactory<CPlazaTile>::Create(fTileX, fTileY);
 		return true;
-	case TILEENUM::ID_ICE:
+	case TILEENUM::ID_FIREBOSS_ROOM:
+		break;
+	case TILEENUM::ID_EARTHBOSS_ROOM:
 		break;
 	default:
 		break;

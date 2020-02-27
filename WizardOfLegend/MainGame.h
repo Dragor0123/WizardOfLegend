@@ -3,7 +3,7 @@
 #ifndef __MAINGAME_H__
 #define __MAINGAME_H__
 
-#include "Singleton.h"
+#include "../Header/Singleton.h"
 
 class CMainGame : public Singleton<CMainGame>
 {
