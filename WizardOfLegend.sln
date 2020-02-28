@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WizardOfLegend", "WizardOfLegend\WizardOfLegend.vcxproj", "{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Header", "Header", "{A83D9024-23FF-4F12-A261-3A9A0414192F}"
+	ProjectSection(SolutionItems) = preProject
+		Header\Include.h = Header\Include.h
+		Header\Singleton.h = Header\Singleton.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{284AB3D0-C291-4DC2-8DBD-5CEB63140B66}"
+	ProjectSection(SolutionItems) = preProject
+		Header\AbstractFactory.h = Header\AbstractFactory.h
+		Header\Define.h = Header\Define.h
+		Header\Enum.h = Header\Enum.h
+		Header\Extern.h = Header\Extern.h
+		Header\Include.h = Header\Include.h
+		Header\Inline.h = Header\Inline.h
+		Header\Singleton.h = Header\Singleton.h
+		Header\Struct.h = Header\Struct.h
+		Header\Template.h = Header\Template.h
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Debug|x64.ActiveCfg = Debug|x64
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Debug|x64.Build.0 = Debug|x64
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Debug|x86.ActiveCfg = Debug|Win32
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Debug|x86.Build.0 = Debug|Win32
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Release|x64.ActiveCfg = Release|x64
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Release|x64.Build.0 = Release|x64
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Release|x86.ActiveCfg = Release|Win32
+		{31007FF0-6D6B-470D-B1B1-E14B0F07AAF7}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{284AB3D0-C291-4DC2-8DBD-5CEB63140B66} = {A83D9024-23FF-4F12-A261-3A9A0414192F}
+	EndGlobalSection
+EndGlobal
