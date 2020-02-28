@@ -85,9 +85,6 @@ bool CPlaza::Initialize()
 	//CObj* SwordMan = CAbstractFactory<CSwordman>::Create(1000.f, 2071.f);
 	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 	//	SwordMan);
-
-	CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-		CAbstractFactory<CSummonCard>::Create(3181, 823, "SUMMONERBALL_SCARD"));
 	
 
 	return true;

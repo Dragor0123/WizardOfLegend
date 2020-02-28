@@ -36,7 +36,7 @@
 #include <functional>
 #include <string>
 #include <cassert>
-
+#include <stack>
 
 using namespace std;
 #include "Include.h"

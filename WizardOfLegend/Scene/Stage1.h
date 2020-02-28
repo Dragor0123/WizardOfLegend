@@ -6,6 +6,7 @@
 #include "Scene.h"
 
 // ¾Æ¸¶ Fire Stage
+class CObj;
 class CStage1 : public CScene
 {
 public:
@@ -20,6 +21,11 @@ public:
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
 	virtual void Key_Check();
+
+private:
+	int				m_aRoomClear[6];
+	stack<CObj*>	m_stackPrison;
+	bool			m_bTeleCircleInserted;
 };
 
 #endif
