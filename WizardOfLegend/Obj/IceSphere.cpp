@@ -18,9 +18,9 @@ bool CIceSphere::Initialize()
 {
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/IceSphere.bmp", "IceSphere"))
 		return false;
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/rot160.bmp", "Sphere_rot"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/rot160.bmp", "rot160"))
 		return false;
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/empty160.bmp", "Sphere_empty"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/empty160.bmp", "empty160"))
 		return false;
 
 	CBullet::Initialize();
@@ -32,7 +32,7 @@ bool CIceSphere::Initialize()
 	m_tHitInfo.iCY = 16;
 	m_fShotRange = 5000.f;
 	m_fSpeed = 1400.f;
-	m_iAtt = 100;
+	m_iAtt = 20;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("IceSphere");
@@ -44,14 +44,13 @@ bool CIceSphere::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
+
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 
 int CIceSphere::Update(float _fdTime)
 {
-	// 수정 요함.
-	// 1.마우스 떼면 날아가야되고. 2. 마우스 떼기전까지는 계속 각도 입력받아야함.
-
 	if (m_bDead)
 		return OBJ_DEAD;
 
@@ -133,8 +132,8 @@ void CIceSphere::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY
 	if (m_ePreState != CBullet::COLLISION)
 	{
 		HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
-		HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("Sphere_rot");
-		HDC hEmpDC = CBmpMgr::Get_Instance()->Find_Image("Sphere_Empty");
+		HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("rot160");
+		HDC hEmpDC = CBmpMgr::Get_Instance()->Find_Image("empty160");
 
 		PlgBlt(hRotDC, m_tRotPoint,
 			hMemDC, 0, 0, m_tInfo.iCX, m_tInfo.iCY,
@@ -179,29 +178,7 @@ void CIceSphere::Move_Frame()
 
 void CIceSphere::Scene_Change()
 {
-	if (m_ePreState != m_eCurState)
-	{
-		switch (m_eCurState)
-		{
-		case CBullet::FIRE:
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 0;
-			m_tFrame.dwFrameSpeed = 100;
-			m_tFrame.dwFrameTime = GetTickCount();
-			break;
-		case CBullet::COLLISION:
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 0;
-			m_tFrame.iFrameScene = 0;
-			m_tFrame.dwFrameSpeed = 100;
-			m_tFrame.dwFrameTime = GetTickCount();
-			break;
-		default:
-			break;
-		}
-		m_ePreState = m_eCurState;
-	}
+	CLineBullet::Scene_Change();
 }
 
 int CIceSphere::Get_Collision_Code() const

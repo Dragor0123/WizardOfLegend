@@ -1,23 +1,18 @@
 #include "../stdafx.h"
 #include "Stage1.h"
-#include "../Manager/ScrollMgr.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "../Obj/ObjMgr.h"
 #include "../Obj/Player.h"
 #include "../Manager/TileMgr.h"
-#include "../Obj/Sandbag.h"
-#include "../Obj/EarthLoad.h"
 #include "../Manager/SceneMgr.h"
 #include "../Obj/FButton.h"
-/////////////
-#include "../Obj/Archer.h"
-#include "../Obj/Swordman.h"
 #include "../Obj/IcicleEffect.h"
-#include "../Obj/SummonCard.h"
-#include "../Obj/Summoner.h"
-#include "../Obj/SummonerBall.h"
 #include "../Obj/Prison.h"
 #include "../Obj/TeleCircle.h"
+#include "../Obj/Inventory.h"
+#include "../Obj/PlayerHPBar.h"
+#include "../Obj/UIGold.h"
+#include "../Obj/SummonCard.h"
 
 CStage1::CStage1()
 	: m_bTeleCircleInserted(false)
@@ -42,19 +37,30 @@ bool CStage1::Initialize()
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(2664.f, 1535.f);
 
+	// ÇÃ·¹ÀÌ¾î HPBAR, SKILLBAR »ðÀÔ, µ· ui»ðÀÔ
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+		CAbstractFactory<CPlayerHPBar>::Create(rPlayer));
+
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+		CAbstractFactory<CUISkillSet>::Create());
+
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+		CAbstractFactory<CUIGold>::Create(rPlayer));
+
 	return true;
 }
 
 int CStage1::Update(float _fdTime)
 {
 	CObjMgr::Get_Instance()->Update(_fdTime);
-	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
 		CTileMgr::Get_Instance()->Update(_fdTime);
 		auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 		
+		/*
 		bool b = true;
-		for (int i = 0; i < 6; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			if (m_aRoomClear[i] < 1) {
 				b = false;
@@ -74,7 +80,10 @@ int CStage1::Update(float _fdTime)
 				CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison);
 
 				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-					CAbstractFactory<CSummonCard>::Create(510.f, 576.f, "ARCHER_SCARD"));
+					CAbstractFactory<CSummonCard>::Create(290.f, 858.f, "SWORDMAN_SCARD"));
+
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(289.f, 417.f, "SWORDMAN_SCARD"));
 				m_aRoomClear[0] = 0;
 			}
 		}
@@ -107,7 +116,11 @@ int CStage1::Update(float _fdTime)
 				CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison);
 
 				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-					CAbstractFactory<CSummonCard>::Create(474.f, 1811.f, "SWORDMAN_SCARD"));
+					CAbstractFactory<CSummonCard>::Create(297.f, 1649.f, "ARCHER_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(277.f, 2100.f, "ARCHER_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(827.f, 2077.f, "ARCHER_SCARD"));
 				m_aRoomClear[1] = 0;
 			}
 		}
@@ -142,7 +155,7 @@ int CStage1::Update(float _fdTime)
 				CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison2);
 
 				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-					CAbstractFactory<CSummonCard>::Create(2273.f, 224.f, "SWORDMAN_SCARD"));
+					CAbstractFactory<CSummonCard>::Create(2293.f, 224.f, "SWORDMAN_SCARD"));
 				m_aRoomClear[2] = 0;
 			}
 		}
@@ -175,7 +188,15 @@ int CStage1::Update(float _fdTime)
 				CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison);
 
 				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-					CAbstractFactory<CSummonCard>::Create(5271.f, 2792.f, "SUMMONER_SCARD"));
+					CAbstractFactory<CSummonCard>::Create(5098.f, 2712.f, "ARCHER_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(5608.f, 2718.f, "SUMMONERBALL_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(5670.f, 3038.f, "SUMMONERBALL_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(5357.f, 2667.f, "SUMMONERBALL_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(5029.f, 3104.f, "SUMMONERBALL_SCARD"));
 				m_aRoomClear[3] = 0;
 			}
 		}
@@ -205,7 +226,9 @@ int CStage1::Update(float _fdTime)
 				m_stackPrison.push(pPrison);
 				CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison);
 				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-					CAbstractFactory<CSummonCard>::Create(2785.f, 4705.f, "SUMMONER_SCARD"));
+					CAbstractFactory<CSummonCard>::Create(2457.f, 4637.f, "SUMMONER_SCARD"));
+				CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+					CAbstractFactory<CSummonCard>::Create(3102.f, 4637.f, "SUMMONER_SCARD"));
 				m_aRoomClear[4] = 0;
 			}
 		}
@@ -263,9 +286,9 @@ int CStage1::Update(float _fdTime)
 				}
 			}
 		}
-
-		if (b && !m_bTeleCircleInserted && m_stackPrison.empty())
-		{
+		*/
+		/*if (b && !m_bTeleCircleInserted && m_stackPrison.empty())
+		{*/
 			// ÅÚ·¹¼­Å¬ »ðÀÔ
 			CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(2664.f, 1535.f);
 			CObjMgr::Get_Instance()->Add_Object(OBJID::TELECIR, pTeleCircle);
@@ -273,14 +296,14 @@ int CStage1::Update(float _fdTime)
 			CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pTeleFButton);
 			static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 			m_bTeleCircleInserted = true;
-		}
+		//}
 	}
 	return OBJ_NOEVENT;
 }
 
 void CStage1::Late_Update(float _fdTime)
 {
-	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	if (CSceneMgr::SCENE_STAGE1 == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
 		CTileMgr::Get_Instance()->Late_Update(_fdTime);
 		CObjMgr::Get_Instance()->Late_Update(_fdTime);
@@ -296,22 +319,22 @@ void CStage1::Render(HDC _DC, float _fdTime)
 {	
 	CTileMgr::Get_Instance()->Render(_DC, _fdTime);
 	CObjMgr::Get_Instance()->Render(_DC, _fdTime);
-
-	//TCHAR szText[32] = L"";
-	//HDC hOneTileDC = GetDC(g_hWnd);
-	//Rectangle(hOneTileDC, 1030, 110, 1300, 190);
-	//swprintf_s(szText, L"½ºÅÃ °³¼ö: [%d], ¸Ç À§ÀÇ °¨¿Á(%d, %d)", m_stackPrison.size());
-	//TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
-	//ReleaseDC(g_hWnd, hOneTileDC);
 }
 
 void CStage1::Release()
 {
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
-	//CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
+	for (int i = (int)OBJID::UNDERDECO; i <= (int)OBJID::EFFECT; ++i) {
+		if ((OBJID::ID)i == OBJID::PLAYER)
+			continue;
+		CObjMgr::Get_Instance()->Delete_ID((OBJID::ID)i);
+	}
+
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::STAGE_UI);
+
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireTile");
 }
 
-void CStage1::Key_Check()
+bool CStage1::Key_Check()
 {
+	return true;
 }

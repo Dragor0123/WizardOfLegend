@@ -56,4 +56,10 @@ void Safe_Delete_Map(T& _con)
 	_con.clear();
 }
 
+template <typename T>
+bool ObjectSortY(T _Dst, T _Src)
+{
+	return _Dst->Get_Info().fY < _Src->Get_Info().fY;
+}
+
 #endif // !__TEMPLATE_H__

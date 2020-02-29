@@ -19,7 +19,7 @@ public:
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
 
-	virtual void Key_Check();
+	virtual bool Key_Check();
 
 private:
 	bool Reload_TileMgr();

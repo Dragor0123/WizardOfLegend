@@ -73,8 +73,12 @@ void CTileEdit::Release()
 	CTileMgr::Destroy_Instance();
 }
 
-void CTileEdit::Key_Check()
+bool CTileEdit::Key_Check()
 {
+	if (KEY_DOWN(VK_ESCAPE)) {
+		// 메인메뉴로 돌아가는거...;
+	}
+
 	if (KEY_DOWN(VK_TAB)) {
 		m_bCursorEnable = (m_bCursorEnable) ? false : true;
 	}
@@ -203,6 +207,8 @@ void CTileEdit::Key_Check()
 			}
 		}
 	}
+
+	return true;
 }
 
 bool CTileEdit::Reload_TileMgr()

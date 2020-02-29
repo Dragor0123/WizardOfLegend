@@ -20,7 +20,7 @@ public:
 	virtual void Collision(float _fdTime);
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
-	virtual void Key_Check();
+	virtual bool Key_Check();
 
 private:
 	int				m_aRoomClear[6];

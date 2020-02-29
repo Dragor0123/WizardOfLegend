@@ -13,12 +13,15 @@
 #include "../Obj/ArcanaCard.h"
 #include "../Manager/SceneMgr.h"
 #include "../Obj/Gold.h"
+#include "../Obj/OverDeco.h"
+#include "../Obj/BossHPBar.h"
+
 // 나중에 없애줄것. 플라자엔 몬스터 없음.
-#include "../Obj/SummonCard.h"
+
+
 CPlaza::CPlaza()
 {
 }
-
 
 CPlaza::~CPlaza()
 {
@@ -36,7 +39,7 @@ bool CPlaza::Initialize()
 
 	// 플레이어 삽입
 	// 원위치 (2080.f, 2356.f )
-	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2050.f, 1050.f);
+	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pPlayer);
 
 	// 인벤 삽입
@@ -61,31 +64,29 @@ bool CPlaza::Initialize()
 	static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 	// 장애물, 데코레이션 삽입
 
+	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+		CAbstractFactory<COverDeco>::Create(2048.f, 1688.f, string("PlazaArch")));
 	// NPC 삽입
 
 	// 아르카나 카드 삽입 이따가 수정할 것. // GaiaShieldCard
 
 	CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(2528.f, 2040.f, "GaiaShieldCard");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);
-
 	CObj* pGaiaFButton = CAbstractFactory<CFButton>::Create(2528.f, 2060.f, OBJID::STAGE_UI);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pGaiaFButton);
 	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
 
 	CObj* pIceSphereCard = CAbstractFactory<CArcanaCard>::Create(2448.f, 2040.f, "IceSphereCard");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pIceSphereCard);
-
 	CObj* pIceSphereFButton = CAbstractFactory<CFButton>::Create(2448.f, 2060.f, OBJID::STAGE_UI);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pIceSphereFButton);
 	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
 
-	///////////////////////// 나중에 지울것
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-	//	CAbstractFactory<CSummonerBall>::Create(3181.f, 823.f));
-	//CObj* SwordMan = CAbstractFactory<CSwordman>::Create(1000.f, 2071.f);
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
-	//	SwordMan);
-	
+	CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(2368.f, 2040.f, "FrostFanCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
+	CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(2368.f, 2060.f, OBJID::STAGE_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pFrostFanFButton);
+	dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
 
 	return true;
 }
@@ -93,7 +94,7 @@ bool CPlaza::Initialize()
 int CPlaza::Update(float _fdTime)
 {
 	CObjMgr::Get_Instance()->Update(_fdTime);
-	if (CSceneMgr::SCENE_PLAZA == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	if (CSceneMgr::SCENE_PLAZA == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
 		CTileMgr::Get_Instance()->Update(_fdTime);
 	}
@@ -102,7 +103,7 @@ int CPlaza::Update(float _fdTime)
 
 void CPlaza::Late_Update(float _fdTime)
 {
-	if (CSceneMgr::SCENE_PLAZA == CSceneMgr::Get_Instance()->Get_Current_SceneID())
+	if (CSceneMgr::SCENE_PLAZA == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
 		CTileMgr::Get_Instance()->Late_Update(_fdTime);
 		CObjMgr::Get_Instance()->Late_Update(_fdTime);
@@ -122,23 +123,24 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 
 void CPlaza::Release()
 {
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::MONSTER);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_CIRBULLET);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_RECTBULLET);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::M_CIRBULLET);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::M_RECTBULLET);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::BOSS);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_SHIELD);
+
 	// F_ABLE제거
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::NPC);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::CARD);
+
 	// UI 제거
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::STAGE_UI);
 
 	// 장애물들 제거
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::OBSTACLE);
 	CBmpMgr::Get_Instance()->Delete_Bmp("PlazaTile");
 }
 
-void CPlaza::Key_Check()
+bool CPlaza::Key_Check()
 {
+	return true;
 }

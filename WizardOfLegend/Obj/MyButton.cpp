@@ -21,6 +21,7 @@ bool CMyButton::Initialize()
 	m_tInfo.iCX = 140;
 	m_tInfo.iCY = 32;
 	Equalize_HitSzInfoSz();
+	m_eRenderGroupID = GROUPID::UI;
 	return true;
 }
 

@@ -5,6 +5,7 @@
 #include "../Scene/Stage1.h"
 #include "../Scene/TileEdit.h"
 #include "../Scene/Plaza.h"
+#include "../Scene/FireBossStage.h"
 #include "../Obj/ObjMgr.h"
 #include "CtrlOwnerMgr.h"
 #include "KeyMgr.h"
@@ -55,7 +56,7 @@ void CSceneMgr::Release()
 	SAFE_DELETE(m_pScene);
 }
 
-int CSceneMgr::Get_Current_SceneID()
+int CSceneMgr::Get_Scene_ID()
 {
 	return (int)m_eCurScene;
 }
@@ -86,6 +87,9 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		case SCENE_STAGE1:
 			m_pScene = new CStage1;
+			break;
+		case SCENE_FIREBOSS:
+			m_pScene = new CFireBossStage;
 			break;
 		case SCENE_EDIT:
 			m_pScene = new CTileEdit;

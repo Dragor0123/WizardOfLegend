@@ -20,7 +20,7 @@ bool CMouse::Initialize()
 	m_tInfo.iCX = 40;
 	m_tInfo.iCY = 40;
 	Equalize_HitSzInfoSz();
-
+	m_eRenderGroupID = GROUPID::MOUSE;
 	return true;
 }
 

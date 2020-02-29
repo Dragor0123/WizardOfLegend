@@ -33,6 +33,8 @@ bool CUISkillSet::Initialize()
 
 	m_strFrameKey = "UI_SKILLSET";
 	Update_Rect();
+	m_eRenderGroupID = GROUPID::UI;
+	return true;
 }
 
 int CUISkillSet::Update(float _fdTime)

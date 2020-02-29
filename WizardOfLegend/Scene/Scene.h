@@ -16,7 +16,7 @@ public:
 	virtual void Render(HDC _DC, float _fdTime) = 0;
 	virtual void Release() = 0;
 
-	virtual void Key_Check() = 0;
+	virtual bool Key_Check() = 0;
 };
 
 #endif

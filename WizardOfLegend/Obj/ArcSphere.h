@@ -15,9 +15,9 @@ public:
 	virtual void Release();
 
 public:
-	virtual void Fire_Skill();
-	void Key_Up_Action();
 	// Inherited via CArcRel
+	virtual void Fire_Skill();
+	virtual void Key_Up_Action();
 	virtual void Passive_Effect();
 
 private:

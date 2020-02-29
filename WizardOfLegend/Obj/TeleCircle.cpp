@@ -24,6 +24,7 @@ bool CTeleCircle::Initialize()
 	m_tInfo.iCY = 256;
 	Equalize_HitSzInfoSz();
 
+	m_eRenderGroupID = GROUPID::BACKGROUND;
 	return true;
 }
 
@@ -67,6 +68,13 @@ void CTeleCircle::Release()
 
 void CTeleCircle::Do_FButton_Action(float _fdTime)
 {
-	if (CSceneMgr::Get_Instance()->Get_Current_SceneID() == CSceneMgr::SCENE_PLAZA)
+	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_PLAZA) {
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_STAGE1);
+		return;
+	}
+
+	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_STAGE1) {
+		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_FIREBOSS);
+		return;
+	}
 }

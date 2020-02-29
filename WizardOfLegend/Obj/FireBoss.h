@@ -28,7 +28,9 @@ public:
 public:
 	virtual void Scene_Change();
 	virtual void Move_Frame();
+
 	virtual int Get_Boss_State() const;
+	bool Get_bJump() const { return m_bJump; }
 	virtual void Set_Boss_State(int _eNewState);
 
 private:

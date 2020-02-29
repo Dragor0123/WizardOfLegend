@@ -34,12 +34,24 @@ bool CCardMgr::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/GaiaShieldIcon_46.bmp", "GaiaShield_46"))
 		return false;
 
+	// 코드 넘버 1 : 드래곤아크
+
+	// 코드 넘버 2 : 파이어볼
+
 	///////코드넘버 3: 아이스 스피어 
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereCard.bmp", "IceSphereCard"))
 		return false;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereIcon_35.bmp", "IceSphere_35"))
 		return false;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/IceSphereIcon_46.bmp", "IceSphere_46"))
+		return false;
+
+	// 코드 넘버 5: FrostFan
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/FrostFanCard.bmp", "FrostFanCard"))
+		return false;
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/FrostFanIcon_35.bmp", "FrostFan_35"))
+		return false;
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/CardIcon/FrostFanIcon_46.bmp", "FrostFan_46"))
 		return false;
 
 	return true;
@@ -95,6 +107,8 @@ HDC CCardMgr::Find_Image35(int _code)
 		return CBmpMgr::Get_Instance()->Find_Image("IceSphere_35");
 	case 4:
 		return CBmpMgr::Get_Instance()->Find_Image("NormalDash_35");
+	case 5:
+		return CBmpMgr::Get_Instance()->Find_Image("FrostFan_35");
 	default:
 		return NULL;
 	}
@@ -118,6 +132,8 @@ HDC CCardMgr::Find_Image46(int _code)
 		return CBmpMgr::Get_Instance()->Find_Image("IceSphere_46");
 	case 4:
 		return CBmpMgr::Get_Instance()->Find_Image("NormalDash_46");
+	case 5:
+		return CBmpMgr::Get_Instance()->Find_Image("FrostFan_46");
 	default:
 		return NULL;
 	}
@@ -150,6 +166,9 @@ bool CCardMgr::Insert_CodeImage35(int _code)
 	case 4:
 		s35 = "NormalDash_35";
 		break;
+	case 5:
+		s35 = "FrostFan_35";
+		break;
 	default:
 		break;
 	}
@@ -176,6 +195,9 @@ bool CCardMgr::Insert_CodeImage46(int _code)
 		break;
 	case 4:
 		s46 = "NormalDash_46";
+		break;
+	case 5:
+		s46 = "FrostFan_46";
 		break;
 	default:
 		break;

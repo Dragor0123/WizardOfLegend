@@ -21,6 +21,8 @@ bool CFButton::Initialize()
 	m_tInfo.iCY = 26;
 	if (OBJID::END == m_eID)
 		return false;
+
+	m_eRenderGroupID = GROUPID::UI;
 	return true;
 }
 

@@ -18,6 +18,8 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/IcicleEffect.h"
 #include "../Obj/SummonerBall.h"
+#include "../Obj/FrostFan.h"
+#include "../Obj/FireBoss.h"
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -60,13 +62,32 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 				{
 					for (auto& srcObj : _Src)
 					{
-						if (!static_cast<CBoss*>(srcObj)->Get_Hittable())
+						float fX = 0.f, fY = 0.f;
+						if (dynamic_cast<CFireBoss*>(srcObj))
 						{
-							// 플레이어가 보스한테 밀리는 것도 해야하나??
-							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							if (static_cast<CFireBoss*>(srcObj)->Get_bJump())
+								continue;
+						}
+
+						if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
+						{
+							if (Collision_Obj_Tile(srcObj, &fX, &fY))
 							{
-								static_cast<CPlayer*>(dstObj)->Sub_Hp(12);
-								static_cast<CPlayer*>(dstObj)->Set_PlayerState(CPlayer::HIT);
+								if (dynamic_cast<CPlayer*>(dstObj))
+								{
+									if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+										static_cast<CPlayer*>(dstObj)->Dash_Off();
+								}
+								CollisionRectPush(dstObj, srcObj, &fX, &fY);
+							}
+							if (Collision_Obj_Obstacle(srcObj, &fX, &fY))
+							{
+								if (dynamic_cast<CPlayer*>(dstObj))
+								{
+									if (CPlayer::DASH == static_cast<CPlayer*>(dstObj)->Get_PlayerState())
+										static_cast<CPlayer*>(dstObj)->Dash_Off();
+								}
+								CollisionRectPush(dstObj, srcObj, &fX, &fY);
 							}
 						}
 					}
@@ -326,7 +347,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									}
 								}
 							}
-							else
+							else //충돌 시 밀어버리지 않는 총알.
 							{
 								if (dynamic_cast<CBullet*>(dstObj))
 								{
@@ -334,6 +355,9 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									{
 										static_cast<CMonster*>(srcObj)->Sub_Hp(static_cast<CBullet*>(dstObj)->Get_Att());
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										if (dynamic_cast<CFrostFan*>(dstObj))
+											CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
+												CAbstractFactory<CIcicleEffect>::Create(srcObj));
 										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 									}
 								}

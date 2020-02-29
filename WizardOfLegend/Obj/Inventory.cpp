@@ -59,6 +59,7 @@ bool CInventory::Initialize()
 	Update_HitRect();
 
 	m_aOutterArray[1] = 4;
+	m_eRenderGroupID = GROUPID::UI;
 	return true;
 }
 

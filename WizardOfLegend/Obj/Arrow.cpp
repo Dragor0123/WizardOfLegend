@@ -15,9 +15,9 @@ bool CArrow::Initialize()
 {
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/Archer/Arrow.bmp", "Arrow"))
 		return false;
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/Archer/rot150.bmp", "Arrow_Rot"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/Archer/rot150.bmp", "rot150"))
 		return false;
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/Archer/empty150.bmp", "Arrow_Empty"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/Archer/empty150.bmp", "empty150"))
 		return false;
 
 	CBullet::Initialize();
@@ -43,7 +43,8 @@ bool CArrow::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
-
+	
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 
@@ -96,13 +97,11 @@ void CArrow::Late_Update(float _fdTime)
 
 void CArrow::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-
-	//Arrow_Empty
 	if (m_ePreState != CBullet::COLLISION)
 	{
 		HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
-		HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("Arrow_Rot");
-		HDC hEmpDC = CBmpMgr::Get_Instance()->Find_Image("Arrow_Empty");
+		HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("rot150");
+		HDC hEmpDC = CBmpMgr::Get_Instance()->Find_Image("empty150");
 
 		PlgBlt(hRotDC, m_tRotPoint,
 			hMemDC, 0, 0, m_tInfo.iCX, m_tInfo.iCY,
@@ -119,9 +118,9 @@ void CArrow::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 			, RGB(255, 0, 255));
 
 		BitBlt(hRotDC, 0, 0, m_tInfo.iCX, m_tInfo.iCY, hEmpDC, 0, 0, SRCCOPY);
-	}
 
-	Draw_HitBox(_DC, _fScrollX, _fScrollY);
+		Draw_HitBox(_DC, _fScrollX, _fScrollY);
+	}
 }
 
 void CArrow::Release()

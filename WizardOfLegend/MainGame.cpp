@@ -121,14 +121,14 @@ void CMainGame::Render(float _fdTime)
 void CMainGame::Release()
 {
 	CKeyMgr::Destroy_Instance();
-	CScrollMgr::Destroy_Instance();
-	CCardMgr::Destroy_Instance();
-	CBmpMgr::Destroy_Instance();
-	CSceneMgr::Destroy_Instance();
-	CTileMgr::Destroy_Instance();
-	CObjMgr::Destroy_Instance();
-	CTimer::Destroy_Instance();
-	CCtrlOwnerMgr::Destroy_Instance();
+	CScrollMgr::Destroy_Instance(); 
+	CCardMgr::Destroy_Instance(); 
+	CBmpMgr::Destroy_Instance(); 
+	CSceneMgr::Destroy_Instance(); 
+	CTileMgr::Destroy_Instance(); 
+	CObjMgr::Destroy_Instance(); 
+	CTimer::Destroy_Instance(); 
+	CCtrlOwnerMgr::Destroy_Instance(); 
 	ReleaseDC(g_hWnd, m_hDC);
 }
 

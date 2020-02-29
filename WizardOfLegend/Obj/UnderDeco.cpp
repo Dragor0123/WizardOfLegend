@@ -46,6 +46,7 @@ bool CUnderDeco::Initialize()
 	}
 
 	m_tFrame.dwFrameTime = GetTickCount();
+	m_eRenderGroupID = GROUPID::BACKGROUND;
 
 	return true;
 }

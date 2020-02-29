@@ -22,6 +22,8 @@ bool CTileMgr::Initialize(const string & _strKey)
 {
 	m_mapFile.emplace(string("FireTile"), wstring(L"../Data/FireTile.dat"));
 	m_mapFile.emplace(string("PlazaTile"), wstring(L"../Data/PlazaTile.dat"));
+	//	m_mapFile.emplace(string("EarthBossTile"), wstring(L"../Data/EarthBossTile.dat"));
+	m_mapFile.emplace(string("FireBossTile"), wstring(L"../Data/FireBossTile.dat"));
 
 	Safe_Delete_VecList(m_vecTile);
 	m_vecTile.reserve(TILE_NUMX * TILE_NUMY);
@@ -37,6 +39,10 @@ bool CTileMgr::Initialize(const string & _strKey)
 				pObj = CAbstractFactory<CFireTile>::Create(fX, fY);
 			else if (_strKey == "PlazaTile")
 				pObj = CAbstractFactory<CPlazaTile>::Create(fX, fY);
+			//else if (_strKey == "EarthBossTile")
+			//	pObj = CAbstractFactory<CPlazaTile>::Create(fX, fY);
+			else if (_strKey == "FireBossTile")
+				pObj = CAbstractFactory<CFireTile>::Create(fX, fY);
 			m_vecTile.push_back(pObj);
 		}
 	}
@@ -222,12 +228,13 @@ void CTileMgr::Load_Tile(const string& _strImageKey)
 			break;
 
 		CObj*	pObj = nullptr;
-		if (_strImageKey == "FireTile"){
+		if (_strImageKey == "FireTile" || _strImageKey == "FireBossTile"){
 			pObj = CAbstractFactory<CFireTile>::Create(tInfo.fX, tInfo.fY);
 		}
 		else if (_strImageKey == "PlazaTile") {
 			pObj = CAbstractFactory<CPlazaTile>::Create(tInfo.fX, tInfo.fY);
 		}
+
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Row(iDrawRow);
 		dynamic_cast<CTile*>(pObj)->Set_DrawID_Col(iDrawCol);
 		dynamic_cast<CTile*>(pObj)->Set_Option(eOption);

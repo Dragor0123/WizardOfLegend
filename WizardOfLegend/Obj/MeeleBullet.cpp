@@ -34,7 +34,7 @@ bool CMeeleBullet::Initialize()
 		m_tInfo.iCY = 160;
 		m_tHitInfo.iCX = 128;
 		m_tHitInfo.iCY = 137;
-		m_iAtt = 20;
+		m_iAtt = 7;
 	}
 
 	// 쓸모 없음.
@@ -65,6 +65,11 @@ int CMeeleBullet::Update(float _fdTime)
 
 void CMeeleBullet::Late_Update(float _fdTime)
 {
+	if (m_bCollision) {
+		m_bDead = true;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
+	}
 	Update_Rect();
 	Update_HitRect();
 }
@@ -192,5 +197,5 @@ void CMeeleBullet::Change_HitRect()
 
 int CMeeleBullet::Get_Collision_Code() const
 {
-	return CC_MBULLET_NWALL_PUSH;
+	return CC_MBULLET_NWALL_NPUSH;
 }

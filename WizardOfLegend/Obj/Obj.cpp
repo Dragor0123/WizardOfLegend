@@ -3,7 +3,8 @@
 #include "../Manager/ScrollMgr.h"
 
 CObj::CObj()
-	: m_pTarget(nullptr), m_fAngle(0.f), m_bDead(false), m_eID(OBJID::END)
+	: m_pTarget(nullptr), m_fAngle(0.f), m_bDead(false), m_eID(OBJID::END),
+	m_eRenderGroupID(GROUPID::GAMEOBJECT)
 {
 	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 	ZeroMemory(&m_tRect, sizeof(RECT));

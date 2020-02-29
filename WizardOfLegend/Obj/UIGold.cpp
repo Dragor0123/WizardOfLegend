@@ -27,6 +27,7 @@ bool CUIGold::Initialize()
 	m_tInfo.fY = (float)WINCY - 55.f;
 
 	m_strFrameKey = "UI_GOLD";
+	m_eRenderGroupID = GROUPID::UI;
 	Update_Rect();
 	return true;
 }

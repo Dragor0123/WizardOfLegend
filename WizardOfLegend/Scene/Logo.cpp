@@ -14,11 +14,12 @@ CLogo::~CLogo()
 	Release();
 }
 
-void CLogo::Key_Check()
+bool CLogo::Key_Check()
 {
 	if (KEY_DOWN(VK_RETURN) || KEY_DOWN(VK_LBUTTON)) {
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_MENU);
 	}
+	return true;
 }
 
 bool CLogo::Initialize()

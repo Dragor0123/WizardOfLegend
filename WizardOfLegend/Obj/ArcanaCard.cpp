@@ -6,6 +6,7 @@
 #include "ArcRel.h"
 #include "ArcGaia.h"
 #include "ArcSphere.h"
+#include "ArcFrostFan.h"
 
 CArcanaCard::CArcanaCard()
 	: m_fmoveTime(0.f)
@@ -39,9 +40,9 @@ bool CArcanaCard::Initialize()
 		m_iCardCode = 3;
 	if (m_strFrameKey == "NormalDashCard")
 		m_iCardCode = 4;
+	if (m_strFrameKey == "FrostFanCard")
+		m_iCardCode = 5;
 
-	//////// Cardmgr
-	//....
 	m_tHitInfo.fX = m_tInfo.fX;
 	m_tHitInfo.fY = m_tInfo.fY + 25.f;
 
@@ -131,6 +132,9 @@ CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)
 		break;
 	case 4:	//기본대쉬
 		return nullptr;
+	case 5: //서리부채 (FrostFan)
+		pArcRel = CAbstractFactory<CArcFrostFan>::Create("FrostFan", pPlayer);
+		break;
 	}
 
 	if (_bCondition == 1)

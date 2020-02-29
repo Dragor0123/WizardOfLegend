@@ -105,7 +105,7 @@ private:
 	float		m_fRestoreSpeed;
 
 	// 이 부분 수정 필요
-	bool		m_bSkillCool;
+	bool		m_bSkillCool; // <-이거 나중에 지워준다!
 	float		m_fCoolStart;
 	float		m_fCoolLimit;
 	float		m_fBulletTick;

@@ -170,12 +170,16 @@
     <ClInclude Include="MyBitmap\BmpMgr.h" />
     <ClInclude Include="MyBitmap\MyBitmap.h" />
     <ClInclude Include="Obj\ArcanaCard.h" />
+    <ClInclude Include="Obj\ArcDragonarc.h" />
+    <ClInclude Include="Obj\ArcFireball.h" />
+    <ClInclude Include="Obj\ArcFrostFan.h" />
     <ClInclude Include="Obj\ArcGaia.h" />
     <ClInclude Include="Obj\Archer.h" />
     <ClInclude Include="Obj\ArcRel.h" />
     <ClInclude Include="Obj\ArcSphere.h" />
     <ClInclude Include="Obj\Arrow.h" />
     <ClInclude Include="Obj\Boss.h" />
+    <ClInclude Include="Obj\BossHPBar.h" />
     <ClInclude Include="Obj\Bullet.h" />
     <ClInclude Include="Obj\Card.h" />
     <ClInclude Include="Obj\EarthBossBox.h" />
@@ -207,6 +211,7 @@
     <ClInclude Include="Obj\Obj.h" />
     <ClInclude Include="Obj\ObjMgr.h" />
     <ClInclude Include="Obj\Obstacle.h" />
+    <ClInclude Include="Obj\OverDeco.h" />
     <ClInclude Include="Obj\Player.h" />
     <ClInclude Include="Obj\PlayerHPBar.h" />
     <ClInclude Include="Obj\PlazaTile.h" />
@@ -228,6 +233,8 @@
     <ClInclude Include="Obj\UnderDeco.h" />
     <ClInclude Include="Ref.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Scene\EarthBossStage.h" />
+    <ClInclude Include="Scene\FireBossStage.h" />
     <ClInclude Include="Scene\Logo.h" />
     <ClInclude Include="Scene\Plaza.h" />
     <ClInclude Include="Scene\Scene.h" />
@@ -285,6 +292,18 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Obj\ArcDragonarc.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcFireball.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcFrostFan.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Obj\ArcGaia.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -306,6 +325,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Obj\Boss.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Obj\BossHPBar.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -433,6 +456,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Obj\OverDeco.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Obj\Player.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -510,6 +537,14 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Ref.cpp" />
+    <ClCompile Include="Scene\EarthBossStage.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Scene\FireBossStage.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
     <ClCompile Include="Scene\Logo.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>

@@ -21,7 +21,7 @@ namespace PLAYER_Space
 	const DWORD HIT_FRAME_SPEED = 80;
 	const DWORD STAMP_FRAME_SPEED = 100;
 	const DWORD DEAD_FRAME_SPEED = 900;
-	const DWORD FALL_FRAME_SPEED = 120;
+	const DWORD FALL_FRAME_SPEED = 80;
 	const DWORD REBIRTH_FRAME_SPEED = 100;
 	const int	P_HIT_FRAME_COUNTMAX = 2;
 }
@@ -259,7 +259,7 @@ void CPlayer::Key_Check(float _fdTime)
 			m_eCurState = WALK;
 		}
 	}
-	else if (!m_bDashInit && m_eCurState != HIT) {
+	else if (!m_bDashInit && m_eCurState != HIT && m_eCurState != ATTACK) {
 		m_eCurState = IDLE;
 	}
 
@@ -291,6 +291,34 @@ void CPlayer::Key_Check(float _fdTime)
 		}
 	}
 
+	idx = m_mapKeyIdx['E'];
+	pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
+	_code = static_cast<CInventory*>(pInven)->Get_OutterArr_Code(idx);
+	if (_code > -1 && _code < 100)
+	{
+		CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
+		if (_code == 3)
+		{
+			if (KEY_PRESSING('E'))
+			{
+				if (pArcRel->Is_Fire_Available())
+					pArcRel->Fire_Skill();
+			}
+			if (KEY_UP('E'))
+			{
+				pArcRel->Key_Up_Action();
+			}
+		}
+		else
+		{
+			if (KEY_DOWN('E'))
+			{
+				if (pArcRel->Is_Fire_Available())
+					pArcRel->Fire_Skill();
+			}
+		}
+	}
+
 	// 스킬 사용
 	if (!m_bSkillCool)
 	{
@@ -298,19 +326,15 @@ void CPlayer::Key_Check(float _fdTime)
 		{
 			if ((0.f <= m_fAngle && m_fAngle < 45.f) || (315.f <= m_fAngle && m_fAngle < 360.f)) {
 				m_strFrameKey = "Player_Right";
-				//m_eMoveDir = MOVEDIR::MD_RIGHT;
 			}
 			else if (45.f <= m_fAngle && m_fAngle < 135.f) {
 				m_strFrameKey = "Player_Up";
-				//m_eMoveDir = MOVEDIR::MD_TOP;
 			}
 			else if (135.f <= m_fAngle && m_fAngle < 225.f) {
 				m_strFrameKey = "Player_Left";
-				//m_eMoveDir = MOVEDIR::MD_LEFT;
 			}
 			else {
 				m_strFrameKey = "Player_Down";
-				//m_eMoveDir = MOVEDIR::MD_BOT;
 			}
 
 			m_eCurState = STATE::ATTACK;
@@ -357,8 +381,8 @@ void CPlayer::Late_Update(float _fdTime)
 	if (0 >= m_iHp)
 	{
 		//m_eCurState = CPlayer::DEAD;
-		m_tHitInfo.iCX = 0;
-		m_tHitInfo.iCY = 0;
+		//m_tHitInfo.iCX = 0;
+		//m_tHitInfo.iCY = 0;
 	}
 
 	Update_Rect();
@@ -438,9 +462,12 @@ void CPlayer::Move_Frame()
 		// 수정 매우 필요!
 		if (m_ePreState == STATE::ATTACK)
 		{
+			//스킬마다 모션이 다 다르기 때문에.... FrameSpeed를 if나 switch분기로 조건 걸어서 예외처리 다 해줘야된다.
+
 			m_tFrame.dwFrameSpeed = ATTACK_FRAME_SPEED;
-			if (m_bShot)
+			if (m_bShot) // 아이스 스피어가 누르고 있을 경우(아직 안땐경우)
 				m_tFrame.iFrameStart = 0;
+
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				m_eCurState = STATE::IDLE;
 			}
@@ -473,7 +500,7 @@ void CPlayer::Move_Frame()
 				m_eCurState = STATE::IDLE;
 			}
 		}
-		// 이건 해주고
+
 		if (m_ePreState == CPlayer::REBIRTH)
 		{
 			m_tFrame.dwFrameSpeed = REBIRTH_FRAME_SPEED;

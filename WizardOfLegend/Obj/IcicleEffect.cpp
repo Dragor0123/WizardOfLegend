@@ -34,6 +34,7 @@ bool CIcicleEffect::Initialize()
 
 	dynamic_cast<CHittable*>(m_pTarget)->Set_MezState(MEZ::MZ_FROZEN);
 	m_strFrameKey = "Icicle";
+	m_eRenderGroupID = GROUPID::EFFECT;
 	return true;
 }
 

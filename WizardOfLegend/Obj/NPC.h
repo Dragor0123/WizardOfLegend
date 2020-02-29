@@ -22,11 +22,12 @@ public:
 
 public:
 	// Inherited via CFAble
-	virtual void Do_FButton_Action(float _fdTime);
+	virtual void Do_FButton_Action(float _fdTime) = 0;
 	virtual int Get_Collision_Code() const { return CC_FABLE_NPC; }
+
 protected:
-	TCHAR		szDialogue[128];
-	CMyBitmap*	m_pMyBitmap;
+	TCHAR			szDialogue[128];
+	CMyBitmap*		m_pMyBitmap;
 };
 
 #endif

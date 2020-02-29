@@ -29,18 +29,20 @@ bool CPlayerHPBar::Initialize()
 	// 20, 16-> offset
 	m_tInfo.iCX = 328;
 	m_tInfo.iCY = 80;
-	m_tInfo.fX = 164.f + 20.f;
-	m_tInfo.fY = 40.f + 16.f;
+	//m_tInfo.fX = 164.f + 20.f;
+	//m_tInfo.fY = 40.f + 16.f;
+	m_tInfo.fX = 780.f + 20.f;
+	m_tInfo.fY = 644.f + 16.f;
 
-	m_tUserHPRC = { 76 + 20, 12 + 16, 320 + 20, 44 + 16};
+	m_tUserHPRC = { 692 + 20, 616 + 16, 936 + 20, 648 + 16};
 	m_tHitInfo.iCX = 244;
 	m_tHitInfo.iCY = 32;
 
-	m_tUserMPRC = {76 + 20, 52 + 16, 268 + 20, 68 + 16};
+	m_tUserMPRC = { 692 + 20, 656 + 16, 884 + 20, 672 + 16};
 	m_strFrameKey = "PlayerBar";
 
 	Update_Rect();
-
+	m_eRenderGroupID = GROUPID::UI;
 	return true;
 }
 
@@ -93,17 +95,22 @@ void CPlayerHPBar::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrol
 		0, 0,
 		SRCCOPY);
 
+
+	// 수정 폰트 크기 크게 키울것.
 	TCHAR szBuff[32] = L"";
 	swprintf_s(szBuff, 32, L" %3d / %3d", 
 		static_cast<CPlayer*>(m_pTarget)->Get_Hp(), static_cast<CPlayer*>(m_pTarget)->Get_MaxHp());
 	COLORREF oldFontColor = SetTextColor(_DC, RGB(255, 255, 255));
 	SetBkMode(_DC, TRANSPARENT);
-	TextOut(_DC, 235, 10, szBuff, lstrlen(szBuff));
+	TextOut(_DC, 852, 614, szBuff, lstrlen(szBuff));
 	SetTextColor(_DC, oldFontColor);
 }
 
 void CPlayerHPBar::Release()
 {
+	CBmpMgr::Get_Instance()->Delete_Bmp("PlayerBar");
+	CBmpMgr::Get_Instance()->Delete_Bmp("P_HPBar");
+	CBmpMgr::Get_Instance()->Delete_Bmp("P_MPBar");
 }
 
 void CPlayerHPBar::Key_Check(float _fdTime)

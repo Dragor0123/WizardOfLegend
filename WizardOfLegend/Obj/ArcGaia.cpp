@@ -7,7 +7,6 @@ CArcGaia::CArcGaia()
 {
 }
 
-
 CArcGaia::~CArcGaia()
 {
 	Release();

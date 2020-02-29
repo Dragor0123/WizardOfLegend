@@ -32,8 +32,7 @@ void CCtrlOwnerMgr::Inventory_On()
 	if (m_bKeyOnOffArr[KEYOWN::KS_FABLE])
 		m_bKeyOnOffArr[KEYOWN::KS_FABLE] = false;
 	if (m_bKeyOnOffArr[KEYOWN::KS_PLAYER])
-		m_bKeyOnOffArr[KEYOWN::KS_FABLE] = false;
-
+		m_bKeyOnOffArr[KEYOWN::KS_PLAYER] = false;
 	Set_On(KEYOWN::KS_INVENTORY);
 }
 

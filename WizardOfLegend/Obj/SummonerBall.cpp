@@ -48,6 +48,7 @@ bool CSummonerBall::Initialize()
 	m_fFireDis = 0.f;
 	m_fPosinRad = 0.f;
 
+	m_fDetectRange = 410.f;
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("SummonerBall");
 
@@ -144,7 +145,16 @@ int CSummonerBall::Update(float _fdTime)
 
 void CSummonerBall::Late_Update(float _fdTime)
 {
-	CMonster::Late_Update(_fdTime);
+	if (0 >= m_iHp)
+	{
+		m_eCurState = CMonster::DEAD;
+		m_eMez = MEZ::MZ_NONE;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
+	}
+
+	Update_Rect();
+	Update_HitRect();
 
 	float	fDis = sqrtf(float((m_tInfo.iCX >> 1) * (m_tInfo.iCX >> 1) + (m_tInfo.iCY >> 1) * (m_tInfo.iCY >> 1)));
 	m_tRotPoint[0].x = LONG((m_tInfo.iCX >> 1) + (cosf((m_fAngle + 135.f) * PI / 180.f) * fDis));

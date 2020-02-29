@@ -216,11 +216,10 @@ void CSwordman::Move_Frame()
 		}
 		else if (m_ePreState == CMonster::ATTACK)
 		{
-			m_tFrame.dwFrameSpeed = 160;
+			m_tFrame.dwFrameSpeed = 250;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			{
-				m_tFrame.iFrameStart = 0;
-				m_tFrame.dwFrameSpeed = 280;
+				m_eCurState = IDLE;
 			}
 		}
 		else if (m_ePreState == CMonster::HIT)
@@ -251,7 +250,12 @@ void CSwordman::Move_Frame()
 				}
 			}
 		}
-		else if (m_ePreState == CMonster::IDLE || m_ePreState == CMonster::WALK)
+		else if (m_ePreState == CMonster::WALK)
+		{
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = 0;
+		}
+		else if (m_ePreState == CMonster::IDLE)
 		{
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				m_tFrame.iFrameStart = 0;
@@ -316,7 +320,7 @@ void CSwordman::Scene_Change()
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iFrameScene = 2;
-			m_tFrame.dwFrameSpeed = 280;
+			m_tFrame.dwFrameSpeed = 250;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case CMonster::HIT:

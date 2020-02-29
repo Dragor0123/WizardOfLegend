@@ -23,6 +23,7 @@ bool CMonster::Initialize()
 	m_fSpeed = 300.f;
 	m_ePreState = END;
 	m_eCurState = IDLE;
+
 	return true;
 }
 
@@ -52,6 +53,11 @@ void CMonster::Late_Update(float _fdTime)
 	{
 		m_eCurState = CMonster::DEAD;
 		m_eMez = MEZ::MZ_NONE;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
+	}
+	if (m_eMez == MEZ::MZ_FROZEN)
+	{
 		m_tHitInfo.iCX = 0;
 		m_tHitInfo.iCY = 0;
 	}

@@ -97,19 +97,19 @@ CObj* CSummonCard::Create_Monster()
 {
 	if (m_strFrameKey == "ARCHER_SCARD")
 	{
-		return CAbstractFactory<CArcher>::Create(m_tInfo.fX, m_tInfo.fY);
+		return CAbstractFactory<CArcher>::Create(m_tInfo.fX, m_tInfo.fY + 2.f);
 	}
 	else if (m_strFrameKey == "SWORDMAN_SCARD")
 	{
-		return CAbstractFactory<CSwordman>::Create(m_tInfo.fX, m_tInfo.fY);
+		return CAbstractFactory<CSwordman>::Create(m_tInfo.fX, m_tInfo.fY + 2.f);
 	}
 	else if (m_strFrameKey == "SUMMONER_SCARD")
 	{
-		return CAbstractFactory<CSummoner>::Create(m_tInfo.fX, m_tInfo.fY);
+		return CAbstractFactory<CSummoner>::Create(m_tInfo.fX, m_tInfo.fY + 2.f);
 	}
 	else if (m_strFrameKey == "SUMMONERBALL_SCARD")
 	{
-		return CAbstractFactory<CSummonerBall>::Create(m_tInfo.fX, m_tInfo.fY);
+		return CAbstractFactory<CSummonerBall>::Create(m_tInfo.fX, m_tInfo.fY + 2.f);
 	}
 	return nullptr;
 }

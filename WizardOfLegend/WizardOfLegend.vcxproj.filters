@@ -280,6 +280,21 @@
     <Filter Include="Source Files\04.Scene\06.FireBossStage">
       <UniqueIdentifier>{74d0e0f5-f23c-48c6-9329-166514d73f1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\07.OverDeco">
+      <UniqueIdentifier>{55fe2edf-2477-44b5-a438-79e69f369f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\02.FrostFanArcana">
+      <UniqueIdentifier>{673cc394-838d-4059-ba36-54a774cf8036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\03.DragonArcArcana">
+      <UniqueIdentifier>{e0eca960-b9aa-41dc-8594-b073dce70611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\04.FireBallArcana">
+      <UniqueIdentifier>{492db0e3-ae72-4916-aa51-c0a49b4247a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar">
+      <UniqueIdentifier>{1a71b0ad-5028-41ea-8e91-367db076d60f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -522,6 +537,27 @@
     <ClInclude Include="Obj\Prison.h">
       <Filter>Source Files\02.Obj\02.StopObj\03.Obstacle\01.NoneHitObstacle</Filter>
     </ClInclude>
+    <ClInclude Include="Obj\OverDeco.h">
+      <Filter>Source Files\02.Obj\02.StopObj\07.OverDeco</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ArcFrostFan.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\02.FrostFanArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ArcDragonarc.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\03.DragonArcArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ArcFireball.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\04.FireBallArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\EarthBossStage.h">
+      <Filter>Source Files\04.Scene\05.EarthBossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\FireBossStage.h">
+      <Filter>Source Files\04.Scene\06.FireBossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\BossHPBar.h">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WizardOfLegend.cpp">
@@ -757,6 +793,27 @@
     </ClCompile>
     <ClCompile Include="Obj\Prison.cpp">
       <Filter>Source Files\02.Obj\02.StopObj\03.Obstacle\01.NoneHitObstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\OverDeco.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\07.OverDeco</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcFrostFan.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\02.FrostFanArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcDragonarc.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\03.DragonArcArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcFireball.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\04.FireBallArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\EarthBossStage.cpp">
+      <Filter>Source Files\04.Scene\05.EarthBossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\FireBossStage.cpp">
+      <Filter>Source Files\04.Scene\06.FireBossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\BossHPBar.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

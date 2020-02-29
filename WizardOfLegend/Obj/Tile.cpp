@@ -5,6 +5,7 @@
 CTile::CTile()
 	: m_drawID_row(0), m_drawID_col(0), m_eOption(TILEENUM::OPT_MOVE)
 {
+	m_eRenderGroupID = GROUPID::TILE;
 }
 
 

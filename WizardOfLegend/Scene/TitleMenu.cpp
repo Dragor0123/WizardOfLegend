@@ -60,16 +60,13 @@ bool CTitleMenu::Initialize()
 int CTitleMenu::Update(float _fdTime)
 {
 	Key_Check();
-
 	if (m_bTitleLogoUp) {
 		iLogoY -= (int)(400.f * _fdTime);
 		if (iLogoY < 172) {
 			iLogoY = 172;
 		}
 	}
-
 	CObjMgr::Get_Instance()->Update(_fdTime);
-
 	return OBJ_NOEVENT;
 }
 
@@ -122,7 +119,7 @@ void CTitleMenu::Release()
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MENU_UI);
 }
 
-void CTitleMenu::Key_Check()
+bool CTitleMenu::Key_Check()
 {
 	if (!m_bTitleLogoUp) {
 		for (int i = 0; i < 0xff; ++i)
@@ -136,4 +133,5 @@ void CTitleMenu::Key_Check()
 			}
 		}
 	}
+	return true;
 }

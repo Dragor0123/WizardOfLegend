@@ -5,6 +5,7 @@
 #include "Mouse.h"
 #include "../Manager/ScrollMgr.h"
 #include "../Manager/CollisionMgr.h"
+#include "../Manager/SceneMgr.h"
 
 CObjMgr::CObjMgr()
 {
@@ -64,13 +65,14 @@ void CObjMgr::Late_Update(float _fdTime)
 {
 	for (int i = 0; i < OBJID::END; ++i)
 	{
-		auto iter = m_listObj[i].begin();
-
 		for (auto& pObj : m_listObj[i])
 		{
 			pObj->Late_Update(_fdTime);
 			if (m_listObj[i].empty())
 				break;
+
+			GROUPID::ID	 eID = pObj->Get_Group_ID();
+			m_listRender[eID].emplace_back(pObj);
 		}
 	}
 }
@@ -102,10 +104,26 @@ void CObjMgr::Render(HDC _DC, float _fdTime)
 	// 대표적: UI 스크롤 먹이면 안 됨. 고정임.
 	// OBJID::UI이면 예외처리 해주자
 
- 	for (int i = 0; i < OBJID::END; ++i)
+	if (CSceneMgr::SCENE_EDIT == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
-		for (auto& pObj : m_listObj[i])
-			pObj->Render(_DC, _fdTime, CScrollMgr::Get_Instance()->Get_ScrollX(), CScrollMgr::Get_Instance()->Get_ScrollY());
+		for (int i = 0; i < OBJID::END; ++i)
+		{
+			for (auto& pObj : m_listObj[i])
+				pObj->Render(_DC, _fdTime, CScrollMgr::Get_Instance()->Get_ScrollX(), CScrollMgr::Get_Instance()->Get_ScrollY());
+		}
+	}
+	else
+	{
+		for (int i = 0; i < GROUPID::END; ++i)
+		{
+			if (i == GROUPID::GAMEOBJECT)
+				m_listRender[i].sort(ObjectSortY<CObj*>);
+
+			for (auto& pObj : m_listRender[i])
+				pObj->Render(_DC, _fdTime, CScrollMgr::Get_Instance()->Get_ScrollX(), CScrollMgr::Get_Instance()->Get_ScrollY());
+
+			m_listRender[i].clear();
+		}
 	}
 }
 

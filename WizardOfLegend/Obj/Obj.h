@@ -14,6 +14,7 @@ public:
 public:
 	// 충돌 매니저에서 dynamic_cast<> 쓰기 싫으니까....
 	virtual int	Get_Collision_Code() const { return 0x00; }
+	const GROUPID::ID& Get_Group_ID() const { return m_eRenderGroupID; }
 	const INFO& Get_Info() const { return m_tInfo; }
 	const INFO& Get_HitInfo() const { return m_tHitInfo; }
 	const RECT& Get_Rect() const { return m_tRect; }
@@ -56,7 +57,8 @@ protected:
 	void Draw_HitBox(HDC _DC, float _fScrollX = 0.f, float _fScrollY = 0.f);
 
 protected:
-	OBJID::ID	m_eID;
+	GROUPID::ID		m_eRenderGroupID;
+	OBJID::ID		m_eID;
 	// 그릴 객체들의 좌표와 크기를 저장한다.
 	// 저장된 좌표와 크기를 통해 Rect를 만든다.
 	INFO	m_tInfo;		

@@ -14,7 +14,7 @@ CGold::~CGold()
 
 bool CGold::Initialize()
 {
-	m_iGold = rand() % 9 + 3;
+	m_iGold = rand() % 30 + 10;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Item/Gold.bmp", "Gold"))
 		return false;
 	if (CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
@@ -23,7 +23,7 @@ bool CGold::Initialize()
 	m_pTarget = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	m_tInfo.iCX = 16;
 	m_tInfo.iCY = 16;
-	m_fSpeed = 650.f;
+	m_fSpeed = 700.f;
 	m_strFrameKey = "Gold";
 
 	Equalize_HitPosInfoPos();

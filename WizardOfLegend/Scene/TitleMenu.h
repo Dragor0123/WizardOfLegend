@@ -12,7 +12,7 @@ public:
 	virtual ~CTitleMenu();
 
 	// Inherited via CScene
-	virtual void Key_Check();
+	virtual bool Key_Check();
 	virtual bool Initialize();
 	virtual int Update(float _fdTime);
 	virtual void Late_Update(float _fdTime);
