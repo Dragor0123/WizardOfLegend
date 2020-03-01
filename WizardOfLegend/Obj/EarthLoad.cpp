@@ -57,10 +57,6 @@ bool CEarthLoad::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/EarthBoss/GuideSword.bmp", "EarthBoss_Sword"))
 		return false;
 
-	// 이거 보스 만들어지는 장소에서 삽입하자... 크레비스...
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/EarthBoss/EarthCrevis.bmp", "Crevis"))
-		return false;
-
 	m_strFrameKey = "EarthBoss";
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 0;
@@ -564,11 +560,50 @@ void CEarthLoad::Release()
 	CBmpMgr::Get_Instance()->Delete_Bmp("EarthBoss_stretch");
 	CBmpMgr::Get_Instance()->Delete_Bmp("EarthBoss_Box");
 	CBmpMgr::Get_Instance()->Delete_Bmp("EarthBoss_Pillar");
+	CBmpMgr::Get_Instance()->Delete_Bmp("EarthBoss_Sword");
 }
 
 void CEarthLoad::Change_HitRect()
 {
-	// 해줘야함!!!!
+	if (m_ePreState == DANCE)
+	{
+		switch (m_tFrame.iFrameStart)
+		{
+		case 2:
+			m_tHitInfo.iCX = 122;
+			m_tHitInfo.iCY = 154;
+			break;
+		case 3:
+			m_tHitInfo.iCX = 119;
+			m_tHitInfo.iCY = 154;
+			break;
+		case 4:
+			m_tHitInfo.iCX = 187;
+			m_tHitInfo.iCY = 164;
+			break;
+		case 5:
+			m_tHitInfo.iCX = 119;
+			m_tHitInfo.iCY = 164;
+			break;
+		case 6:
+			m_tHitInfo.iCX = 103;
+			m_tHitInfo.iCY = 164;
+			break;
+		case 7:
+			m_tHitInfo.iCX = 119;
+			m_tHitInfo.iCY = 164;
+			break;
+		case 8:
+			m_tHitInfo.iCX = 103;
+			m_tHitInfo.iCY = 164;
+			break;
+		}
+	}
+	else
+	{
+		m_tHitInfo.iCX = 106;
+		m_tHitInfo.iCY = 180;
+	}
 }
 
 CObj* CEarthLoad::Create_Bullet(const string & _frameKey)
@@ -586,4 +621,3 @@ void CEarthLoad::Set_Boss_State(int _eNewState)
 	if (m_eCurState != CBoss::DEAD)
 		m_eCurState = (CBoss::EARTHB_STATE)_eNewState;
 }
-

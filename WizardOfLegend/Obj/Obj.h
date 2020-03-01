@@ -55,7 +55,7 @@ protected:
 	void Equalize_HitPosInfoPos() { m_tHitInfo.fX = m_tInfo.fX; m_tHitInfo.fY = m_tInfo.fY; }
 	void Equalize_HitSzInfoSz() { m_tHitInfo.iCX = m_tInfo.iCX; m_tHitInfo.iCY = m_tInfo.iCY; }
 	void Draw_HitBox(HDC _DC, float _fScrollX = 0.f, float _fScrollY = 0.f);
-
+	void Draw_HitCircle(HDC _DC, float _fScrollX = 0.f, float _fScrollY = 0.f);
 protected:
 	GROUPID::ID		m_eRenderGroupID;
 	OBJID::ID		m_eID;

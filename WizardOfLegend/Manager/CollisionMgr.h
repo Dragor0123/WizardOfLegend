@@ -16,7 +16,9 @@ public:
 	// 사각형 충돌시 밀기 _Src : 밀리는 놈, _Dst : 미는 놈
 	static void Collision_RectEx(list<CObj*>& _Dst, list<CObj*>& _Src); 
 	static void Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src);
-	//static void Collision_CircleRect(list<CObj*>& _circle, list<CObj*>& _rect);
+	
+	// 왼쪽 인자에는 무조건 총알(또는 쉴드), 오른쪽 인자에는 플레이어, 몬스터, Obstacle등...
+	static void Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src);
 
 	static bool Is_PointInRect(const POINT& _pt, LPRECT _lpRC);
 	static bool Is_PointInCircle(const POINT& _pt, const POINT& _cPt, float _cRad);

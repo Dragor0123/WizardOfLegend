@@ -45,7 +45,8 @@ bool CBmpMgr::Delete_Bmp(const string & _strImageKey)
 	{
 		return false;
 	}
-	m_mapStrBmp.erase(iter);
+	SAFE_DELETE(iter->second);
+	iter = m_mapStrBmp.erase(iter);
 	return true;
 }
 

@@ -220,9 +220,6 @@
     <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\05.BossBullet\01.Meteor">
       <UniqueIdentifier>{93710636-a7ee-434f-8f6f-f469d6e88060}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.FireBossKick">
-      <UniqueIdentifier>{e7cac0b6-0860-4231-9205-06e41dbb4085}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\02.Obj\02.StopObj\01.F_Able\02.Card\00.ArcanaCard">
       <UniqueIdentifier>{c8fc62b8-1f17-424c-88ad-ff6171afb89d}</UniqueIdentifier>
     </Filter>
@@ -294,6 +291,9 @@
     </Filter>
     <Filter Include="Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar">
       <UniqueIdentifier>{1a71b0ad-5028-41ea-8e91-367db076d60f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick">
+      <UniqueIdentifier>{18e73456-5dd9-47fc-a7ff-b51310c469cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -465,9 +465,6 @@
     <ClInclude Include="Obj\Meteor.h">
       <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\05.BossBullet\01.Meteor</Filter>
     </ClInclude>
-    <ClInclude Include="Obj\FireKick.h">
-      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.FireBossKick</Filter>
-    </ClInclude>
     <ClInclude Include="Obj\Card.h">
       <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\02.Card</Filter>
     </ClInclude>
@@ -557,6 +554,9 @@
     </ClInclude>
     <ClInclude Include="Obj\BossHPBar.h">
       <Filter>Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\FireKick.h">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -725,9 +725,6 @@
     <ClCompile Include="Obj\Meteor.cpp">
       <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\05.BossBullet\01.Meteor</Filter>
     </ClCompile>
-    <ClCompile Include="Obj\FireKick.cpp">
-      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.FireBossKick</Filter>
-    </ClCompile>
     <ClCompile Include="Obj\Card.cpp">
       <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\02.Card</Filter>
     </ClCompile>
@@ -814,6 +811,9 @@
     </ClCompile>
     <ClCompile Include="Obj\BossHPBar.cpp">
       <Filter>Source Files\02.Obj\02.StopObj\99.UI\07.BossHPBar</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\FireKick.cpp">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

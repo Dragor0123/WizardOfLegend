@@ -53,14 +53,45 @@ void CObj::Update_HitRect()
 
 void CObj::Draw_HitBox(HDC _DC, float _fScrollX, float _fScrollY)
 {
+
 	if (g_HitBox_On)
 	{
+		HPEN hOldPen, hMyPen;
+		hMyPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+		hOldPen = (HPEN)SelectObject(_DC, hMyPen);
+
 		MoveToEx(_DC, (int)(m_tHitRect.left + _fScrollX), (int)(m_tHitRect.top + _fScrollY), NULL);
 		LineTo(_DC, (int)(m_tHitRect.left + _fScrollX), (int)(m_tHitRect.bottom + _fScrollY));
 		LineTo(_DC, (int)(m_tHitRect.right + _fScrollX), (int)(m_tHitRect.bottom + _fScrollY));
 		LineTo(_DC, (int)(m_tHitRect.right + _fScrollX), (int)(m_tHitRect.top + _fScrollY));
 		LineTo(_DC, (int)(m_tHitRect.left + _fScrollX), (int)(m_tHitRect.top + _fScrollY));
+
+		SelectObject(_DC, hOldPen);
+		DeleteObject(hMyPen);
 	}
+}
+
+void CObj::Draw_HitCircle(HDC _DC, float _fScrollX, float _fScrollY)
+{
+	if (g_HitBox_On)
+	{
+		HPEN hOldPen, hMyPen;
+		hMyPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+		hOldPen = (HPEN)SelectObject(_DC, hMyPen);
+
+		HBRUSH hOldBrush;
+		hOldBrush = (HBRUSH)SelectObject(_DC, GetStockObject(NULL_BRUSH));
+		Ellipse(_DC,
+			(int)(m_tHitRect.left + _fScrollX),
+			(int)(m_tHitRect.top  + _fScrollY),
+			(int)(m_tHitRect.right + _fScrollX),
+			(int)(m_tHitRect.bottom + _fScrollY));
+
+		SelectObject(_DC, hOldBrush);
+		SelectObject(_DC, hOldPen);
+		DeleteObject(hMyPen);
+	}
+
 }
 
 void CObj::Set_Pos(float _x, float _y)

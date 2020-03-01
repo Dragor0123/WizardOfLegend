@@ -3,7 +3,7 @@
 #include "../MyBitmap/BmpMgr.h"
 
 CFireBall::CFireBall()
-	: m_fRisingTime(0.f), m_fRisingLimit(.7f)
+	: m_fRisingTime(0.f), m_fRisingLimit(.76f)
 {
 	m_bMonsters = true;
 }
@@ -29,7 +29,7 @@ bool CFireBall::Initialize()
 	m_tHitInfo.iCX = 136;
 	m_tHitInfo.iCX = 92;
 
-	m_fShotRange = 1100.f;
+	m_fShotRange = 1200.f;
 	m_fSpeed = 1100.f;
 
 	if (m_strFrameKey == "")

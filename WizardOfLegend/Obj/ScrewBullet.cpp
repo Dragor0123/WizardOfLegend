@@ -35,11 +35,22 @@ bool CScrewBullet::Initialize()
 	m_tStartPt.fY = m_tInfo.fY;
 
 	m_fSpeed = 900.f;	 //직선으로 날아갈 점의 스피드
-	m_fShotRange = 850.f;
+	if (!m_bMonsters)
+		m_fShotRange = 850.f;
+	else
+		m_fShotRange = 1600.f;
 
 	m_fRotAngle = 0.f;
-	m_fRotSpeed = 4.f;
-	m_fRotDis = 40.f;
+	if (!m_bMonsters)
+	{
+		m_fRotSpeed = 4.f;
+		m_fRotDis = 40.f;
+	}
+	else
+	{
+		m_fRotSpeed = 12.f;
+		m_fRotDis = 80.f;
+	}
 	m_bStart = true;
 	m_bClockWise = false;
 
@@ -54,7 +65,11 @@ bool CScrewBullet::Initialize()
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
 
-	m_iAtt = 10;
+	if (!m_bMonsters)
+		m_iAtt = 10;
+	else
+		m_iAtt = 20;
+
 	return true;
 }
 
@@ -117,7 +132,6 @@ void CScrewBullet::Late_Update(float _fdTime)
 
 void CScrewBullet::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-
 
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
 	HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("DragonArcRot");
@@ -234,5 +248,8 @@ void CScrewBullet::Change_HitRect()
 
 int CScrewBullet::Get_Collision_Code() const
 {
-	return CC_PBULLET_WALL_PUSH_NDRAG;
+	if (!m_bMonsters)
+		return CC_PBULLET_WALL_PUSH_NDRAG;
+	else
+		return CC_MBULLET_WALL_PUSH;
 }

@@ -7,11 +7,11 @@
 class CFireBoss : public CBoss
 {
 public:
-	enum PATTERN { P_FIREBALL, P_DRAGON, P_KICK, P_METEOR, P_END };
+	enum PATTERN { P_FIREBALL, P_KICK, P_DRAGON, P_METEOR, P_END };
 	enum FIREB_STATE {
 		FIRE_IDLE, FIRE_DANCE, 
 		ATT_DRAGON_RIGHT, ATT_DRAGON_DOWN, ATT_DRAGON_UP, ATT_FIREBALL_RIGHT, ATT_FIREBALL_UP, FIRE_HIT, FIRE_DEAD,
-		ATT_FIREBALL_DOWN, ATT_KICK, ATT_JUMP, FIRE_S_END
+		ATT_FIREBALL_DOWN, ATT_MOVE_RIGHT, ATT_MOVE_DOWN, ATT_MOVE_UP, ATT_KICK, ATT_JUMP, FIRE_S_END
 	};
 
 public:
@@ -49,6 +49,25 @@ private:
 	}
 
 	template <typename T>
+	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey)
+	{
+		CObj* pObj = CAbstractFactory<T>::Create(_fx, _fy, _frameKey);
+		dynamic_cast<CBullet*>(pObj)->Set_Target(m_pTarget);
+		return pObj;
+	}
+
+	template <typename T>
+	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey, CObj* _pTarget)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_fx, _fy);
+		pObj->Set_FrameKey(_frameKey);
+		pObj->Set_Target(_pTarget);
+		pObj->Initialize();
+		return pObj;
+	}
+
+	template <typename T>
 	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey, float _fAngle, float _fRange)
 	{
 		CObj* pObj = CAbstractFactory<T>::Create(_fx, _fy,
@@ -82,23 +101,29 @@ private:
 private:
 	POINT			m_tPosin;
 	float			m_fPosinRange;
+	float			m_fPosinAng;
 
 	PATTERN			m_ePattern;
 	int				m_iPatternArr[CFireBoss::P_END];
 	int				m_iAttackCntLimit[CFireBoss::P_END];
 
-	float			m_fBulletTick;
+	float			m_fBulletTick[CFireBoss::P_END];
 	float			m_fBulletTickLimit[CFireBoss::P_END];
-	bool			m_bMove;
-	LINEPOS			m_tStartPt;
-	float			m_fMoveDist;
-
+	
 	bool			m_bJump;
 	bool			m_bMeteoFire;
+	float			m_fMeteoTime;
 	float			m_fJumpDirAngle;
 	float			m_fJumpLandY;
 	float			m_fJumpPower;
 	float			m_fJumpTime;
+
+	bool			m_bDragonFire;
+	float			m_fDragonTime;
+
+	bool			m_bMoveStateFlag;
+	bool			m_bKickFire;
+	bool			m_bKick_bulletCreate;
 
 	FIREB_STATE			m_eFIREPreState;
 	FIREB_STATE			m_eFIRECurState;

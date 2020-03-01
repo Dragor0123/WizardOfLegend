@@ -22,10 +22,11 @@ public:
 	// Inherited via CBullet
 	virtual void Move_Frame() override;
 	virtual void Scene_Change() override;
+public:
+	virtual int		Get_Collision_Code() const;
 
 protected:
 	virtual void	Change_HitRect();
-	virtual int		Get_Collision_Code() const;
 private:
 	bool		m_bCrevisInit;
 	float		m_fPillarCreateTime;

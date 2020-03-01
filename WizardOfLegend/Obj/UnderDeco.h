@@ -22,10 +22,14 @@ public:
 	// 애니메이션 
 	void Move_Frame();
 	void Scene_Change();
-	
+
+public:
+	int		Get_DrawID() const { return m_iDrawID; }
+	void	Set_DrawID(int i) { m_iDrawID = i; }
+
 protected:
 	POINT		m_tRotPoint[3];
-
+	int			m_iDrawID;
 	// state가 필요하면 필요한대로....
 };
 

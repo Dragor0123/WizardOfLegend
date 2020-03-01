@@ -24,6 +24,7 @@ public:
 	virtual void Scene_Change();
 public:
 	virtual int	Get_Collision_Code() const { return CC_MBULLET_WALL_PUSH; }
+
 private:
 	float		m_fRisingTime;
 	float		m_fRisingLimit;

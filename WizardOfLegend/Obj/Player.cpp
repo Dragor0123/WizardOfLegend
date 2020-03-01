@@ -12,6 +12,8 @@
 #include "Inventory.h"
 #include "../Manager/CardMgr.h"
 #include "ArcRel.h"
+// 지워줄것
+#include "Meteor.h"
 
 namespace PLAYER_Space
 {
@@ -123,6 +125,7 @@ void CPlayer::Key_Check(float _fdTime)
 		CCtrlOwnerMgr::Get_Instance()->GameObject_Off();
 		CCtrlOwnerMgr::Get_Instance()->Inventory_On();
 	}
+
 
 	if (!m_bDashInit && KEY_PRESSING('A'))
 	{
@@ -319,6 +322,20 @@ void CPlayer::Key_Check(float _fdTime)
 		}
 	}
 
+	//if (KEY_DOWN(VK_RBUTTON))
+	//{
+	//	POINT pt = {};
+	//	GetCursorPos(&pt);
+	//	ScreenToClient(g_hWnd, &pt);
+	//	pt.x -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollX());
+	//	pt.y -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollY());
+
+	//	using namespace Meteor_Space;
+	//	CObjMgr::Get_Instance()->Add_Object(OBJID::M_CIRBULLET,
+	//		Create_Bullet<CMeteor>(pt.x, pt.y - 842.f, "Meteor"));
+	//}
+
+	/*
 	// 스킬 사용
 	if (!m_bSkillCool)
 	{
@@ -354,7 +371,7 @@ void CPlayer::Key_Check(float _fdTime)
 			}
 		}
 	}
-
+	*/
 	Dash_Check(_fdTime);
 }
 
@@ -425,6 +442,34 @@ void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 		MAGENTA_COLOR);
 
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
+
+	/*
+	TCHAR szText[32] = L"";
+	HDC hOneTileDC = GetDC(g_hWnd);
+	Rectangle(hOneTileDC, 1030, 110, 1300, 250);
+
+	if (CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).empty())
+	{
+		swprintf_s(szText, L"메테오 : %d", 0);
+		TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+	}
+	else
+	{
+		size_t bulletcnt =  CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).size();
+		swprintf_s(szText, L"메테오 : %d", bulletcnt);
+		TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+		
+		CObj* pMeteor = CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).back();
+		swprintf_s(szText, L"fY : %.2f, LandY : %.2f", pMeteor->Get_HitInfo().fY, 
+			dynamic_cast<CMeteor*>(pMeteor)->Get_LandY());
+		TextOut(hOneTileDC, 1060, 170, szText, lstrlen(szText));
+		swprintf_s(szText, L"생성시간: %.3f", dynamic_cast<CMeteor*>(pMeteor)->Get_CreateTime());
+		TextOut(hOneTileDC, 1060, 190, szText, lstrlen(szText));
+		//swprintf_s(szText, L"이전상태 : %d, 현재상태: %d", (int)m_ePreState, (int)m_eCurState);
+		//TextOut(hOneTileDC, 1060, 220, szText, lstrlen(szText));
+	}
+	ReleaseDC(g_hWnd, hOneTileDC);
+	*/
 
 	//char strGold[64] = "";
 	//sprintf_s(strGold, "gold : %d\n", m_iGold);

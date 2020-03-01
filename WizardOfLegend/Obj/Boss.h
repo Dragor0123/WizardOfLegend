@@ -27,6 +27,8 @@ public:
 public:
 	virtual int	Get_Collision_Code() const { return CC_MONSTER_BOSS; }
 	bool		Get_Hittable() const { return m_bHittable; }
+
+	const BOSSDIR& Get_Boss_Dir() const { return m_eDir; }
 	virtual int Get_Boss_State() const = 0;
 	virtual void Set_Boss_State(int _eNewState) = 0;
 

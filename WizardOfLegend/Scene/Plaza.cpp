@@ -17,7 +17,9 @@
 #include "../Obj/BossHPBar.h"
 
 // 나중에 없애줄것. 플라자엔 몬스터 없음.
-
+#include "../Obj/UnderDeco.h"
+#include "../Obj/Archer.h"
+#include "../Obj/FireBoss.h"
 
 CPlaza::CPlaza()
 {
@@ -41,7 +43,7 @@ bool CPlaza::Initialize()
 	// 원위치 (2080.f, 2356.f )
 	CObj*	pPlayer = CAbstractFactory<CPlayer>::Create(2080.f, 2356.f);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAYER, pPlayer);
-
+	
 	// 인벤 삽입
 	CObjMgr::Get_Instance()->Add_Object(OBJID::INVENTORY,
 		CAbstractFactory<CInventory>::Create());
@@ -49,10 +51,10 @@ bool CPlaza::Initialize()
 	// 플레이어 HPBAR, SKILLBAR 삽입, 돈 ui삽입
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
 		CAbstractFactory<CPlayerHPBar>::Create(pPlayer));
-
+	
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
 		CAbstractFactory<CUISkillSet>::Create());
-
+	
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
 		CAbstractFactory<CUIGold>::Create(pPlayer));
 
@@ -88,6 +90,9 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI, pFrostFanFButton);
 	dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
 
+	////////////////
+	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
+		CAbstractFactory<CFireBoss>::Create(2050.f, 1050.f));
 	return true;
 }
 

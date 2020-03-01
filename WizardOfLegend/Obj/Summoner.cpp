@@ -378,3 +378,24 @@ CObj * CSummoner::Create_Bullet(float _fAngle, const string & _frameKey)
 		m_tHitInfo.fX, m_tHitInfo.fY, _fAngle, _frameKey);
 	return pObj;
 }
+
+
+/*
+
+
+
+
+if (m_fMeteoTime > 8.f)
+{
+m_fMeteoTime = 0.f;
+m_bMeteoFire = false;
+++m_tFrame.iFrameStart;
+}
+
+
+
+
+
+
+
+*/

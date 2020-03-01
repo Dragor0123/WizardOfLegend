@@ -37,6 +37,7 @@
 #include <string>
 #include <cassert>
 #include <stack>
+#include <random>
 
 using namespace std;
 #include "Include.h"

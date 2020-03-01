@@ -115,9 +115,10 @@ void CNoMoveBullet::Release()
 
 void CNoMoveBullet::Move_Frame()
 {
-	if (CBullet::END == m_eCurState)
+	//if (CBullet::END == m_eCurState)
+	//	return;
+	if (CBullet::END == m_ePreState)
 		return;
-
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
 		++m_tFrame.iFrameStart;
