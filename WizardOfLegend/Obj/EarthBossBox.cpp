@@ -39,7 +39,7 @@ bool CEarthBossBox::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
-
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 

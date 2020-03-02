@@ -5,6 +5,7 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "../Obj/ObjMgr.h"
 #include "../Obj/MyButton.h"
+#include "../Manager/CtrlOwnerMgr.h"
 
 const int CTitleMenu::iLogoX = 141;
 int CTitleMenu::iLogoY = 340;
@@ -64,6 +65,7 @@ int CTitleMenu::Update(float _fdTime)
 		iLogoY -= (int)(400.f * _fdTime);
 		if (iLogoY < 172) {
 			iLogoY = 172;
+			CCtrlOwnerMgr::Get_Instance()->TitleMenu_On();
 		}
 	}
 	CObjMgr::Get_Instance()->Update(_fdTime);
@@ -130,6 +132,7 @@ bool CTitleMenu::Key_Check()
 			if (KEY_DOWN(i))
 			{
 				m_bTitleLogoUp = true;
+				CCtrlOwnerMgr::Get_Instance()->TitleMenu_Off();
 			}
 		}
 	}

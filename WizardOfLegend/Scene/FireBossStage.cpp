@@ -13,9 +13,10 @@
 #include "../Obj/PlayerHPBar.h"
 #include "../Obj/UIGold.h"
 #include "../Obj/FireBoss.h"
+#include "../Obj/BossHPBar.h"
 
 CFireBossStage::CFireBossStage()
-	: m_bTeleCircleInserted(false)
+	: m_bTeleCircleInserted(false), m_bBossHPBarInserted(false)
 {
 }
 
@@ -36,39 +37,40 @@ bool CFireBossStage::Initialize()
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(1601.f, 3344.f);
 	// 플레이어 HPBAR, SKILLBAR, 돈 UI 삽입
-	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 		CAbstractFactory<CPlayerHPBar>::Create(rPlayer));
-	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 		CAbstractFactory<CUISkillSet>::Create());
-	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE_UI,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
 	// 파이어 보스 삽입, HPBAR도 삽입해야한다. 그리고 이따가 이거 update쪽으로 바꾸자.
 	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
-		CAbstractFactory<CFireBoss>::Create(1601.f, 988.f));
+		CAbstractFactory<CFireBoss>::Create(1601.f, 968.f));
 
 	return true;
 }
 
 int CFireBossStage::Update(float _fdTime)
 {
-	CObjMgr::Get_Instance()->Update(_fdTime);
-	if (CSceneMgr::SCENE_FIREBOSS == CSceneMgr::Get_Instance()->Get_Scene_ID())
+	CTileMgr::Get_Instance()->Update(_fdTime);
+	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
-		CTileMgr::Get_Instance()->Update(_fdTime);
-		// auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+		auto& rFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();
+		CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
+			CAbstractFactory<CBossHPBar>::Create(rFireBoss));
+		m_bBossHPBarInserted = true;
 	}
 
+	CObjMgr::Get_Instance()->Update(_fdTime);
 	return OBJ_NOEVENT;
 }
 
 void CFireBossStage::Late_Update(float _fdTime)
 {
-	if (CSceneMgr::SCENE_FIREBOSS == CSceneMgr::Get_Instance()->Get_Scene_ID())
-	{
-		CTileMgr::Get_Instance()->Late_Update(_fdTime);
-		CObjMgr::Get_Instance()->Late_Update(_fdTime);
-	}
+	CTileMgr::Get_Instance()->Late_Update(_fdTime);
+	CObjMgr::Get_Instance()->Late_Update(_fdTime);
 }
 
 void CFireBossStage::Collision(float _fdTime)
@@ -90,7 +92,8 @@ void CFireBossStage::Release()
 		CObjMgr::Get_Instance()->Delete_ID((OBJID::ID)i);
 	}
 
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::STAGE_UI);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::DIGIT_UI);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::FIREBSTAGE_UI);
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireTile");
 }
 

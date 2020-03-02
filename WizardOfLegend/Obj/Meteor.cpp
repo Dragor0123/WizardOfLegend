@@ -37,7 +37,7 @@ bool CMeteor::Initialize()
 
 	m_fShotRange = 600.f; // 1000.f
 	m_fSpeed = 1200.f; //1200.f;
-	m_iAtt = 36;
+	m_iAtt = rand() % 15 + 28;
 	m_fCreateTime = 0.f;
 
 	m_ePreState = END;

@@ -92,7 +92,7 @@ private:
 
 	STATE		m_ePreState;
 	STATE		m_eCurState;
-	int			m_iHitCount;
+	int			m_iHitStateCount;
 	int			m_iMp;
 	int			m_iMaxMp;
 	//bool		m_bDeadInit;		// true일경우 SceneChange 에서 STATE를 DEAD로 바꾼다.

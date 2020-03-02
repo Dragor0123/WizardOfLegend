@@ -42,7 +42,8 @@ bool CFireBall::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
-
+	
+	//m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 
@@ -185,7 +186,12 @@ void CFireBall::Change_HitRect()
 int CFireBall::Get_Collision_Code() const
 {
 	if (m_bMonsters)
-		return CC_MBULLET_WALL_PUSH;
+	{
+		if (m_fRisingTime <= m_fRisingLimit)
+			return CC_MBULLET_NWALL_NPUSH;
+		else
+			return CC_MBULLET_WALL_PUSH;
+	}
 	else
 		return CC_PBULLET_WALL_PUSH_NDRAG;
 }

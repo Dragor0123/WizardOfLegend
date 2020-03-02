@@ -25,6 +25,9 @@ public:
 	virtual void Scene_Change() override;
 	virtual void Change_HitRect() override;
 	virtual CObj * Create_Bullet(const string & _frameKey = "") override;
+
+	// Inherited via CMonster
+	virtual void Move_Frame() override;
 };
 
 #endif

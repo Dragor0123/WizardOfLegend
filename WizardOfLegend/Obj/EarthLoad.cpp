@@ -42,7 +42,7 @@ bool CEarthLoad::Initialize()
 	//IDLE일 때 히트박스
 	m_tHitInfo.iCX = 106;
 	m_tHitInfo.iCY = 180;
-	m_iHitCount = 0;
+	m_iHitStateCount = 0;
 	m_ePattern = CEarthLoad::P_BOX;
 	m_eDir = BOSSDIR::BOTTOM;
 
@@ -180,6 +180,7 @@ int CEarthLoad::Update(float _fdTime)
 void CEarthLoad::Late_Update(float _fdTime)
 {
 	CBoss::Late_Update(_fdTime);
+
 	if (m_bAttackCool &&
 		m_tFrame.iFrameStart == 0 &&
 		(m_ePreState >= ATT1 && m_ePreState <= ATT3_UP))
@@ -360,11 +361,11 @@ void CEarthLoad::Move_Frame()
 				m_tFrame.dwFrameSpeed = (DWORD)(HIT_FRAME_SPEED * 1.5f);
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			{
-				++m_iHitCount;
-				if (m_iHitCount > B_HIT_FRAME_COUNTMAX)
+				++m_iHitStateCount;
+				if (m_iHitStateCount > B_HIT_FRAME_COUNTMAX)
 				{
 					m_eCurState = CEarthLoad::IDLE;
-					m_iHitCount = 0;
+					m_iHitStateCount = 0;
 				}
 				else
 				{
@@ -381,7 +382,7 @@ void CEarthLoad::Move_Frame()
 				m_tFrame.dwFrameSpeed = 260;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				++iDanceCount;
-				if (iDanceCount > 1) {
+				if (iDanceCount > B_DANCE_COUNTMAX) {
 					m_eCurState = CEarthLoad::ATT1;
 					iDanceCount = 0;
 				}

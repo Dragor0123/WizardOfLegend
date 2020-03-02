@@ -19,7 +19,7 @@ CObjMgr::~CObjMgr()
 
 bool CObjMgr::Initialize()
 {
-	//Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
+	Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
 	return true;
 }
 
@@ -98,12 +98,13 @@ void CObjMgr::Collision(float _fdTime)
 	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::M_CIRBULLET], m_listObj[OBJID::PLAYER]);
 
 	// 장애물 충돌판정
+	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::MONSTER], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::BOSS], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_RECTBULLET], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::M_RECTBULLET], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::P_CIRBULLET], m_listObj[OBJID::OBSTACLE]);
-	//CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::M_CIRBULLET], m_listObj[OBJID::OBSTACLE]);
+	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::M_CIRBULLET], m_listObj[OBJID::OBSTACLE]);
 }
 
 void CObjMgr::Render(HDC _DC, float _fdTime)
@@ -138,9 +139,10 @@ void CObjMgr::Render(HDC _DC, float _fdTime)
 void CObjMgr::Release()
 {
 	for (int i = 0; i < OBJID::END; ++i)
-	{
 		Safe_Delete_VecList(m_listObj[i]);
-	}
+
+	for (int i = 0; i < GROUPID::END; ++i)
+		Safe_Delete_VecList(m_listRender[i]);
 }
 
 void CObjMgr::Add_Object(OBJID::ID _eID, CObj * _pObj)

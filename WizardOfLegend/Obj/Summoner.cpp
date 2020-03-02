@@ -215,6 +215,7 @@ void CSummoner::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 void CSummoner::Move_Frame()
 {
+
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
 		++m_tFrame.iFrameStart;
@@ -247,11 +248,11 @@ void CSummoner::Move_Frame()
 			{
 				if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				{
-					++m_iHitCount;
-					if (m_iHitCount > M_HIT_FRAME_COUNTMAX)
+					++m_iHitStateCount;
+					if (m_iHitStateCount > M_HIT_FRAME_COUNTMAX)
 					{
 						m_eCurState = CMonster::IDLE;
-						m_iHitCount = 0;
+						m_iHitStateCount = 0;
 					}
 					else
 					{

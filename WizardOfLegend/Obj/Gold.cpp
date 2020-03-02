@@ -29,6 +29,8 @@ bool CGold::Initialize()
 	Equalize_HitPosInfoPos();
 	Equalize_HitSzInfoSz();
 
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
+
 	return true;
 }
 

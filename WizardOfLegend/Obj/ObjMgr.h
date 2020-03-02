@@ -27,8 +27,6 @@ public:
 	void Delete_A_Obj(OBJID::ID _eID, CObj* _pObj);
 
 private:
-
-private:
 	CObjMgr();
 	~CObjMgr();
 	CObjMgr(const CObjMgr&) = delete;
@@ -38,5 +36,8 @@ private:
 	list<CObj*>			m_listObj[OBJID::END];
 	list<CObj*>			m_listRender[GROUPID::END];
 };
+
+#define ADD_OBJECT(_eID, _pObj) CObjMgr::Get_Instance()->Add_Object(_eID, _pObj)
+#define DELETE_OBJECT(_eID, _pObj) CObjMgr::Get_Instance()->Delete_A_Obj(_eID, _pObj)
 
 #endif

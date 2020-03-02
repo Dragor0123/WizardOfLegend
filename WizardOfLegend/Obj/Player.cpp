@@ -13,7 +13,6 @@
 #include "../Manager/CardMgr.h"
 #include "ArcRel.h"
 // 지워줄것
-#include "Meteor.h"
 
 namespace PLAYER_Space
 {
@@ -75,7 +74,7 @@ bool CPlayer::Initialize()
 	m_iGold = 0;
 
 	//
-	m_iHitCount = 0;
+	m_iHitStateCount = 0;
 	// 스킬 쿨타임, 공격 주기 구하기 (드래곤아크) // 총알 수 8개 -> 이부분 수정합시다!
 	m_bSkillCool = false;
 	m_fCoolStart = 0.f;
@@ -110,6 +109,7 @@ bool CPlayer::Initialize()
 	m_mapKeyIdx.emplace('Q', 3);
 	m_mapKeyIdx.emplace('E', 4);
 	m_mapKeyIdx.emplace('R', 5);
+
 
 	return true;
 }
@@ -322,20 +322,6 @@ void CPlayer::Key_Check(float _fdTime)
 		}
 	}
 
-	//if (KEY_DOWN(VK_RBUTTON))
-	//{
-	//	POINT pt = {};
-	//	GetCursorPos(&pt);
-	//	ScreenToClient(g_hWnd, &pt);
-	//	pt.x -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollX());
-	//	pt.y -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollY());
-
-	//	using namespace Meteor_Space;
-	//	CObjMgr::Get_Instance()->Add_Object(OBJID::M_CIRBULLET,
-	//		Create_Bullet<CMeteor>(pt.x, pt.y - 842.f, "Meteor"));
-	//}
-
-	/*
 	// 스킬 사용
 	if (!m_bSkillCool)
 	{
@@ -371,7 +357,7 @@ void CPlayer::Key_Check(float _fdTime)
 			}
 		}
 	}
-	*/
+
 	Dash_Check(_fdTime);
 }
 
@@ -405,6 +391,10 @@ void CPlayer::Late_Update(float _fdTime)
 	Update_Rect();
 	Update_HitRect();
 	OffSet();
+
+	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_ePreState != CPlayer::HIT)
+		Reset_HitDigitCnt();
+
 	if (m_bDashInit) {
 		float fX = (m_tInfo.fX - m_tBeforeDashPos.fX);
 		float fY = (m_tInfo.fY - m_tBeforeDashPos.fY);
@@ -450,23 +440,23 @@ void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 	if (CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).empty())
 	{
-		swprintf_s(szText, L"메테오 : %d", 0);
-		TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+	swprintf_s(szText, L"메테오 : %d", 0);
+	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
 	}
 	else
 	{
-		size_t bulletcnt =  CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).size();
-		swprintf_s(szText, L"메테오 : %d", bulletcnt);
-		TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
-		
-		CObj* pMeteor = CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).back();
-		swprintf_s(szText, L"fY : %.2f, LandY : %.2f", pMeteor->Get_HitInfo().fY, 
-			dynamic_cast<CMeteor*>(pMeteor)->Get_LandY());
-		TextOut(hOneTileDC, 1060, 170, szText, lstrlen(szText));
-		swprintf_s(szText, L"생성시간: %.3f", dynamic_cast<CMeteor*>(pMeteor)->Get_CreateTime());
-		TextOut(hOneTileDC, 1060, 190, szText, lstrlen(szText));
-		//swprintf_s(szText, L"이전상태 : %d, 현재상태: %d", (int)m_ePreState, (int)m_eCurState);
-		//TextOut(hOneTileDC, 1060, 220, szText, lstrlen(szText));
+	size_t bulletcnt =  CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).size();
+	swprintf_s(szText, L"메테오 : %d", bulletcnt);
+	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+
+	CObj* pMeteor = CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).back();
+	swprintf_s(szText, L"fY : %.2f, LandY : %.2f", pMeteor->Get_HitInfo().fY,
+	dynamic_cast<CMeteor*>(pMeteor)->Get_LandY());
+	TextOut(hOneTileDC, 1060, 170, szText, lstrlen(szText));
+	swprintf_s(szText, L"생성시간: %.3f", dynamic_cast<CMeteor*>(pMeteor)->Get_CreateTime());
+	TextOut(hOneTileDC, 1060, 190, szText, lstrlen(szText));
+	//swprintf_s(szText, L"이전상태 : %d, 현재상태: %d", (int)m_ePreState, (int)m_eCurState);
+	//TextOut(hOneTileDC, 1060, 220, szText, lstrlen(szText));
 	}
 	ReleaseDC(g_hWnd, hOneTileDC);
 	*/
@@ -526,11 +516,11 @@ void CPlayer::Move_Frame()
 				m_tFrame.dwFrameSpeed = (DWORD)(HIT_FRAME_SPEED * 1.5f);
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			{
-				++m_iHitCount;
-				if (m_iHitCount > P_HIT_FRAME_COUNTMAX)
+				++m_iHitStateCount;
+				if (m_iHitStateCount > P_HIT_FRAME_COUNTMAX)
 				{
 					m_eCurState = CPlayer::IDLE;
-					m_iHitCount = 0;
+					m_iHitStateCount = 0;
 				}
 				else
 				{

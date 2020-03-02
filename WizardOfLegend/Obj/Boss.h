@@ -5,6 +5,7 @@
 #define __BOSS_H__
 
 #include "Monster.h"
+
 class CBoss : public CMonster
 {
 public:
@@ -52,6 +53,7 @@ protected:
 	int					m_iAttackCnt;
 	bool				m_bHittable;
 	static const int	B_HIT_FRAME_COUNTMAX;
+	static const int    B_DANCE_COUNTMAX;
 };
 
 

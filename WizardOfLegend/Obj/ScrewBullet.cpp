@@ -66,9 +66,9 @@ bool CScrewBullet::Initialize()
 	m_tFrame.dwFrameTime = GetTickCount();
 
 	if (!m_bMonsters)
-		m_iAtt = 10;
+		m_iAtt = rand() % 7 + 6;
 	else
-		m_iAtt = 20;
+		m_iAtt = rand() % 9 + 16;
 
 	return true;
 }

@@ -21,6 +21,7 @@ public:
 
 private:
 	bool			m_bTeleCircleInserted;
+	bool			m_bBossHPBarInserted;
 };
 
 #endif

@@ -48,6 +48,7 @@ bool CGuideLBullet::Initialize()
 	//m_ePreState = CBullet::END;
 	//m_eCurState = CBullet::FIRE;
 	// m_ePreState = m_eCurState = CBullet::END;
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 

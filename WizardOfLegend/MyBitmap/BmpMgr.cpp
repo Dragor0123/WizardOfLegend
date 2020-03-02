@@ -15,6 +15,10 @@ bool CBmpMgr::Initialize()
 {
 	if (!Insert_Bmp(L"Bitmap/BackBuffer.bmp", "BackBuffer"))
 		return false;
+	if (!Insert_Bmp(L"Bitmap/Back.bmp", "Back"))
+		return false;
+	if (!Insert_Bmp(L"Bitmap/Back_black.bmp", "Back_black"))
+		return false;
 	if (!Insert_Bmp(L"Bitmap/DecoEffect/PlazaArch.bmp", "PlazaArch"))
 		return false;
 	return true;

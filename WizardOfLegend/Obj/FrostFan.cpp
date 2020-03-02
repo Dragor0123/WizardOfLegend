@@ -31,7 +31,7 @@ bool CFrostFan::Initialize()
 	m_tHitInfo.iCY = 30;
 	m_fShotRange = 5000.f;
 	m_fSpeed = 1200.f;
-	m_iAtt = 18;
+	m_iAtt = rand() % 7 + 15;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("FrostFan");

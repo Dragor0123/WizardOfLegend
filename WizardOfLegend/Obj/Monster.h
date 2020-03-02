@@ -51,7 +51,7 @@ protected:
 	MONSTATE		m_ePreState;
 	MONSTATE		m_eCurState;
 	bool			m_bAttackCool;
-	int				m_iHitCount;
+	int				m_iHitStateCount;
 
 	static const int		M_HIT_FRAME_COUNTMAX;
 };

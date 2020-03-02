@@ -43,13 +43,13 @@ int CNPC::Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
-	CFAble::Key_Check(_fdTime);
 
 	return OBJ_NOEVENT;
 }
 
 void CNPC::Late_Update(float _fdTime)
 {
+	CFAble::Key_Check(_fdTime);
 }
 
 void CNPC::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)

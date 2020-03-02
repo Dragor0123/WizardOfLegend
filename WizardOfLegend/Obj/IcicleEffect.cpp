@@ -5,8 +5,9 @@
 #include "Player.h"
 #include "Monster.h"
 
+const float CIcicleEffect::m_fLifeTLimit = 3.6f;
 CIcicleEffect::CIcicleEffect()
-	: m_fLifeTime(0.f), m_fLifeTLimit(3.6f)
+	: m_fLifeTime(0.f)
 {
 }
 

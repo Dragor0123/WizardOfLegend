@@ -10,6 +10,7 @@
 #include "Manager\TileMgr.h"
 #include "Manager\CtrlOwnerMgr.h"
 #include "Manager\CardMgr.h"
+#include "Manager\DigitMgr.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -81,6 +82,10 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 	if (!CCardMgr::Get_Instance()->Initialize())
 		return false;
 
+	// 숫자 매니저 초기화
+	if (!CDigitMgr::Get_Instance()->Initialize())
+		return false;
+
 	return true;
 }
 
@@ -105,8 +110,9 @@ void CMainGame::Collision(float _fdTime)
 
 void CMainGame::Render(float _fdTime)
 {
+	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("Back");
 	HDC hBackBuffer = CBmpMgr::Get_Instance()->Find_Image("BackBuffer");
-	Rectangle(hBackBuffer, 0, 0, WINCX, WINCY);
+	BitBlt(hBackBuffer, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
 
 	CSceneMgr::Get_Instance()->Render(hBackBuffer, _fdTime);
 	//CCardMgr::Get_Instance()->Render();
@@ -123,12 +129,14 @@ void CMainGame::Release()
 	CKeyMgr::Destroy_Instance();
 	CScrollMgr::Destroy_Instance(); 
 	CCardMgr::Destroy_Instance(); 
+	CDigitMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance(); 
 	CSceneMgr::Destroy_Instance(); 
 	CTileMgr::Destroy_Instance(); 
 	CObjMgr::Destroy_Instance(); 
 	CTimer::Destroy_Instance(); 
 	CCtrlOwnerMgr::Destroy_Instance(); 
+
 	ReleaseDC(g_hWnd, m_hDC);
 }
 

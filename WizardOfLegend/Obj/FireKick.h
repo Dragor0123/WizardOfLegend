@@ -22,10 +22,11 @@ public:
 	virtual void Scene_Change();
 
 public:
-	virtual int	Get_Collision_Code() const { return CC_MBULLET_NWALL_PUSH; }
+	virtual int	Get_Collision_Code() const { return CC_MBULLET_NWALL_NPUSH; }
 
 private:
 	int			m_iDrawID;
+	float		m_fDeadTime;
 };
 
 #endif

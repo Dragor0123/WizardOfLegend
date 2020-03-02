@@ -2,11 +2,11 @@
 #include "Monster.h"
 #include "Gold.h"
 #include "ObjMgr.h"
-const int CMonster::M_HIT_FRAME_COUNTMAX = 2;
+const int CMonster::M_HIT_FRAME_COUNTMAX = 3;
 using namespace Monster_space;
 
 CMonster::CMonster()
-	: m_bAttackCool(false), m_fDetectRange(DEFAULT_DETECT_RAD), m_iHitCount(0)
+	: m_bAttackCool(false), m_fDetectRange(DEFAULT_DETECT_RAD), m_iHitStateCount(0)
 {
 }
 
@@ -61,6 +61,9 @@ void CMonster::Late_Update(float _fdTime)
 		m_tHitInfo.iCX = 0;
 		m_tHitInfo.iCY = 0;
 	}
+	
+	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_ePreState != CMonster::HIT)
+		Reset_HitDigitCnt();
 
 	Update_Rect();
 	Update_HitRect();
@@ -130,11 +133,11 @@ void CMonster::Move_Frame()
 			{
 				if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				{
-					++m_iHitCount;
-					if (m_iHitCount > M_HIT_FRAME_COUNTMAX)
+					++m_iHitStateCount;
+					if (m_iHitStateCount > M_HIT_FRAME_COUNTMAX)
 					{
 						m_eCurState = CMonster::IDLE;
-						m_iHitCount = 0;
+						m_iHitStateCount = 0;
 					}
 					else
 					{

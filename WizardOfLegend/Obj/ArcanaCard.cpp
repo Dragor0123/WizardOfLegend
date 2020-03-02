@@ -16,7 +16,6 @@ CArcanaCard::CArcanaCard()
 
 CArcanaCard::~CArcanaCard()
 {
-	Release();
 }
 
 bool CArcanaCard::Initialize()
@@ -72,7 +71,7 @@ int CArcanaCard::Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
-	return 0;
+	return OBJ_NOEVENT;
 }
 
 void CArcanaCard::Late_Update(float _fdTime)
@@ -81,14 +80,10 @@ void CArcanaCard::Late_Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
-
-	int a = 3;
 }
 
 void CArcanaCard::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-	Update_Rect();
-	Update_HitRect();
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
 	GdiTransparentBlt(_DC
 		, (int)(m_tRect.left + _fScrollX)
@@ -104,10 +99,6 @@ void CArcanaCard::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScroll
 
 void CArcanaCard::Release()
 {
-	if (m_pFbutton)
-	{
-		CObjMgr::Get_Instance()->Delete_A_Obj(m_pFbutton->Get_OBJID(), m_pFbutton);
-	}
 }
 
 CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)

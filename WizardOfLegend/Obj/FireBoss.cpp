@@ -53,7 +53,7 @@ bool CFireBoss::Initialize()
 	// IDLE일 때
 	m_tHitInfo.iCX = 68;
 	m_tHitInfo.iCY = 152;
-	m_iHitCount = 0;
+	m_iHitStateCount = 0;
 	m_ePattern = CFireBoss::P_METEOR;
 	m_eDir = BOSSDIR::BOTTOM;
 
@@ -90,8 +90,6 @@ bool CFireBoss::Initialize()
 		int  _right = rand() % CFireBoss::P_END;
 		Swap(&m_iPatternArr[_left], &m_iPatternArr[_right]);
 	}
-
-	m_fDetectRange = DEFAULT_DETECT_RAD;
 
 	// 점프 관련 초기화
 	m_fJumpPower = 12.f;
@@ -190,8 +188,7 @@ int CFireBoss::Update(float _fdTime)
 		//m_fPosinAng += 5.f;
 		// posin...
 
-		//m_ePattern = (CFireBoss::PATTERN)m_iPatternArr[m_iPatternCnt];
-		m_ePattern = (CFireBoss::PATTERN)m_iPatternCnt;
+		m_ePattern = (CFireBoss::PATTERN)m_iPatternArr[m_iPatternCnt];
 		Attack_Pattern(_fdTime, fDis);
 
 		if ((m_eFIREPreState >= ATT_MOVE_RIGHT && m_eFIREPreState <= ATT_KICK) 
@@ -255,6 +252,10 @@ void CFireBoss::Late_Update(float _fdTime)
 		m_tHitInfo.iCX = 0;
 		m_tHitInfo.iCY = 0;
 	}
+	
+	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_eFIREPreState != CFireBoss::FIRE_HIT)
+		Reset_HitDigitCnt();
+
 	Update_Rect();
 	Update_HitRect();
 
@@ -316,23 +317,19 @@ void CFireBoss::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 			MAGENTA_COLOR);
 	}
 
-	//TCHAR szBuff[32] = L"";
-	//swprintf_s(szBuff, L"각도(%.2f), 총알 수 : %d, 방향: %d", m_fAngle, 
-	//	CObjMgr::Get_Instance()->Get_listObj(OBJID::M_RECTBULLET).size(), (int)m_eDir);
-	//SetWindowText(g_hWnd, szBuff);
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 	Draw_DetectCircle(_DC, _fScrollX, _fScrollY);
 
 
-	TCHAR szText[64] = L"";
-	HDC hOneTileDC = GetDC(g_hWnd);
-	Rectangle(hOneTileDC, 1030, 110, 1600, 200);
-	swprintf_s(szText, L"PatternCnt : %d", m_iPatternCnt);
-	TextOut(hOneTileDC, 1060, 120, szText, lstrlen(szText));
-	swprintf_s(szText, L"이전상태: %d, 현재상태: %d", (int)m_eFIREPreState, (int)m_eFIRECurState);
-	TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
-	swprintf_s(szText, L"프레임start: %d, 프레임End: %d", m_tFrame.iFrameStart, m_tFrame.iFrameEnd);
-	TextOut(hOneTileDC, 1060, 180, szText, lstrlen(szText));
+	//TCHAR szText[64] = L"";
+	//HDC hOneTileDC = GetDC(g_hWnd);
+	//Rectangle(hOneTileDC, 1030, 110, 1600, 200);
+	//swprintf_s(szText, L"PatternCnt : %d", m_iPatternCnt);
+	//TextOut(hOneTileDC, 1060, 120, szText, lstrlen(szText));
+	//swprintf_s(szText, L"이전상태: %d, 현재상태: %d", (int)m_eFIREPreState, (int)m_eFIRECurState);
+	//TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
+	//swprintf_s(szText, L"프레임start: %d, 프레임End: %d", m_tFrame.iFrameStart, m_tFrame.iFrameEnd);
+	//TextOut(hOneTileDC, 1060, 180, szText, lstrlen(szText));
 
 	//ReleaseDC(g_hWnd, hOneTileDC);
 }
@@ -522,11 +519,11 @@ void CFireBoss::Move_Frame()
 				m_tFrame.dwFrameSpeed = (DWORD)(HIT_FRAME_SPEED * 1.5f);
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			{
-				++m_iHitCount;
-				if (m_iHitCount > B_HIT_FRAME_COUNTMAX)
+				++m_iHitStateCount;
+				if (m_iHitStateCount > B_HIT_FRAME_COUNTMAX)
 				{
 					m_eFIRECurState = FIRE_IDLE;
-					m_iHitCount = 0;
+					m_iHitStateCount = 0;
 				}
 				else
 				{
@@ -539,7 +536,7 @@ void CFireBoss::Move_Frame()
 			m_tFrame.dwFrameSpeed = DANCE_FRAME_SPEED;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				++iDanceCount;
-				if (iDanceCount > 1) {
+				if (iDanceCount > B_DANCE_COUNTMAX) {
 					m_eFIRECurState = FIRE_IDLE;
 					iDanceCount = 0;
 				}

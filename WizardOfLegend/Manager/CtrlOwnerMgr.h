@@ -26,6 +26,8 @@ public:
 	void TitleMenu_Off();
 	void GameObject_On();
 	void GameObject_Off();
+	void WardInven_Off();
+	void WardInven_On();
 
 private:
 	void Set_Off(int i) { m_bKeyOnOffArr[i] = false; }

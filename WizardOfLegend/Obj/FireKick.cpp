@@ -4,6 +4,7 @@
 #include "FireBoss.h"
 
 CFireKick::CFireKick()
+	: m_fDeadTime(0.f)
 {
 	m_bMonsters = true;
 }
@@ -31,7 +32,7 @@ bool CFireKick::Initialize()
 	m_tHitInfo.iCX = 188;
 
 	m_fSpeed = 500.f;
-	m_fShotRange = 240.f;
+	m_fShotRange = 200.f;
 	m_iAtt = 8;
 
 	if (m_strFrameKey == "")
@@ -44,9 +45,11 @@ bool CFireKick::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
-	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
+
 	const CBoss::BOSSDIR eDir = dynamic_cast<CFireBoss*>(m_pTarget)->Get_Boss_Dir();
 	m_iDrawID = (int)eDir;
+
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 
@@ -70,7 +73,12 @@ int CFireKick::Update(float _fdTime)
 		MoveYFromSpeed(_fdTime, MOVEDIR::MD_FRONT);
 		break;
 	}
-	
+
+	if (m_ePreState == CBullet::COLLISION)
+	{
+		m_fDeadTime += _fdTime;
+	}
+
 	// 움직임 구현
 	Equalize_HitPosInfoPos();
 
@@ -84,26 +92,25 @@ int CFireKick::Update(float _fdTime)
 void CFireKick::Late_Update(float _fdTime)
 {
 	CBullet::Late_Update(_fdTime);
-
-	if (m_ePreState == CBullet::COLLISION)
+	if (m_fDeadTime > 0.4f)
 		m_bDead = true;
 }
 
 void CFireKick::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-	if (m_ePreState != CBullet::COLLISION)
-	{
-		HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
-		GdiTransparentBlt(_DC
-			, (int)(m_tRect.left + _fScrollX)
-			, (int)(m_tRect.top + _fScrollY)
-			, m_tInfo.iCX, m_tInfo.iCY
-			, hMemDC
-			, m_iDrawID * m_tInfo.iCX
-			, 0
-			, m_tInfo.iCX, m_tInfo.iCY
-			, MAGENTA_COLOR);
-	}
+
+	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
+	GdiTransparentBlt(_DC
+		, (int)(m_tRect.left + _fScrollX)
+		, (int)(m_tRect.top + _fScrollY)
+		, m_tInfo.iCX, m_tInfo.iCY
+		, hMemDC
+		, m_iDrawID * m_tInfo.iCX
+		, 0
+		, m_tInfo.iCX, m_tInfo.iCY
+		, MAGENTA_COLOR);
+
+	Draw_HitCircle(_DC, _fScrollX, _fScrollY);
 }
 
 void CFireKick::Release()

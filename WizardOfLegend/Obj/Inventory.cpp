@@ -34,7 +34,7 @@ CInventory::~CInventory()
 bool CInventory::Initialize()
 {
 	m_tInfo.fX = 228.f;
-	m_tInfo.fY = 342;
+	m_tInfo.fY = 342.f;
 	m_tInfo.iCX = 456;
 	m_tInfo.iCY = 684;
 
@@ -304,14 +304,14 @@ void CInventory::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY
 
 		Render_Inventory_Items(_DC, _fdTime, _fScrollX, _fScrollY);
 
-		TCHAR szText[32] = L"";
-		HDC hOneTileDC = GetDC(g_hWnd);
-		Rectangle(hOneTileDC, 1030, 110, 1300, 190);
-		swprintf_s(szText, L"위쪽배열 인덱스[%d], 값 : [%d]", m_iIdxOutter, (m_iIdxOutter != -1) ? m_aOutterArray[m_iIdxOutter] : -999);
-		TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
-		swprintf_s(szText, L"내부배열 인덱스[%d], 값 : [%d]", m_iIdxInner, (m_iIdxInner != -1) ? m_aInnerArray[m_iIdxInner] : -999);
-		TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
-		ReleaseDC(g_hWnd, hOneTileDC);
+		//TCHAR szText[32] = L"";
+		//HDC hOneTileDC = GetDC(g_hWnd);
+		//Rectangle(hOneTileDC, 1030, 110, 1300, 190);
+		//swprintf_s(szText, L"위쪽배열 인덱스[%d], 값 : [%d]", m_iIdxOutter, (m_iIdxOutter != -1) ? m_aOutterArray[m_iIdxOutter] : -999);
+		//TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+		//swprintf_s(szText, L"내부배열 인덱스[%d], 값 : [%d]", m_iIdxInner, (m_iIdxInner != -1) ? m_aInnerArray[m_iIdxInner] : -999);
+		//TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
+		//ReleaseDC(g_hWnd, hOneTileDC);
 	}
 }
 

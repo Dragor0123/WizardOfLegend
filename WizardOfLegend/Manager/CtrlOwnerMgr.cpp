@@ -33,6 +33,9 @@ void CCtrlOwnerMgr::Inventory_On()
 		m_bKeyOnOffArr[KEYOWN::KS_FABLE] = false;
 	if (m_bKeyOnOffArr[KEYOWN::KS_PLAYER])
 		m_bKeyOnOffArr[KEYOWN::KS_PLAYER] = false;
+	if (m_bKeyOnOffArr[KEYOWN::KS_WARDINVEN])
+		m_bKeyOnOffArr[KEYOWN::KS_WARDINVEN] = false;
+
 	Set_On(KEYOWN::KS_INVENTORY);
 }
 
@@ -78,4 +81,23 @@ void CCtrlOwnerMgr::GameObject_Off()
 {
 	Set_Off(KEYOWN::KS_PLAYER);
 	Set_Off(KEYOWN::KS_FABLE);
+}
+
+void CCtrlOwnerMgr::WardInven_Off()
+{
+	Set_Off(KEYOWN::KS_WARDINVEN);
+	Set_On(KEYOWN::KS_PLAYER);
+	Set_On(KEYOWN::KS_FABLE);
+}
+
+void CCtrlOwnerMgr::WardInven_On()
+{
+	if (m_bKeyOnOffArr[KEYOWN::KS_FABLE])
+		Set_Off(KEYOWN::KS_FABLE);
+	if (m_bKeyOnOffArr[KEYOWN::KS_PLAYER])
+		Set_Off(KEYOWN::KS_PLAYER);
+	if (m_bKeyOnOffArr[KEYOWN::KS_INVENTORY])
+		Set_Off(KEYOWN::KS_INVENTORY);
+
+	Set_On(KEYOWN::KS_WARDINVEN);
 }

@@ -10,7 +10,6 @@ CTeleCircle::CTeleCircle()
 
 CTeleCircle::~CTeleCircle()
 {
-	Release();
 }
 
 bool CTeleCircle::Initialize()
@@ -46,8 +45,6 @@ void CTeleCircle::Late_Update(float _fdTime)
 
 void CTeleCircle::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-	Update_Rect();
-	Update_HitRect();
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("TeleCircle");
 	GdiTransparentBlt(_DC
 		, (int)(m_tRect.left + _fScrollX)
@@ -63,7 +60,6 @@ void CTeleCircle::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScroll
 
 void CTeleCircle::Release()
 {
-	// CFAble::Release();
 }
 
 void CTeleCircle::Do_FButton_Action(float _fdTime)

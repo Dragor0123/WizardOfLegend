@@ -70,5 +70,8 @@ void CFAble::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 void CFAble::Release()
 {
-	//SAFE_DELETE(m_pFbutton);
+	if (m_pFbutton)
+	{
+		CObjMgr::Get_Instance()->Delete_A_Obj(m_pFbutton->Get_OBJID(), m_pFbutton);
+	}
 }

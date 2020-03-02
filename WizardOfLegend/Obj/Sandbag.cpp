@@ -14,29 +14,35 @@ CSandbag::~CSandbag()
 bool CSandbag::Initialize()
 {
 	CMoveObj::Initialize();
-	m_tInfo.iCX = 97;
-	m_tInfo.iCY = 86;
+	m_tInfo.iCX = 80;
+	m_tInfo.iCY = 116;
 	Equalize_HitPosInfoPos();
 	Equalize_HitSzInfoSz();
 	m_fSpeed = 0.f;
+
+	m_iMaxHp = std::numeric_limits<int>::max();
+	m_iHp = m_iMaxHp;
+
+	Update_Rect();
+	Update_HitRect();
+
 	return true;
 }
 
 int CSandbag::Update(float _fdTime)
 {
-	if (OBJ_DEAD == CMoveObj::Update(_fdTime))
-		return OBJ_DEAD;
-	// 특정 조건 때문에 OBJ_DEAD일경우 그걸 리턴
-
-	Update_Rect();
-	Update_HitRect();
-	return OBJ_NOEVENT;
+	return CMoveObj::Update(_fdTime);
 }
 
 void CSandbag::Late_Update(float _fdTime)
 {
-	Update_Rect();
-	Update_HitRect();
+	CMonster::Late_Update(_fdTime);
+
+	if (m_eMez != MEZ::MZ_FROZEN)
+	{
+		m_tHitInfo.iCX = 80;
+		m_tHitInfo.iCY = 116;
+	}
 }
 
 void CSandbag::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
@@ -52,6 +58,12 @@ void CSandbag::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 	//	0,
 	//	m_tInfo.iCX, m_tInfo.iCY,
 	//	MAGENTA_COLOR);
+	Rectangle(_DC,
+		(int)(m_tHitRect.left + _fScrollX),
+		(int)(m_tHitRect.top + _fScrollY),
+		(int)(m_tHitRect.right + _fScrollX),
+		(int)(m_tHitRect.bottom + _fScrollY)
+	);
 
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 }
@@ -71,4 +83,8 @@ void CSandbag::Change_HitRect()
 CObj * CSandbag::Create_Bullet(const string & _frameKey)
 {
 	return nullptr;
+}
+
+void CSandbag::Move_Frame()
+{
 }

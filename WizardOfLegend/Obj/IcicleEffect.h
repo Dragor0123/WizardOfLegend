@@ -18,6 +18,6 @@ public:
 
 private:
 	float m_fLifeTime;
-	float m_fLifeTLimit;
+	static const float m_fLifeTLimit;
 };
 

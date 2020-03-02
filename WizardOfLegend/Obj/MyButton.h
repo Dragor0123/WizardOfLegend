@@ -20,9 +20,6 @@ public:
 	virtual void Render(HDC _DC, float _fdTime, float _fScrollX = 0.f, float _fScrollY = 0.f);
 	virtual void Release();
 
-public:
-	void Set_FrameKey(const string& _FrameKey) { m_strFrameKey = _FrameKey; }
-
 private:
 	int			m_iDrawID;
 };

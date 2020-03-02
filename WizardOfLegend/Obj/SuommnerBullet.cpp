@@ -45,6 +45,7 @@ bool CSummonerBullet::Initialize()
 	m_tFrame.dwFrameSpeed = 80;
 	m_tFrame.dwFrameTime = GetTickCount();
 
+	//	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 

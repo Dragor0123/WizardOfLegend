@@ -19,6 +19,12 @@ public:
 	virtual void Collision(float _fdTime);
 	virtual void Render(HDC _DC, float _fdTime);
 	virtual void Release();
+private:
+	int		m_iKeyCnt;
+	float	m_fTime;
+	float	m_fTime2;
+	BLENDFUNCTION	m_tBF;
+
 };
 
 #endif
