@@ -7,4 +7,5 @@ extern HWND g_hWnd;
 extern bool g_bGameLoop;
 extern bool g_FPS_ON;
 extern bool g_HitBox_On;
+
 #endif // !__EXTERN_H__

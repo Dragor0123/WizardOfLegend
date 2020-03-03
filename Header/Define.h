@@ -38,6 +38,7 @@
 //Bullet & Skill
 #define G_BULLET_LIFETIME_LIMIT 3.0f
 
+#define HIT_DIGIT_CNT_MAX 6
 
 // OBJECT COLLISION CODE
 // 만들어라

@@ -108,7 +108,7 @@ void CPlayerHPBar::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrol
 
 void CPlayerHPBar::Release()
 {
-	CBmpMgr::Get_Instance()->Delete_Bmp("PlayerBar");
+	//CBmpMgr::Get_Instance()->Delete_Bmp("PlayerBar");
 	CBmpMgr::Get_Instance()->Delete_Bmp("P_HPBar");
 	CBmpMgr::Get_Instance()->Delete_Bmp("P_MPBar");
 }

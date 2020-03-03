@@ -23,6 +23,7 @@ private:
 	void Update_Robe_List(float _fdTime);
 	void Late_Update_Robe_List(float _fdTime);
 	void Insert_Robe_List();
+	void Init_RobeColor();
 
 private:
 	static const float		m_fCircleY;
@@ -31,6 +32,7 @@ private:
 	static const float		m_fOFFSET_Y;
 
 	list<CObj*>				m_listRobe;
+	static COLORREF			tRobeColor[ROBE::END][21];
 };
 
 #endif

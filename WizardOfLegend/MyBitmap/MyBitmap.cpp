@@ -13,6 +13,18 @@ CMyBitmap::~CMyBitmap()
 	Release();
 }
 
+bool CMyBitmap::Set_Bitmap(HBITMAP hNewBMP)
+{
+	if (hNewBMP == NULL)
+		return false;
+
+	m_hBitmap = (HBITMAP)SelectObject(m_hMemDC, m_hOldBmp);
+	DeleteObject(m_hBitmap);
+	m_hBitmap = (HBITMAP)CopyImage(hNewBMP, IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_COPYDELETEORG);
+	m_hOldBmp = (HBITMAP)SelectObject(m_hMemDC, m_hBitmap);
+	return true;
+}
+
 bool CMyBitmap::Load_Bmp(const TCHAR * _pFilePath)
 {
 	HDC hDC = GetDC(g_hWnd);
