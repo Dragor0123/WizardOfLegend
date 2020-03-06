@@ -33,6 +33,9 @@ private:
 	// 두번째 인자가 첫번째 인자를 밀어버린다.
 	static bool CollisionRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY, float _pushScale = 1.f);
 
+	// 두번째 인자가 첫번째 인자를 밀어버린다.
+	static bool CollisionDiagRectPush(CObj* _Pushee, CObj* _Pusher, float* _pfX, float* _pfY, float _pushScale = 1.f);
+
 private:
 	CCollisionMgr();
 	~CCollisionMgr();

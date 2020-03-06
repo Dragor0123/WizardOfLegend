@@ -24,11 +24,11 @@ public:
 	}
 
 	// GETTER
-
+	bool	Is_HP_Full() { return m_iHp == m_iMaxHp; }
 	MEZ::STATE Get_MezState() { return m_eMez; }
-	int Get_HitDigitCnt() { return m_iHitDigitCnt; }
-	int Get_Hp() const { return m_iHp; }
-	int Get_MaxHp() const { return m_iMaxHp; }
+	int		Get_HitDigitCnt() { return m_iHitDigitCnt; }
+	int		Get_Hp() const { return m_iHp; }
+	int		Get_MaxHp() const { return m_iMaxHp; }
 	float	Get_Cur_HP_Ratio() const { return (float)m_iHp / m_iMaxHp;}
 
 protected:

@@ -6,7 +6,6 @@
 #include "../Manager/TileMgr.h"
 #include "../Manager/SceneMgr.h"
 #include "../Obj/FButton.h"
-#include "../Obj/IcicleEffect.h"
 #include "../Obj/Prison.h"
 #include "../Obj/TeleCircle.h"
 #include "../Obj/Inventory.h"
@@ -51,10 +50,12 @@ bool CFireBossStage::Initialize()
 	return true;
 }
 
+// 보스 방에 감옥 넣기!
 int CFireBossStage::Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Update(_fdTime);
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
 		auto& rFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();

@@ -1,11 +1,14 @@
 #include "../stdafx.h"
 #include "WardInven.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../MyBitmap/MyBitmap.h"
 #include "../Manager/CtrlOwnerMgr.h"
 #include "../Manager/KeyMgr.h"
 #include "Wardrobe.h"
 #include "ObjMgr.h"
 #include "RobeIcon.h"
+#include "Player.h"
+#include "../ReplaceColor.h"
 
 const float CWardInven::m_fRADIUS = 156.f;
 const float CWardInven::m_fCircleY = 231.f;
@@ -177,7 +180,7 @@ void CWardInven::Key_Check(float _fdTime)
 	{
 		float firstPosX = 0.f, firstPosY = 0.f;
 		
-		if (KEY_DOWN('A') || KEY_DOWN(VK_LEFT))
+		if (KEY_DOWN('D') || KEY_DOWN(VK_RIGHT))
 		{
 			list<CObj*>::reverse_iterator rIterBeg = m_listRobe.rbegin();
 			list<CObj*>::reverse_iterator rIterEnd = m_listRobe.rend();
@@ -194,7 +197,7 @@ void CWardInven::Key_Check(float _fdTime)
 			}
 			(*rIterBeg)->Set_Pos(firstPosX, firstPosY);
 		}
-		else if (KEY_DOWN('D') || KEY_DOWN(VK_RIGHT))
+		else if (KEY_DOWN('A') || KEY_DOWN(VK_LEFT))
 		{
 			list<CObj*>::iterator IterBeg = m_listRobe.begin();
 			list<CObj*>::iterator IterEnd = m_listRobe.end();
@@ -214,7 +217,37 @@ void CWardInven::Key_Check(float _fdTime)
 
 		if (KEY_DOWN(VK_SPACE) || KEY_DOWN(VK_RETURN))
 		{
-			//
+			CMyBitmap* PlayerBmp[4];
+			CMyBitmap* UIPlayerBarBmp = CBmpMgr::Get_Instance()->Find_MyBitmap("PlayerBar");
+
+			PlayerBmp[0] = CBmpMgr::Get_Instance()->Find_MyBitmap("Player_Left");
+			PlayerBmp[1] = CBmpMgr::Get_Instance()->Find_MyBitmap("Player_Up");
+			PlayerBmp[2] = CBmpMgr::Get_Instance()->Find_MyBitmap("Player_Right");
+			PlayerBmp[3] = CBmpMgr::Get_Instance()->Find_MyBitmap("Player_Down");
+			
+			CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+			int _iOldRobe = (int)static_cast<CPlayer*>(pPlayer)->Get_Robe_Color();
+			auto& iter = find_if(m_listRobe.begin(), m_listRobe.end(), [=](CObj* p) { return p->Get_PosX() == m_tInfo.fX; });
+			int _iNewRobe = static_cast<CRobeIcon*>(*iter)->Get_DrawID();
+
+			for (int i = 0; i < 4; ++i)
+			{
+				Change_Robe_Color(PlayerBmp[i], _iOldRobe, _iNewRobe);
+			}
+			Change_UI_Color(UIPlayerBarBmp, _iOldRobe, _iNewRobe);
+			static_cast<CPlayer*>(pPlayer)->Set_Robe_Color((ROBE::COLOR)_iNewRobe);
+			
+			pPlayer->Update(_fdTime);
+			pPlayer->Late_Update(_fdTime);
+
+			for (auto& Obj : CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAZA_UI))
+			{
+				if (Obj->Get_FrameKey() == "PlayerBar")
+				{
+					Obj->Update(_fdTime);
+					Obj->Late_Update(_fdTime);
+				}
+			}
 		}
 	}
 }
@@ -233,8 +266,8 @@ void CWardInven::Init_RobeColor()
 	tRobeColor[0][7] = RGB(125, 80, 29);
 	tRobeColor[0][8] = RGB(106, 69, 27);
 	tRobeColor[0][9] = RGB(77, 45, 8);
-	tRobeColor[0][10] = RGB(234, 200, 15);
-	tRobeColor[0][11] = RGB(196, 161, 11);
+	tRobeColor[0][10] = RGB(234, 200, 152);
+	tRobeColor[0][11] = RGB(196, 161, 111);
 	tRobeColor[0][12] = RGB(100, 100, 100);
 	tRobeColor[0][13] = RGB(166, 51, 57);
 	tRobeColor[0][14] = RGB(147, 37, 43);
@@ -394,8 +427,8 @@ void CWardInven::Init_RobeColor()
 	tRobeColor[7][7] = RGB(104, 80, 62);
 	tRobeColor[7][8] = RGB(86, 68, 56);
 	tRobeColor[7][9] = RGB(29, 36, 59);
-	tRobeColor[7][10] = RGB(140, 153, 151);
-	tRobeColor[7][11] = RGB(133, 146, 143);
+	tRobeColor[7][10] = RGB(140, 153, 151);  //¾ó±¼»ö
+	tRobeColor[7][11] = RGB(133, 146, 143);  //¼Õ»ö
 	tRobeColor[7][12] = RGB(94, 110, 109);
 	tRobeColor[7][13] = RGB(70, 88, 98);
 	tRobeColor[7][14] = RGB(55, 74, 83);
@@ -417,8 +450,8 @@ void CWardInven::Init_RobeColor()
 	tRobeColor[8][7] = RGB(75, 61, 61);
 	tRobeColor[8][8] = RGB(58, 48, 49);
 	tRobeColor[8][9] = RGB(32, 22, 22);
-	tRobeColor[8][10] = RGB(13, 14, 18);
-	tRobeColor[8][11] = RGB(12, 14, 16);
+	tRobeColor[8][10] = RGB(13, 14, 18);  //¾ó±¼»ö
+	tRobeColor[8][11] = RGB(12, 14, 16);  //¼Õ»ö
 	tRobeColor[8][12] = RGB(98, 98, 98);
 	tRobeColor[8][13] = RGB(104, 128, 143);
 	tRobeColor[8][14] = RGB(89, 114, 130);
@@ -428,4 +461,50 @@ void CWardInven::Init_RobeColor()
 	tRobeColor[8][18] = RGB(58, 76, 85);
 	tRobeColor[8][19] = RGB(41, 51, 57);
 	tRobeColor[8][20] = RGB(20, 27, 24);
+}
+
+void CWardInven::Change_Robe_Color(CMyBitmap * _pMyBitmap, int _oldCD, int _newCD)
+{
+	if (_oldCD == _newCD)
+		return;
+
+	if ((_oldCD < 0) || (_oldCD > 8) || (_newCD < 0) || (_newCD > 8))
+		return;
+
+	for (int i = 0; i < 21; ++i)
+	{
+		HBITMAP hBmpOld = _pMyBitmap->Get_Bitmap();
+		HBITMAP hBmpNew = ReplaceColor(hBmpOld, tRobeColor[_oldCD][i], tRobeColor[_newCD][i], _pMyBitmap->Get_MemDC());
+		_pMyBitmap->Set_Bitmap(hBmpNew);
+		DeleteObject(hBmpNew);
+	}
+}
+
+void CWardInven::Change_UI_Color(CMyBitmap * _pMyBitmap, int _oldCD, int _newCD)
+{
+	if (_oldCD == _newCD)
+		return;
+
+	if ((_oldCD < 0) || (_oldCD > 8) || (_newCD < 0) || (_newCD > 8))
+		return;
+
+	for (int i = 0; i < 6; ++i)
+	{
+		if (i == 2)
+			continue;
+		HBITMAP hBmpOld = _pMyBitmap->Get_Bitmap();
+		HBITMAP hBmpNew = ReplaceColor(hBmpOld, tRobeColor[_oldCD][i], tRobeColor[_newCD][i], _pMyBitmap->Get_MemDC());
+		_pMyBitmap->Set_Bitmap(hBmpNew);
+		DeleteObject(hBmpNew);
+	}
+
+	for (int i = 10; i < 21; ++i)
+	{
+		if (i > 10 && i < 13)
+			continue;
+		HBITMAP hBmpOld = _pMyBitmap->Get_Bitmap();
+		HBITMAP hBmpNew = ReplaceColor(hBmpOld, tRobeColor[_oldCD][i], tRobeColor[_newCD][i], _pMyBitmap->Get_MemDC());
+		_pMyBitmap->Set_Bitmap(hBmpNew);
+		DeleteObject(hBmpNew);
+	}
 }

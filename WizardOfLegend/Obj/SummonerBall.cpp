@@ -37,7 +37,7 @@ bool CSummonerBall::Initialize()
 	m_tHitInfo.iCX = 40;
 	m_tHitInfo.iCY = 40;
 
-	m_iMaxHp = 140;
+	m_iMaxHp = 150;
 	m_iHp = m_iMaxHp;
 
 	m_fSpeed = 160.f;
@@ -82,6 +82,9 @@ int CSummonerBall::Update(float _fdTime)
 		fDis = sqrtf(fDX * fDX + fDY * fDY);
 
 		if (fDis < m_fDetectRange)
+			m_pTarget = pPlayer;
+
+		if (m_ePreState == CMonster::HIT)
 			m_pTarget = pPlayer;
 	}
 	else if (m_eCurState != CMonster::DEAD && m_eCurState != CMonster::HIT)

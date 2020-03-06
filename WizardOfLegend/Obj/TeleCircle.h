@@ -22,6 +22,15 @@ public:
 	// Inherited via CFAble
 	virtual void Do_FButton_Action(float _fdTime);
 	virtual int Get_Collision_Code() const { return CC_FABLE_TELECIRCLE; }
+
+public:
+	void Set_TeleEffectEnd() { m_bEffectEnd = true; }
+
+private:
+	void Change_Scene();
+
+private:
+	bool		m_bEffectEnd;
 };
 
 #endif

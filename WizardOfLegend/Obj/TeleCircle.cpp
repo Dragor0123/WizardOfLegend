@@ -2,8 +2,12 @@
 #include "TeleCircle.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "../Manager/SceneMgr.h"
+#include "TeleEffect.h"
+#include "ObjMgr.h"
+#include "Player.h"
 
 CTeleCircle::CTeleCircle()
+	: m_bEffectEnd(false)
 {
 }
 
@@ -41,6 +45,9 @@ int CTeleCircle::Update(float _fdTime)
 void CTeleCircle::Late_Update(float _fdTime)
 {
 	CFAble::Key_Check(_fdTime);
+
+	if (m_bEffectEnd)
+		Change_Scene();
 }
 
 void CTeleCircle::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
@@ -60,16 +67,40 @@ void CTeleCircle::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScroll
 
 void CTeleCircle::Release()
 {
+
 }
 
 void CTeleCircle::Do_FButton_Action(float _fdTime)
 {
+	CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
+		CAbstractFactory<CTeleEffect>::Create(this));
+
+	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
+	{
+		CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+		static_cast<CPlayer*>(pPlayer)->Set_DontDraw(true);
+	}
+}
+
+void CTeleCircle::Change_Scene()
+{
+	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
+	{
+		CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+		static_cast<CPlayer*>(pPlayer)->Set_DontDraw(false);
+	}
+
 	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_PLAZA) {
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_STAGE1);
 		return;
 	}
 
 	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_STAGE1) {
+		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_EARTHBOSS);
+		return;
+	}
+
+	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_EARTHBOSS) {
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_FIREBOSS);
 		return;
 	}

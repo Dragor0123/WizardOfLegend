@@ -32,18 +32,6 @@ CMainGame::~CMainGame()
 //#endif //DEBUG
 }
 
-void CMainGame::Logic()
-{
-	CTimer::Get_Instance()->Update();
-
-	float fDeltaTime = CTimer::Get_Instance()->Get_DeltaTime();
-
-	Update(fDeltaTime);
-	Late_Update(fDeltaTime);
-	Collision(fDeltaTime);
-	Render(fDeltaTime);
-}
-
 bool CMainGame::Initialize(HINSTANCE _hInst)
 {
 	m_hInst = _hInst;
@@ -87,6 +75,18 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 		return false;
 
 	return true;
+}
+
+void CMainGame::Logic()
+{
+	CTimer::Get_Instance()->Update();
+
+	float fDeltaTime = CTimer::Get_Instance()->Get_DeltaTime();
+
+	Update(fDeltaTime);
+	Late_Update(fDeltaTime);
+	Collision(fDeltaTime);
+	Render(fDeltaTime);
 }
 
 void CMainGame::Update(float _fdTime)

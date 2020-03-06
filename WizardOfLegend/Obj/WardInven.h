@@ -4,6 +4,8 @@
 #define __WARDINVEN_H__
 
 #include "StopObj.h"
+class CMyBitmap;
+
 class CWardInven : public CStopObj
 {
 public:
@@ -24,6 +26,8 @@ private:
 	void Late_Update_Robe_List(float _fdTime);
 	void Insert_Robe_List();
 	void Init_RobeColor();
+	void Change_Robe_Color(CMyBitmap* _pMyBitmap, int _oldCD, int _newCD);
+	void Change_UI_Color(CMyBitmap* _pMyBitmap, int _oldCD, int _newCD);
 
 private:
 	static const float		m_fCircleY;

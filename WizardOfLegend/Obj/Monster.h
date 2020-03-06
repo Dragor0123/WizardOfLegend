@@ -21,7 +21,7 @@ public:
 
 public:
 	void Set_Monster_State(CMonster::MONSTATE _eNewState);
-	CMonster::MONSTATE Get_Monster_State() { return m_eCurState; }
+	CMonster::MONSTATE Get_Monster_State() const { return m_eCurState; }
 	bool Get_bAttack_Cool() const { return m_bAttackCool; }
 	void Set_bAttack_Cool(bool _b) { m_bAttackCool = _b; }
 public:

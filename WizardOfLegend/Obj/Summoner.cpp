@@ -33,7 +33,7 @@ bool CSummoner::Initialize()
 	m_tHitInfo.iCY = 128;
 
 	// m_fSpeed
-	m_iMaxHp = 400;
+	m_iMaxHp = 350;
 	m_iHp = m_iMaxHp;
 	m_fBulletTick = 0.f;
 	m_iBulletCount = 4;
@@ -79,6 +79,9 @@ int CSummoner::Update(float _fdTime)
 		fDis = sqrtf(fDX * fDX + fDY * fDY);
 
 		if (fDis < m_fDetectRange)
+			m_pTarget = pPlayer;
+
+		if (m_ePreState == CMonster::HIT)
 			m_pTarget = pPlayer;
 	}
 	else if (m_eCurState != CMonster::DEAD && m_eCurState != CMonster::HIT)
@@ -379,24 +382,3 @@ CObj * CSummoner::Create_Bullet(float _fAngle, const string & _frameKey)
 		m_tHitInfo.fX, m_tHitInfo.fY, _fAngle, _frameKey);
 	return pObj;
 }
-
-
-/*
-
-
-
-
-if (m_fMeteoTime > 8.f)
-{
-m_fMeteoTime = 0.f;
-m_bMeteoFire = false;
-++m_tFrame.iFrameStart;
-}
-
-
-
-
-
-
-
-*/

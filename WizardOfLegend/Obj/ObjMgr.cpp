@@ -19,7 +19,7 @@ CObjMgr::~CObjMgr()
 
 bool CObjMgr::Initialize()
 {
-	Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
+	//Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
 	return true;
 }
 

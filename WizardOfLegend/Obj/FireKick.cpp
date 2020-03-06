@@ -33,7 +33,7 @@ bool CFireKick::Initialize()
 
 	m_fSpeed = 500.f;
 	m_fShotRange = 200.f;
-	m_iAtt = 8;
+	m_iAtt = rand() % 6 + 11;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("FireKick");

@@ -29,7 +29,8 @@ bool CArcher::Initialize()
 	m_fSpeed = 330.f;
 	
 	// 체력 및 기본 전투 스탯 초기화
-	m_iMaxHp = 300;
+	// m_iMaxHp = 300;
+	m_iMaxHp = 999999;
 	m_iHp = m_iMaxHp;
 
 	// 공격 주기 구하기
@@ -82,6 +83,9 @@ int CArcher::Update(float _fdTime)
 		fDis = sqrtf(fDX * fDX + fDY * fDY);
 
 		if (fDis < m_fDetectRange)
+			m_pTarget = pPlayer;
+
+		if (m_ePreState == CMonster::HIT)
 			m_pTarget = pPlayer;
 	}
 	else if (m_eCurState != CMonster::DEAD && m_eCurState != CMonster::HIT)

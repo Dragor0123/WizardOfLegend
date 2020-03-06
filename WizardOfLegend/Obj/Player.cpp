@@ -4,15 +4,11 @@
 #include "../Manager/KeyMgr.h"
 #include "../Manager/ScrollMgr.h"
 #include "../MyBitmap/BmpMgr.h"
-#include "LineBullet.h"
-#include "MeeleBullet.h"
-#include "ScrewBullet.h"
-#include "FireBall.h"
 #include "../Manager/CtrlOwnerMgr.h"
-#include "Inventory.h"
 #include "../Manager/CardMgr.h"
+#include "Inventory.h"
 #include "ArcRel.h"
-// 지워줄것
+// 아래 헤더 지워 줄것
 
 namespace PLAYER_Space
 {
@@ -30,9 +26,11 @@ namespace PLAYER_Space
 using namespace PLAYER_Space;
 
 CPlayer::CPlayer()
-	: m_bDashInit(false), m_bShot(false)
+	: m_bDashInit(false), m_bDontDraw(false),
+	m_iSkillCode(-1), m_eRobeColor(ROBE::RED)
 {
 	ZeroMemory(&m_tBeforeDashPos, sizeof(LINEPOS));
+	ZeroMemory(m_tEffectLine, sizeof(m_tEffectLine));
 }
 
 
@@ -47,7 +45,7 @@ void CPlayer::Set_PlayerState(CPlayer::STATE _eNewState)
 		m_eCurState = _eNewState;
 }
 
-void CPlayer::Add_Player_Mana(int _iVal)
+void CPlayer::Add_MP(int _iVal)
 {
 	m_iMp += _iVal;
 	if (m_iMp > m_iMaxMp)
@@ -72,17 +70,14 @@ bool CPlayer::Initialize()
 	m_iMaxMp = 200;
 	m_iMp = 0;
 	m_iGold = 0;
-
-	//
 	m_iHitStateCount = 0;
-	// 스킬 쿨타임, 공격 주기 구하기 (드래곤아크) // 총알 수 8개 -> 이부분 수정합시다!
-	m_bSkillCool = false;
-	m_fCoolStart = 0.f;
-	m_fCoolLimit = 2.4f;
-	m_fBulletTick = 0.15f;
-	m_iBulletCount = 8;
-	////
-
+	//
+	m_bNormalAttackFire = false;
+	// 시그니쳐 관련
+	m_bSigniture = false;
+	// m_fSigLineLen = 0.f;
+	// m_fSigLineAng = 0.f;
+	
 	// 스프라이트 가져옴
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Player/Up_Red.bmp", "Player_Up"))
 		return false;
@@ -102,14 +97,13 @@ bool CPlayer::Initialize()
 	m_tFrame.iFrameScene = 0;
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
-
+	
 	m_mapKeyIdx.emplace(VK_LBUTTON, 0);
 	m_mapKeyIdx.emplace(VK_SPACE, 1);
 	m_mapKeyIdx.emplace(VK_RBUTTON, 2);
 	m_mapKeyIdx.emplace('Q', 3);
 	m_mapKeyIdx.emplace('E', 4);
 	m_mapKeyIdx.emplace('R', 5);
-
 
 	return true;
 }
@@ -125,7 +119,6 @@ void CPlayer::Key_Check(float _fdTime)
 		CCtrlOwnerMgr::Get_Instance()->GameObject_Off();
 		CCtrlOwnerMgr::Get_Instance()->Inventory_On();
 	}
-
 
 	if (!m_bDashInit && KEY_PRESSING('A'))
 	{
@@ -262,101 +255,39 @@ void CPlayer::Key_Check(float _fdTime)
 			m_eCurState = WALK;
 		}
 	}
-	else if (!m_bDashInit && m_eCurState != HIT && m_eCurState != ATTACK) {
+	else if (!m_bDashInit && m_eCurState != HIT && m_eCurState != ATTACK && m_eCurState != STAMP) {
 		m_eCurState = IDLE;
 	}
 
-	int idx = m_mapKeyIdx[VK_LBUTTON];
-	CObj* pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
-	int _code = static_cast<CInventory*>(pInven)->Get_OutterArr_Code(idx);
-	if (_code > -1 && _code < 100)
+	// 7~8 : 돈, 9 마나, 0 무적
+	if (KEY_DOWN('7'))
 	{
-		CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
-		if (_code == 3)
-		{
-			if (KEY_PRESSING(VK_LBUTTON))
-			{
-				if (pArcRel->Is_Fire_Available())
-					pArcRel->Fire_Skill();
-			}
-			if (KEY_UP(VK_LBUTTON))
-			{
-				pArcRel->Key_Up_Action();
-			}
-		}
-		else
-		{
-			if (KEY_DOWN(VK_LBUTTON))
-			{
-				if (pArcRel->Is_Fire_Available())
-					pArcRel->Fire_Skill();
-			}
-		}
+		m_iGold = 0;
+	}
+	if (KEY_DOWN('8'))
+	{
+		Add_Gold(200);
+	}
+	if (KEY_DOWN('9'))
+	{
+		Add_MP(m_iMaxMp);
+	}
+	if (KEY_DOWN(VK_OEM_COMMA))
+	{
+		Sub_Hp(100);
+	}
+	if (KEY_DOWN(VK_OEM_PERIOD))
+	{
+		Reset_Hp();
 	}
 
-	idx = m_mapKeyIdx['E'];
-	pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
-	_code = static_cast<CInventory*>(pInven)->Get_OutterArr_Code(idx);
-	if (_code > -1 && _code < 100)
-	{
-		CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
-		if (_code == 3)
-		{
-			if (KEY_PRESSING('E'))
-			{
-				if (pArcRel->Is_Fire_Available())
-					pArcRel->Fire_Skill();
-			}
-			if (KEY_UP('E'))
-			{
-				pArcRel->Key_Up_Action();
-			}
-		}
-		else
-		{
-			if (KEY_DOWN('E'))
-			{
-				if (pArcRel->Is_Fire_Available())
-					pArcRel->Fire_Skill();
-			}
-		}
-	}
 
-	// 스킬 사용
-	if (!m_bSkillCool)
-	{
-		if (KEY_PRESSING(VK_RBUTTON))
-		{
-			if ((0.f <= m_fAngle && m_fAngle < 45.f) || (315.f <= m_fAngle && m_fAngle < 360.f)) {
-				m_strFrameKey = "Player_Right";
-			}
-			else if (45.f <= m_fAngle && m_fAngle < 135.f) {
-				m_strFrameKey = "Player_Up";
-			}
-			else if (135.f <= m_fAngle && m_fAngle < 225.f) {
-				m_strFrameKey = "Player_Left";
-			}
-			else {
-				m_strFrameKey = "Player_Down";
-			}
 
-			m_eCurState = STATE::ATTACK;
-			m_fBulletTick -= _fdTime;
-			if (m_fBulletTick <= 0.f) {
-				m_fBulletTick = 0.15f;
-				CScrewBullet* screwBullet = dynamic_cast<CScrewBullet*>(Create_Bullet<CScrewBullet>(string(""), 850.f));
-				CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, screwBullet);
-				screwBullet = dynamic_cast<CScrewBullet*>(Create_Bullet<CScrewBullet>(string(""), 850.f));
-				screwBullet->Set_Rotation_Dir(true);
-				CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, screwBullet);
-				--m_iBulletCount;
-				if (m_iBulletCount <= 0) {
-					//m_bSkillCool = true;
-					m_iBulletCount = 8;
-				}
-			}
-		}
-	}
+	Skill_Button_KeyCheck(VK_LBUTTON);
+	Skill_Button_KeyCheck(VK_RBUTTON);
+	Skill_Button_KeyCheck('Q');
+	Skill_Button_KeyCheck('E');
+	Skill_Button_KeyCheck('R');
 
 	Dash_Check(_fdTime);
 }
@@ -390,7 +321,6 @@ void CPlayer::Late_Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
-	OffSet();
 
 	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_ePreState != CPlayer::HIT)
 		Reset_HitDigitCnt();
@@ -406,72 +336,40 @@ void CPlayer::Late_Update(float _fdTime)
 			m_eCurState = IDLE;
 		}
 	}
-
-	if (m_bSkillCool) {
-		m_fCoolStart += _fdTime;
-		if (m_fCoolStart > m_fCoolLimit)
-		{
-			m_bSkillCool = false;
-			m_fCoolStart = 0.f;
-		}
-	}
 }
 
 void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
-	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
-
-	GdiTransparentBlt(_DC,
-		(int)(m_tRect.left + _fScrollX),
-		(int)(m_tRect.top + _fScrollY),
-		m_tInfo.iCX, m_tInfo.iCY,
-		hMemDC,
-		m_tFrame.iFrameStart * m_tInfo.iCX,
-		m_tFrame.iFrameScene * m_tInfo.iCY,
-		m_tInfo.iCX, m_tInfo.iCY,
-		MAGENTA_COLOR);
-
-	Draw_HitBox(_DC, _fScrollX, _fScrollY);
-
-	/*
-	TCHAR szText[32] = L"";
-	HDC hOneTileDC = GetDC(g_hWnd);
-	Rectangle(hOneTileDC, 1030, 110, 1300, 250);
-
-	if (CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).empty())
+	if (!m_bDontDraw)
 	{
-	swprintf_s(szText, L"메테오 : %d", 0);
-	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
-	}
-	else
-	{
-	size_t bulletcnt =  CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).size();
-	swprintf_s(szText, L"메테오 : %d", bulletcnt);
-	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+		HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
 
-	CObj* pMeteor = CObjMgr::Get_Instance()->Get_listObj(OBJID::M_CIRBULLET).back();
-	swprintf_s(szText, L"fY : %.2f, LandY : %.2f", pMeteor->Get_HitInfo().fY,
-	dynamic_cast<CMeteor*>(pMeteor)->Get_LandY());
-	TextOut(hOneTileDC, 1060, 170, szText, lstrlen(szText));
-	swprintf_s(szText, L"생성시간: %.3f", dynamic_cast<CMeteor*>(pMeteor)->Get_CreateTime());
-	TextOut(hOneTileDC, 1060, 190, szText, lstrlen(szText));
-	//swprintf_s(szText, L"이전상태 : %d, 현재상태: %d", (int)m_ePreState, (int)m_eCurState);
-	//TextOut(hOneTileDC, 1060, 220, szText, lstrlen(szText));
-	}
-	ReleaseDC(g_hWnd, hOneTileDC);
-	*/
+		GdiTransparentBlt(_DC,
+			(int)(m_tRect.left + _fScrollX),
+			(int)(m_tRect.top + _fScrollY),
+			m_tInfo.iCX, m_tInfo.iCY,
+			hMemDC,
+			m_tFrame.iFrameStart * m_tInfo.iCX,
+			m_tFrame.iFrameScene * m_tInfo.iCY,
+			m_tInfo.iCX, m_tInfo.iCY,
+			MAGENTA_COLOR);
 
+		if (m_bSigniture)
+		{
+			Render_Sig_Effect(_DC, _fdTime, _fScrollX, _fScrollY);
+		}
+
+		Draw_HitBox(_DC, _fScrollX, _fScrollY);
+	}
 	//char strGold[64] = "";
 	//sprintf_s(strGold, "gold : %d\n", m_iGold);
 	//_cprintf(strGold);
 }
 
-void CPlayer::Release()
-{
-}
-
 void CPlayer::Move_Frame()
 {
+	static int NormAttFrameRemeber = 0;
+
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
 		//if (m_ePreState != STATE::ATTACK)
@@ -498,13 +396,56 @@ void CPlayer::Move_Frame()
 		if (m_ePreState == STATE::ATTACK)
 		{
 			//스킬마다 모션이 다 다르기 때문에.... FrameSpeed를 if나 switch분기로 조건 걸어서 예외처리 다 해줘야된다.
-
 			m_tFrame.dwFrameSpeed = ATTACK_FRAME_SPEED;
-			if (m_bShot) // 아이스 스피어가 누르고 있을 경우(아직 안땐경우)
+			// 3 := IceSphere
+			if (3 == m_iSkillCode)
+			{
 				m_tFrame.iFrameStart = 0;
+			}
+			else
+			{
+				if (0 > m_iSkillCode)
+				{
+					if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+						m_eCurState = STATE::IDLE;
+				}
+				if (1 == m_iSkillCode)
+				{
+					if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
+						m_tFrame.iFrameStart = m_tFrame.iFrameEnd - 1;
+				}
+				if (6 == m_iSkillCode)
+				{
+					if (!m_bNormalAttackFire)
+					{
+						m_tFrame.dwFrameSpeed = ATTACK_FRAME_SPEED + 20;
+						m_tFrame.iFrameStart = rand() % 3 + 1;
+						NormAttFrameRemeber = m_tFrame.iFrameStart;
+						m_bNormalAttackFire = true;
+					}
+					else
+					{
+						m_tFrame.dwFrameSpeed = ATTACK_FRAME_SPEED;
+						if (m_tFrame.iFrameStart > NormAttFrameRemeber)
+						{
+							m_eCurState = STATE::IDLE;
+							m_bNormalAttackFire = false;
+							m_iSkillCode = -1;
+						}
+					}
+				}
 
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
-				m_eCurState = STATE::IDLE;
+				if (1000 < m_iSkillCode)
+				{
+					if (m_bSigniture)
+					{
+						m_tFrame.iFrameStart = 0;
+					}
+					else
+					{
+						m_iSkillCode -= 1000;
+					}
+				}
 			}
 		}
 
@@ -556,6 +497,36 @@ void CPlayer::Move_Frame()
 	}
 }
 
+void CPlayer::Skill_Button_KeyCheck(int _iKey)
+{
+	int idx = m_mapKeyIdx[_iKey];
+	CObj* pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
+	int _code = static_cast<CInventory*>(pInven)->Get_OutterArr_Code(idx);
+	if (_code > -1 && _code < 100)
+	{
+		CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
+		if (_code == 3) // 3 : IceSphere
+		{
+			if (KEY_PRESSING(_iKey))
+			{
+				if (pArcRel->Is_Fire_Available())
+					pArcRel->Fire_Skill();
+			}
+			if (KEY_UP(_iKey))
+			{
+				pArcRel->Key_Up_Action();
+			}
+		}
+		else
+		{
+			if (KEY_DOWN(_iKey))
+			{
+				if (pArcRel->Is_Fire_Available())
+					pArcRel->Fire_Skill();
+			}
+		}
+	}
+}
 
 void CPlayer::Update_ShotAngle()
 {
@@ -579,78 +550,155 @@ void CPlayer::Update_ShotAngle()
 
 	m_fAngle = Radian_To_Degree(fRadian);
 
-	//TCHAR szBuff[128] = L"";
-	//swprintf_s(szBuff, L"플레이어(%d, %d), 마우스좌표(%d, %d), 각도: %.2f", 
-	//	(int)m_tInfo.fX, (int)m_tInfo.fY, (int)(pt.x), (int)(pt.y), m_fAngle);
-	//SetWindowText(g_hWnd, szBuff);
 }
 
 void CPlayer::Change_HitRect()
 {
-	if ("Player_Down" == m_strFrameKey)
+	if (m_bSigniture)
 	{
-		switch (m_eCurState)
-		{
-		case IDLE:
-			m_tHitInfo.iCX = 70;
-			m_tHitInfo.iCY = 128;
-			break;
-		case WALK:
-			m_tHitInfo.iCX = 80;
-			m_tHitInfo.iCY = 114;
-			break;
-		case DASH:
-			m_tHitInfo.iCX = 80;
-			m_tHitInfo.iCY = 88;
-			if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd - 1)
-				m_tHitInfo.iCY = 116;
-			break;
-		}
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
 	}
-	else if ("Player_Up" == m_strFrameKey)
+	else
 	{
-		switch (m_eCurState)
+		if ("Player_Down" == m_strFrameKey)
 		{
-		case IDLE:
-			m_tHitInfo.iCX = 70;
-			m_tHitInfo.iCY = 128;
-			break;
-		case WALK:
-			m_tHitInfo.iCX = 80;
-			m_tHitInfo.iCY = 120;
-			break;
-		case DASH:
-			m_tHitInfo.iCX = 90;
-			m_tHitInfo.iCY = 108;
-			if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 1)
-				m_tHitInfo.iCY = 112;
-			if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
+			switch (m_ePreState)
+			{
+			case IDLE:
+				m_tHitInfo.iCX = 70;
+				m_tHitInfo.iCY = 128;
+				break;
+			case WALK:
+				m_tHitInfo.iCX = 80;
+				m_tHitInfo.iCY = 114;
+				break;
+			case DASH:
+				m_tHitInfo.iCX = 80;
+				m_tHitInfo.iCY = 88;
+				if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd - 1)
+					m_tHitInfo.iCY = 116;
+				break;
+			case ATTACK:
+				if (m_tFrame.iFrameStart == 0)
+				{
+					m_tHitInfo.iCX = 80;
+					m_tHitInfo.iCY = 112;
+				}
+				else if (m_tFrame.iFrameStart == 1)
+				{
+					m_tHitInfo.iCX = 80;
+					m_tHitInfo.iCY = 116;
+				}
+				else if (m_tFrame.iFrameStart == 2)
+				{
+					m_tHitInfo.iCX = 68;
+					m_tHitInfo.iCY = 108;
+				}
+				else
+				{
+					m_tHitInfo.iCX = 88;
+					m_tHitInfo.iCY = 112;
+				}
+				break;
+			case HIT:
+				m_tHitInfo.iCX = 80;
 				m_tHitInfo.iCY = 120;
-			break;
+				break;
+			}
 		}
-	}
-	else if ("Player_Left" == m_strFrameKey || "Player_Right" == m_strFrameKey)
-	{
-		switch (m_eCurState)
+		else if ("Player_Up" == m_strFrameKey)
 		{
-		case IDLE:
-			m_tHitInfo.iCX = 50;
-			m_tHitInfo.iCY = 132;
-			break;
-		case WALK:
-			m_tHitInfo.iCX = 80;
-			m_tHitInfo.iCY = 128;
-			break;
-		case DASH:
-			if (m_tFrame.iFrameStart == 0) {
-				m_tHitInfo.iCX = 128;
-				m_tHitInfo.iCY = 84;
-			}
-			else {
-				m_tHitInfo.iCX = 116;
+			switch (m_ePreState)
+			{
+			case IDLE:
+				m_tHitInfo.iCX = 70;
+				m_tHitInfo.iCY = 128;
+				break;
+			case WALK:
+				m_tHitInfo.iCX = 80;
+				m_tHitInfo.iCY = 120;
+				break;
+			case DASH:
+				m_tHitInfo.iCX = 90;
 				m_tHitInfo.iCY = 108;
+				if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd - 1)
+					m_tHitInfo.iCY = 112;
+				if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
+					m_tHitInfo.iCY = 120;
+				break;
+			case ATTACK:
+				if (m_tFrame.iFrameStart == 0)
+				{
+					m_tHitInfo.iCX = 80;
+					m_tHitInfo.iCY = 112;
+				}
+				else if (m_tFrame.iFrameStart == 1)
+				{
+					m_tHitInfo.iCX = 84;
+					m_tHitInfo.iCY = 116;
+				}
+				else
+				{
+					m_tHitInfo.iCX = 88;
+					m_tHitInfo.iCY = 116;
+				}
+				break;
+			case HIT:
+				m_tHitInfo.iCX = 68;
+				m_tHitInfo.iCY = 120;
+				break;
 			}
-			break;
+		}
+		else if ("Player_Left" == m_strFrameKey || "Player_Right" == m_strFrameKey)
+		{
+			switch (m_ePreState)
+			{
+			case IDLE:
+				m_tHitInfo.iCX = 50;
+				m_tHitInfo.iCY = 132;
+				break;
+			case WALK:
+				m_tHitInfo.iCX = 80;
+				m_tHitInfo.iCY = 128;
+				break;
+			case DASH:
+				if (m_tFrame.iFrameStart == 0) {
+					m_tHitInfo.iCX = 128;
+					m_tHitInfo.iCY = 84;
+				}
+				else {
+					m_tHitInfo.iCX = 116;
+					m_tHitInfo.iCY = 108;
+				}
+				break;
+			case ATTACK:
+				if (m_tFrame.iFrameStart == 0)
+				{
+					m_tHitInfo.iCX = 108;
+					m_tHitInfo.iCY = 112;
+				}
+				else if (m_tFrame.iFrameStart == 1)
+				{
+					m_tHitInfo.iCX = 116;
+					m_tHitInfo.iCY = 100;
+				}
+				else if (m_tFrame.iFrameStart == 2)
+				{
+					m_tHitInfo.iCX = 96;
+					m_tHitInfo.iCY = 120;
+				}
+				else
+				{
+					m_tHitInfo.iCX = 104;
+					m_tHitInfo.iCY = 112;
+				}
+				break;
+			case HIT:
+				m_tHitInfo.iCX = 72;
+				m_tHitInfo.iCY = 124;
+				break;
+			}
 		}
 	}
 }
@@ -813,4 +861,52 @@ void CPlayer::Dash_Check(float _fdTime)
 			break;
 		}
 	}
+}
+
+void CPlayer::Render_Sig_Effect(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
+{
+	// 하얀 선 32개를 그린다고 치자.
+	float fLineX, fLineY;
+	HPEN hMyPen = NULL, hOldPen = NULL;
+
+	for (int i = 0; i < 32; ++i)
+	{
+
+		hMyPen = CreatePen(PS_SOLID, m_tEffectLine[i].iWidth, RGB(255, 255, 255));
+		fLineX = m_tHitInfo.fX + cosf(m_tEffectLine[i].fRadian) * m_tEffectLine[i].fRange;
+		fLineY = m_tHitInfo.fY - sinf(m_tEffectLine[i].fRadian) * m_tEffectLine[i].fRange;
+		hOldPen = (HPEN)SelectObject(_DC, hMyPen);
+		
+		MoveToEx(_DC, (int)(fLineX + _fScrollX), (int)(fLineY + _fScrollY), NULL);
+		LineTo(_DC, (int)(m_tHitInfo.fX + _fScrollX), (int)(m_tHitInfo.fY + _fScrollY));
+		
+		m_tEffectLine[i].fRange -= _fdTime * 115.f;
+		if (m_tEffectLine[i].fRange < 0)
+			m_tEffectLine[i].fRange = 0.f;
+
+		SelectObject(_DC, hOldPen);
+		DeleteObject(hMyPen);
+	}
+}
+
+void CPlayer::Init_Effect_Line()
+{
+	std::random_device rd_len;
+	std::default_random_engine generator_len(rd_len());
+	std::uniform_real_distribution<float> distribution_len(84.f, 282.f);
+
+	std::random_device rd_rad;
+	std::default_random_engine generator_rad(rd_rad());
+	std::uniform_real_distribution<float> distribution_rad(0.f, 2.f*PI);
+
+	for (int i = 0; i < 32; ++i)
+	{
+		m_tEffectLine[i].iWidth = rand() % 3 + 1;
+		m_tEffectLine[i].fRadian = distribution_rad(generator_rad);
+		m_tEffectLine[i].fRange = distribution_len(generator_len);
+	}
+}
+
+void CPlayer::Release()
+{
 }

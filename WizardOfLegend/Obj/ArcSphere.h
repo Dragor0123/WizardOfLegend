@@ -22,6 +22,8 @@ public:
 
 private:
 	CObj*	Create_Bullet();
+
+private:
 	CObj*	m_pLastMadeBullet;
 	bool	m_bShot;
 };

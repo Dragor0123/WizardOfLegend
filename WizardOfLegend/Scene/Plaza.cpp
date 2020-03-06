@@ -10,14 +10,14 @@
 #include "../Obj/PlayerHPBar.h"
 #include "../Obj/UISkillSet.h"
 #include "../Obj/UIGold.h"
-#include "../Obj/ArcanaCard.h"
 #include "../Manager/SceneMgr.h"
 #include "../Obj/Gold.h"
 #include "../Obj/OverDeco.h"
 #include "../Obj/Wardrobe.h"
-
+#include "../Obj/SpellSeller.h"
+#include "../Obj/UnderDeco.h"
+#include "../Obj/ArcanaCard.h"
 // 나중에 없애줄것
-#include "../Obj/Sandbag.h"
 #include "../Obj/Archer.h"
 
 CPlaza::CPlaza()
@@ -63,36 +63,43 @@ bool CPlaza::Initialize()
 	CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(2050.f, 1035.f, OBJID::PLAZA_UI);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pTeleFButton);
 	static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
+	
 	// 장애물, 데코레이션 삽입
-
 	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
-		CAbstractFactory<COverDeco>::Create(2048.f, 1688.f, string("PlazaArch")));
+		CAbstractFactory<COverDeco>::Create(2048.f, 1688.f, "PlazaArch"));
+	
 	// NPC 삽입
+	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+		CAbstractFactory<COverDeco>::Create(2621.f, 1874.f, "PurpleTent"));
+	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,
+		CAbstractFactory<CSpellSeller>::Create(2723.f, 1966.f, "SpellSeller"));
+	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+		CAbstractFactory<CUnderDeco>::Create(2621.f, 2100.f, "Carpet_0"));
 
-	// 아르카나 카드 삽입 이따가 수정할 것. // GaiaShieldCard
+	//// 아르카나 카드 삽입. Fbutton은 카드y의 -74.f
+	CObj* pNormalAttCard = CAbstractFactory<CArcanaCard>::Create(2448.f, 2092.f, "NormalAttackCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pNormalAttCard);
+	CObj* pNormalAttFButton = CAbstractFactory<CFButton>::Create(2448.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pNormalAttFButton);
+	dynamic_cast<CFAble*>(pNormalAttCard)->Set_fButton(pNormalAttFButton);
 
-	CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(2528.f, 2040.f, "GaiaShieldCard");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);
-	CObj* pGaiaFButton = CAbstractFactory<CFButton>::Create(2528.f, 2060.f, OBJID::PLAZA_UI);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pGaiaFButton);
-	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
+	CObj* pDragonArcCard = CAbstractFactory<CArcanaCard>::Create(2538.f, 2092.f, "DragonArcCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pDragonArcCard);
+	CObj* pDragonArcFButton = CAbstractFactory<CFButton>::Create(2538.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pDragonArcFButton);
+	dynamic_cast<CFAble*>(pDragonArcCard)->Set_fButton(pDragonArcFButton);
 
-	CObj* pIceSphereCard = CAbstractFactory<CArcanaCard>::Create(2448.f, 2040.f, "IceSphereCard");
+	CObj* pIceSphereCard = CAbstractFactory<CArcanaCard>::Create(2628.f, 2092.f, "IceSphereCard");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pIceSphereCard);
-	CObj* pIceSphereFButton = CAbstractFactory<CFButton>::Create(2448.f, 2060.f, OBJID::PLAZA_UI);
+	CObj* pIceSphereFButton = CAbstractFactory<CFButton>::Create(2628.f, 2018.f, OBJID::PLAZA_UI);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pIceSphereFButton);
 	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
 
-	CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(2368.f, 2040.f, "FrostFanCard");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
-	CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(2368.f, 2060.f, OBJID::PLAZA_UI);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFrostFanFButton);
-	dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
-
-	// 옷장 NPC 추가
+	//// 옷장 NPC 추가
 	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,
 		CAbstractFactory<CWardrobe>::Create(3350.f, 528.f));
-	////////////////
+
+	// 몬스터 테스트.
 	//ADD_OBJECT(OBJID::MONSTER,
 	//	CAbstractFactory<CArcher>::Create(3495.f, 2269.f));
 	
@@ -130,21 +137,15 @@ void CPlaza::Render(HDC _DC, float _fdTime)
 
 void CPlaza::Release()
 {
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_CIRBULLET);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_RECTBULLET);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::P_SHIELD);
+	for (int i = (int)OBJID::UNDERDECO; i <= (int)OBJID::EFFECT; ++i) {
+		if ((OBJID::ID)i == OBJID::PLAYER)
+			continue;
+		CObjMgr::Get_Instance()->Delete_ID((OBJID::ID)i);
+	}
 
-	// F_ABLE제거
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::NPC);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::TELECIR);
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::CARD);
-
-	// UI 제거
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::DIGIT_UI);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAZA_UI);
-
-	// 장애물들 제거
-	CObjMgr::Get_Instance()->Delete_ID(OBJID::OBSTACLE);
+	
 	CBmpMgr::Get_Instance()->Delete_Bmp("PlazaTile");
 }
 
@@ -152,3 +153,6 @@ bool CPlaza::Key_Check()
 {
 	return true;
 }
+
+
+// 아르카나 카드 삽입

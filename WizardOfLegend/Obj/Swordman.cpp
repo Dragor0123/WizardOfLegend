@@ -23,8 +23,8 @@ bool CSwordman::Initialize()
 	// idle일 때 히트박스
 	m_tHitInfo.iCX = 92;
 	m_tHitInfo.iCY = 136;
-	// m_fDetectRange = ;
-	m_iMaxHp = 400;
+	
+	m_iMaxHp = 360;
 	m_iHp = m_iMaxHp;
 	m_eAttDir = CMeeleBullet::END;
 	
@@ -65,6 +65,9 @@ int CSwordman::Update(float _fdTime)
 		fDis = sqrtf(fDX * fDX + fDY * fDY);
 
 		if (fDis < m_fDetectRange)
+			m_pTarget = pPlayer;
+
+		if (m_ePreState == CMonster::HIT)
 			m_pTarget = pPlayer;
 	}
 	else if (m_eCurState != CMonster::DEAD && m_eCurState != CMonster::HIT)
@@ -117,13 +120,13 @@ int CSwordman::Update(float _fdTime)
 		m_fAngle = fRadian * 180.f / PI;
 
 		// 근접해야할 조건
-		if (fRealDX >= fRealDY && floor(fDis) > 120.f)
+		if (fRealDX >= fRealDY && floor(fDis) > 128.f)
 		{
 			MoveAngle(_fdTime);
 			m_eCurState = WALK;
 			m_tFrame.iFrameEnd = 5;
 		}
-		else if (fRealDX < fRealDY && floor(fDis) > 150.f)
+		else if (fRealDX < fRealDY && floor(fDis) > 128.f)
 		{
 			MoveAngle(_fdTime);
 			m_eCurState = WALK;

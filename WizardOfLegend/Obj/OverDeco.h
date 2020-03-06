@@ -20,7 +20,6 @@ public:
 	virtual int Get_Collision_Code() const { return CC_ONLYTILE_COLLISION; }
 
 protected:
-	TCHAR			szDialogue[128];
 	CMyBitmap*		m_pMyBitmap;
 
 	// Inherited via CStopObj

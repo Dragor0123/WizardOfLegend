@@ -5,6 +5,7 @@
 
 #include "StopObj.h"
 
+// 잘못 설계한 클래스
 class CUnderDeco : public CStopObj
 {
 public:

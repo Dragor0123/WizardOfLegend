@@ -15,7 +15,7 @@ CFireBall::~CFireBall()
 
 bool CFireBall::Initialize()
 {
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/FireBoss/Fireball_Boss.bmp", "FireBoss_Fireball"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/FireBoss/Fireball_Boss.bmp", "FireBall"))
 		return false;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/FireBoss/rot200.bmp", "rot200"))
 		return false;
@@ -29,11 +29,14 @@ bool CFireBall::Initialize()
 	m_tHitInfo.iCX = 136;
 	m_tHitInfo.iCX = 92;
 
-	m_fShotRange = 1200.f;
+	if (m_bMonsters)
+		m_fShotRange = 1200.f;
+	else
+		m_fShotRange = 850.f;
 	m_fSpeed = 1100.f;
 
-	if (m_strFrameKey == "")
-		m_strFrameKey = string("FireBoss_Fireball");
+	if (m_strFrameKey != "FireBall")
+		m_strFrameKey = string("FireBall");
 
 	m_ePreState = END;
 	m_eCurState = FIRE;
@@ -43,6 +46,10 @@ bool CFireBall::Initialize()
 	m_tFrame.dwFrameSpeed = 100;
 	m_tFrame.dwFrameTime = GetTickCount();
 	
+	if (m_bMonsters)
+		m_iAtt = rand() % 9 + 16;
+	else
+		m_iAtt = rand() % 8 + 12;
 	//m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
@@ -145,7 +152,8 @@ void CFireBall::Move_Frame()
 				m_tFrame.iFrameStart = 0;
 		}
 		else if (m_ePreState == CBullet::COLLISION) {
-			m_bDead = true;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_bDead = true;
 		}
 	}
 }

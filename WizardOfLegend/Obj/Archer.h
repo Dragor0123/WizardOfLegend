@@ -32,11 +32,6 @@ public:
 private:
 	POINT		m_tRotPoint[3];
 
-
-	// Inherited via CMonster
-
-	//float		m_fCoolStart;
-	//float		m_fCoolLimit;
 };
 
 #endif

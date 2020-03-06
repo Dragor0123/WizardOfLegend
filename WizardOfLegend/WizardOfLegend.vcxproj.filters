@@ -208,9 +208,6 @@
     <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\01.GuideLSearchBullet">
       <UniqueIdentifier>{c63810be-287b-4d72-991b-8abdd84fd386}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\00.GuideSortBullet">
-      <UniqueIdentifier>{7e3b1d05-adc3-4890-b765-f672eceae7f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\02.Obj\01.MoveObj\02.Monster\06.Boss\01.FireBoss">
       <UniqueIdentifier>{f7659c4f-bfd4-4a45-9ce5-b0bd42a763ff}</UniqueIdentifier>
     </Filter>
@@ -294,6 +291,42 @@
     </Filter>
     <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick">
       <UniqueIdentifier>{18e73456-5dd9-47fc-a7ff-b51310c469cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\01.MoveObj\06.Digit">
+      <UniqueIdentifier>{0efd2554-4e7f-4706-885f-20551a75e14c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\99.UI\08.WardInven">
+      <UniqueIdentifier>{263c625f-c3a6-402b-a0e6-b7d2785f8cf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\99.UI\09.RobeIcon">
+      <UniqueIdentifier>{2430c6f6-e65a-4ff9-ae50-8f14fec3cad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\05.GlobalFunctions">
+      <UniqueIdentifier>{21361d2a-b8cc-41fc-a12b-dd8ee5ed4959}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.NormalAttack">
+      <UniqueIdentifier>{8a08f7d7-4b02-46c3-97be-9219a90f54bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\05.NormalAttArcana">
+      <UniqueIdentifier>{51f9d176-1c65-43f4-adfd-7add977bb1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\98.Effect\00.Icicle">
+      <UniqueIdentifier>{9d463eee-eef9-4c4b-8aa0-a50c671ba7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\98.Effect\01.TeleEffect">
+      <UniqueIdentifier>{e4429dfa-dcc2-43ce-8451-464b8928f4ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\08.PriceTag">
+      <UniqueIdentifier>{0c9309b9-610a-4835-8f26-3a5cb5cd9f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\01.F_Able\02.Card\01.Potion">
+      <UniqueIdentifier>{155135d4-5d2e-4597-84ea-2fd6fa24398e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\98.Effect\02.Emoji">
+      <UniqueIdentifier>{47746bb4-3ef6-433d-88eb-b2d8388517bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\00.WindFalcon">
+      <UniqueIdentifier>{7e3b1d05-adc3-4890-b765-f672eceae7f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -513,9 +546,6 @@
     <ClInclude Include="Obj\ArcSphere.h">
       <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\01.SphereArcana</Filter>
     </ClInclude>
-    <ClInclude Include="Obj\IcicleEffect.h">
-      <Filter>Source Files\02.Obj\02.StopObj\98.Effect</Filter>
-    </ClInclude>
     <ClInclude Include="MyBitmap\MyBitmap.h">
       <Filter>Source Files\03.MyBitmap</Filter>
     </ClInclude>
@@ -557,6 +587,45 @@
     </ClInclude>
     <ClInclude Include="Obj\FireKick.h">
       <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\Digit.h">
+      <Filter>Source Files\02.Obj\01.MoveObj\06.Digit</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\DigitMgr.h">
+      <Filter>Source Files\01.Manager\10.DigitMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\Wardrobe.h">
+      <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\01.NPC\01.Wardrobe</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\WardInven.h">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\08.WardInven</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\RobeIcon.h">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\09.RobeIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplaceColor.h">
+      <Filter>Source Files\05.GlobalFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\NormalAttack.h">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.NormalAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ArcNormalAtt.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\05.NormalAttArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\IcicleEffect.h">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\00.Icicle</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\TeleEffect.h">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\01.TeleEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\PriceTag.h">
+      <Filter>Source Files\02.Obj\02.StopObj\08.PriceTag</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\Potion.h">
+      <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\02.Card\01.Potion</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\Emoji.h">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\02.Emoji</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -773,9 +842,6 @@
     <ClCompile Include="Obj\ArcSphere.cpp">
       <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\01.SphereArcana</Filter>
     </ClCompile>
-    <ClCompile Include="Obj\IcicleEffect.cpp">
-      <Filter>Source Files\02.Obj\02.StopObj\98.Effect</Filter>
-    </ClCompile>
     <ClCompile Include="Obj\SuommnerBullet.cpp">
       <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\05.SummonerBullet</Filter>
     </ClCompile>
@@ -814,6 +880,45 @@
     </ClCompile>
     <ClCompile Include="Obj\FireKick.cpp">
       <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\00.LineBullet\06.FireKick</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\Digit.cpp">
+      <Filter>Source Files\02.Obj\01.MoveObj\06.Digit</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\DigitMgr.cpp">
+      <Filter>Source Files\01.Manager\10.DigitMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\WardInven.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\08.WardInven</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\RobeIcon.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\99.UI\09.RobeIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\Wardrobe.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\01.NPC\01.Wardrobe</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplaceColor.cpp">
+      <Filter>Source Files\05.GlobalFunctions</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\NormalAttack.cpp">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\03.MeeleBullet\01.NormalAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcNormalAtt.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\05.NormalAttArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\IcicleEffect.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\00.Icicle</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\TeleEffect.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\01.TeleEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\PriceTag.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\08.PriceTag</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\Potion.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\01.F_Able\02.Card\01.Potion</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\Emoji.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\98.Effect\02.Emoji</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

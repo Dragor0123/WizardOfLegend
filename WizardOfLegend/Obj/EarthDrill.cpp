@@ -30,6 +30,8 @@ bool CEarthDrill::Initialize()
 	m_tHitInfo.iCX = 126;
 	m_tHitInfo.iCY = 93;
 
+	m_iAtt = rand() % 7 + 11;
+
 	m_strFrameKey = "EarthDrill";
 
 	m_ePreState = CBullet::END;
@@ -68,7 +70,11 @@ int CEarthDrill::Update(float _fdTime)
 
 void CEarthDrill::Late_Update(float _fdTime)
 {
-	CMeeleBullet::Late_Update(_fdTime);
+	if (m_bCollision) {
+		m_eCurState = CBullet::COLLISION;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
+	}
 	Update_Rect();
 	Update_HitRect();
 
@@ -119,7 +125,12 @@ void CEarthDrill::Move_Frame()
 		m_tFrame.dwFrameTime = GetTickCount();
 
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_bDead = true;
+		{
+			if (m_ePreState == CBullet::FIRE)
+				m_tFrame.iFrameStart = 0;
+			if (m_ePreState == CBullet::COLLISION)
+				m_bDead;
+		}
 	}
 }
 
@@ -137,13 +148,25 @@ void CEarthDrill::Scene_Change()
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case CBullet::COLLISION:
+			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		default:
 			break;
 		}
 		m_ePreState = m_eCurState;
 	}
+}
+
+int CEarthDrill::Get_Collision_Code() const
+{
+	if (m_bMonsters)
+		return CC_MBULLET_NWALL_NPUSH;
+	else
+		return CC_MBULLET_NWALL_PUSH;
 }
 
 void CEarthDrill::Change_HitRect()

@@ -17,9 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{284A
 		Header\Define.h = Header\Define.h
 		Header\Enum.h = Header\Enum.h
 		Header\Extern.h = Header\Extern.h
-		Header\Include.h = Header\Include.h
 		Header\Inline.h = Header\Inline.h
-		Header\Singleton.h = Header\Singleton.h
 		Header\Struct.h = Header\Struct.h
 		Header\Template.h = Header\Template.h
 	EndProjectSection

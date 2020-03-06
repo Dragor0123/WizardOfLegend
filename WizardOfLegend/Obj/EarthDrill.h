@@ -20,7 +20,7 @@ public:
 	virtual void Move_Frame();
 	virtual void Scene_Change();
 public:
-	virtual int		Get_Collision_Code() const { return CC_MBULLET_NWALL_PUSH; }
+	virtual int		Get_Collision_Code() const;
 protected:
 	virtual void  Change_HitRect();
 };

@@ -2,12 +2,18 @@
 #include "ArcanaCard.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "../Manager/CardMgr.h"
-#include "../Obj/ObjMgr.h"
+#include "ObjMgr.h"
 #include "ArcRel.h"
 #include "ArcGaia.h"
 #include "ArcSphere.h"
 #include "ArcFrostFan.h"
+#include "ArcDragonarc.h"
+#include "ArcFireball.h"
+#include "ArcNormalAtt.h"
+#include "Player.h"
+#include "NPC.h"
 
+// CArcanaCard 의 m_pTarget은 nullptr일 수도 있고, SpellSeller일 수도 있다.
 CArcanaCard::CArcanaCard()
 	: m_fmoveTime(0.f)
 {
@@ -29,23 +35,30 @@ bool CArcanaCard::Initialize()
 	if (m_strFrameKey == "")
 		return false;
 
-	if (m_strFrameKey == "GaiaShieldCard")
+	if (m_strFrameKey == "GaiaShieldCard") //o
 		m_iCardCode = 0;
-	if (m_strFrameKey == "DragonArcCard")
+	if (m_strFrameKey == "DragonArcCard") //o
 		m_iCardCode = 1;
-	if (m_strFrameKey == "FireBallCard")
+	if (m_strFrameKey == "FireBallCard") //o
 		m_iCardCode = 2;
-	if (m_strFrameKey == "IceSphereCard")
+	if (m_strFrameKey == "IceSphereCard") //o
 		m_iCardCode = 3;
-	if (m_strFrameKey == "NormalDashCard")
+	if (m_strFrameKey == "NormalDashCard") //o
 		m_iCardCode = 4;
-	if (m_strFrameKey == "FrostFanCard")
+	if (m_strFrameKey == "FrostFanCard") //o
 		m_iCardCode = 5;
+	if (m_strFrameKey == "NormalAttackCard") //o
+		m_iCardCode = 6;
+	if (m_strFrameKey == "EarthDrillCard")
+		m_iCardCode = 7;
+	if (m_strFrameKey == "WindFalconCard")
+		m_iCardCode = 8;
+
 
 	m_tHitInfo.fX = m_tInfo.fX;
 	m_tHitInfo.fY = m_tInfo.fY + 25.f;
 
-	m_tHitInfo.iCX = 90;
+	m_tHitInfo.iCX = 76;
 	m_tHitInfo.iCY = 110;
 
 	m_fSpeed = 25.f;
@@ -97,10 +110,6 @@ void CArcanaCard::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScroll
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 }
 
-void CArcanaCard::Release()
-{
-}
-
 CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)
 {
 	CArcRel *pArcRel = nullptr;
@@ -114,9 +123,11 @@ CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)
 	case 0: // Gaia Shield
 		pArcRel = CAbstractFactory<CArcGaia>::Create("GaiaShield", pPlayer);
 		break;
-	case 1:
+	case 1: // "DragonArcCard"
+		pArcRel = CAbstractFactory<CArcDragonarc>::Create("DragonArc", pPlayer);
 		break;
-	case 2:
+	case 2: // "FireBallCard"
+		pArcRel = CAbstractFactory<CArcFireball>::Create("FireBall", pPlayer);
 		break;
 	case 3:
 		pArcRel = CAbstractFactory<CArcSphere>::Create("IceSphere", pPlayer);
@@ -125,6 +136,13 @@ CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)
 		return nullptr;
 	case 5: //서리부채 (FrostFan)
 		pArcRel = CAbstractFactory<CArcFrostFan>::Create("FrostFan", pPlayer);
+		break;
+	case 6: // NormalAttackCard
+		pArcRel = CAbstractFactory<CArcNormalAtt>::Create("NormalAttack", pPlayer);
+		break;
+	case 7: // EarthDrillCard
+		break;
+	case 8: // WindFalconCard
 		break;
 	}
 
@@ -144,17 +162,64 @@ void CArcanaCard::MoveY(float yourSpeed, float fDeltaTime, MOVEDIR::FB eDir)
 
 void CArcanaCard::Do_FButton_Action(float _fdTime)
 {
-	//CArcRel *pArcRel = Create_ArcanaRelic();
-	CCardMgr::Get_Instance()->Insert_CodeImage35(m_iCardCode);
-	CCardMgr::Get_Instance()->Insert_CodeImage46(m_iCardCode);
-	int bInsertCondition = CCardMgr::Get_Instance()->Insert_Item_To_Inventory(m_iCardCode);
-
-	if (bInsertCondition)
+	if (m_pTarget && m_iPriceAsGold > 0)
 	{
-		bool bSuccess = false;
-		CArcRel* pArcRel = Create_ArcanaRelic(bInsertCondition);
-		bSuccess = CCardMgr::Get_Instance()->Insert_CodeArcana(m_iCardCode, pArcRel);
-	}
+		if (!dynamic_cast<CNPC*>(m_pTarget))
+			return;
 
-	m_bDead = true;
+		if (CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
+			return;
+
+		CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+
+		if (Is_Player_Money_Enough(pPlayer))
+		{
+			CCardMgr::Get_Instance()->Insert_CodeImage35(m_iCardCode);
+			CCardMgr::Get_Instance()->Insert_CodeImage46(m_iCardCode);
+			int bInsertCondition = CCardMgr::Get_Instance()->Insert_Item_To_Inventory(m_iCardCode);
+
+			if (bInsertCondition)
+			{
+				bool bSuccess = false;
+				CArcRel* pArcRel = Create_ArcanaRelic(bInsertCondition);
+				bSuccess = CCardMgr::Get_Instance()->Insert_CodeArcana(m_iCardCode, pArcRel);
+				static_cast<CPlayer*>(pPlayer)->Sub_Gold(this->m_iPriceAsGold);
+				// m_pTarget의 표정 만들어주기.
+				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_YES);
+				m_bDead = true;
+			}
+			else
+			{
+				// 인벤토리가 가득 찼습니다!
+				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+			}
+		}
+		else // 플레이어의 금액이 상품의 가격보다 적을 경우
+		{
+			// 금액이 모자랍니다! m_pTarget 표정 만들기
+			static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+		}
+	}
+	else
+	{
+		CCardMgr::Get_Instance()->Insert_CodeImage35(m_iCardCode);
+		CCardMgr::Get_Instance()->Insert_CodeImage46(m_iCardCode);
+		int bInsertCondition = CCardMgr::Get_Instance()->Insert_Item_To_Inventory(m_iCardCode);
+
+		if (bInsertCondition)
+		{
+			bool bSuccess = false;
+			CArcRel* pArcRel = Create_ArcanaRelic(bInsertCondition);
+			bSuccess = CCardMgr::Get_Instance()->Insert_CodeArcana(m_iCardCode, pArcRel);
+			m_bDead = true;
+		}
+		else
+		{
+			// 인벤토리가 가득 찼습니다!
+		}
+	}
+}
+
+void CArcanaCard::Release()
+{
 }

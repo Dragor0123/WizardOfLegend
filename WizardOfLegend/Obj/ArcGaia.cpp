@@ -2,6 +2,7 @@
 #include "ArcGaia.h"
 #include "GaiaShield.h"
 #include "ObjMgr.h"
+#include "Player.h"
 
 CArcGaia::CArcGaia()
 {
@@ -36,7 +37,7 @@ int CArcGaia::Update(float _fdTime)
 		return ARCRELIC_COOLING;
 	}
 	else
-		return OBJ_NOEVENT;
+		return ARCRELIC_IDLE;
 }
 
 void CArcGaia::Late_Update(float _fdTime)
@@ -65,6 +66,7 @@ void CArcGaia::Fire_Skill()
 		for (int i = 0; i < 12; ++i)
 		{
 			Create_Shield((float)i * 30.f);
+			static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
 		}
 		m_bCool = true;
 	}

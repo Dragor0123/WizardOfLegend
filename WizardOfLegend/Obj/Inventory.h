@@ -34,7 +34,9 @@ public:
 	bool Is_Inner_Full();
 	int	 Push_Item_In_OuterArr(int _code);
 	int  Push_Item_In_InnerArr(int _code);
+
 private:
+	void Drop_Item();
 	void Pull_InArrayItems();
 	void Render_Inventory_Items(HDC _DC, float _fdTime, float _fScrollX = 0.f, float _fScrollY = 0.f);
 

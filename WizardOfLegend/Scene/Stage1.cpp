@@ -6,13 +6,17 @@
 #include "../Manager/TileMgr.h"
 #include "../Manager/SceneMgr.h"
 #include "../Obj/FButton.h"
-#include "../Obj/IcicleEffect.h"
 #include "../Obj/Prison.h"
 #include "../Obj/TeleCircle.h"
 #include "../Obj/Inventory.h"
 #include "../Obj/PlayerHPBar.h"
 #include "../Obj/UIGold.h"
 #include "../Obj/SummonCard.h"
+#include "../Obj/SpellSeller.h"
+#include "../Obj/UnderDeco.h"
+#include "../Obj/ArcanaCard.h"
+#include "../Obj/OverDeco.h"
+#include "../Obj/Potion.h"
 
 CStage1::CStage1()
 	: m_bTeleCircleInserted(false)
@@ -34,18 +38,60 @@ bool CStage1::Initialize()
 	if (!CTileMgr::Get_Instance()->Initialize("FireTile"))
 		return false;
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
+
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
-	rPlayer->Set_Pos(2664.f, 1535.f);
+	//rPlayer->Set_Pos(2664.f, 1535.f);
+	rPlayer->Set_Pos(4130.f, 3761.f);
 
 	// ÇÃ·¹ÀÌ¾î HPBAR, SKILLBAR »ðÀÔ, µ· ui»ðÀÔ
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI,
 		CAbstractFactory<CPlayerHPBar>::Create(rPlayer));
-
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI,
 		CAbstractFactory<CUISkillSet>::Create());
-
 	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI,
 		CAbstractFactory<CUIGold>::Create(rPlayer));
+
+	// NPC »ðÀÔ
+	CObj* pSpellSeller = CAbstractFactory<CSpellSeller>::Create(4080.f, 3456.f, "SpellSeller");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,
+		pSpellSeller);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+		CAbstractFactory<COverDeco>::Create(3980.f, 3440.f, "Easel"));
+	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+		CAbstractFactory<CUnderDeco>::Create(4064.f, 3608.f, "Carpet_0"));
+
+	CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(3891.f, 3600.f, "FrostFanCard");
+	static_cast<CCard*>(pFrostFanCard)->Set_Price_Gold(150);
+	static_cast<CCard*>(pFrostFanCard)->Set_Target(pSpellSeller);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
+	CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(3891.f, 3526.f, OBJID::STAGE1_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI, pFrostFanFButton);
+	dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
+
+	CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(3981.f, 3600.f, "GaiaShieldCard");
+	static_cast<CCard*>(pGaiaCard)->Set_Price_Gold(125);
+	static_cast<CCard*>(pGaiaCard)->Set_Target(pSpellSeller);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);
+	CObj* pGaiaFButton = CAbstractFactory<CFButton>::Create(3981.f, 3526.f, OBJID::STAGE1_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI, pGaiaFButton);
+	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
+
+	CObj* pFireBallCard = CAbstractFactory<CArcanaCard>::Create(4071.f, 3600.f, "FireBallCard");
+	static_cast<CCard*>(pFireBallCard)->Set_Price_Gold(150);
+	static_cast<CCard*>(pFireBallCard)->Set_Target(pSpellSeller);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFireBallCard);
+	CObj* pFireBallFButton = CAbstractFactory<CFButton>::Create(4071.f, 3526.f, OBJID::STAGE1_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI, pFireBallFButton);
+	dynamic_cast<CFAble*>(pFireBallCard)->Set_fButton(pFireBallFButton);
+
+	// ½ºÅ³ ÇÏ³ª ´õ!;
+
+	CObj* pPotion = CAbstractFactory<CPotion>::Create(4251.f, 3600.f, "HPPotion");
+	static_cast<CCard*>(pPotion)->Set_Target(pSpellSeller);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pPotion);
+	CObj* pPotionFButton = CAbstractFactory<CFButton>::Create(4251.f, 3540.f, OBJID::STAGE1_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::STAGE1_UI, pPotionFButton);
+	dynamic_cast<CFAble*>(pPotion)->Set_fButton(pPotionFButton);
 
 	return true;
 }

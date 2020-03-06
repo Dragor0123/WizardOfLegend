@@ -15,6 +15,15 @@ COverDeco::~COverDeco()
 
 bool COverDeco::Initialize()
 {
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/DecoEffect/PlazaArch.bmp", "PlazaArch"))
+		return false;
+
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/DecoEffect/PurpleTent.bmp", "PurpleTent"))
+		return false;
+
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/DecoEffect/Easel.bmp", "Easel"))
+		return false;
+
 	m_pMyBitmap = CBmpMgr::Get_Instance()->Find_MyBitmap(m_strFrameKey);
 	if (!m_pMyBitmap)
 		return false;
@@ -59,7 +68,7 @@ void COverDeco::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 			, MAGENTA_COLOR);
 	}
 
-	Draw_HitBox(_DC, _fScrollX, _fScrollY);
+	// Draw_HitBox(_DC, _fScrollX, _fScrollY);
 }
 
 void COverDeco::Release()

@@ -15,6 +15,7 @@ public:
 
 public:
 	// Getter
+	float Get_Pure_DeltaTime() const { return m_fDeltaTime; }
 	float Get_DeltaTime() const { return m_fDeltaTime * m_fTimeScale; }
 	float Get_FPS() const { return m_fFPS; }
 	float Get_TimeScale() const { return m_fTimeScale; }

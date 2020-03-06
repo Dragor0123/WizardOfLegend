@@ -57,7 +57,7 @@ int CNoMoveBullet::Update(float _fdTime)
 	if (!m_bCrevisInit)
 	{
 		CObj* pCrevis = CAbstractFactory<CUnderDeco>::Create(m_tHitInfo.fX, m_tHitInfo.fY, "Crevis");
-		CObjMgr::Get_Instance()->Add_Object(OBJID::UNDERDECO, pCrevis);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pCrevis);
 		m_bCrevisInit = true;
 	}
 

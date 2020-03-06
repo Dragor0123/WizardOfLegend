@@ -4,6 +4,7 @@
 #define __FIREBOSSSTAGE_H__
 
 #include "Scene.h"
+
 class CFireBossStage : public CScene
 {
 public:

@@ -6,6 +6,7 @@
 #include "../Scene/TileEdit.h"
 #include "../Scene/Plaza.h"
 #include "../Scene/FireBossStage.h"
+#include "../Scene/EarthBossStage.h"
 #include "../Obj/ObjMgr.h"
 #include "CtrlOwnerMgr.h"
 #include "KeyMgr.h"
@@ -90,6 +91,9 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		case SCENE_FIREBOSS:
 			m_pScene = new CFireBossStage;
+			break;
+		case SCENE_EARTHBOSS:
+			m_pScene = new CEarthBossStage;
 			break;
 		case SCENE_EDIT:
 			m_pScene = new CTileEdit;

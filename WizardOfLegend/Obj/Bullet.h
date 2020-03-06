@@ -27,8 +27,8 @@ protected:
 	virtual void Change_HitRect() = 0;
 
 public:
-	int			Get_Att() const { return m_iAtt; }
 	virtual int		Get_Collision_Code() const { return CC_MBULLET_WALL_PUSH; }
+	int				Get_Att() const { return m_iAtt; }
 	bool		Get_Collision() const { return m_bCollision; }
 	float		Get_ShotRange() const { return m_fShotRange; }
 	bool		Get_bMonsters()  const { return m_bMonsters; }

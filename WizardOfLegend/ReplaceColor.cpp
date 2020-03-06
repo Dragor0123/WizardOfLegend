@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "ReplaceColor.h"
 
 HBITMAP ReplaceColor(HBITMAP hBmp, COLORREF cOldColor, COLORREF cNewColor, HDC hBmpDC)

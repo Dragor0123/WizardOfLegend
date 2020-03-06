@@ -49,6 +49,16 @@ public:
 		return pObj;
 	}
 
+	static CObj* Create(float _x, float _y, const string& _frameKey, CObj* _pTarget)
+	{
+		CObj* pObj = new T;
+		pObj->Set_Pos(_x, _y);
+		pObj->Set_FrameKey(_frameKey);
+		pObj->Set_Target(_pTarget);
+		pObj->Initialize();
+		return pObj;
+	}
+
 	// Fbutton Àü¿ë
 	static CObj* Create(float _x, float _y, OBJID::ID _id)
 	{

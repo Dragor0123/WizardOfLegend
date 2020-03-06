@@ -163,6 +163,7 @@ int CEarthLoad::Update(float _fdTime)
 
 		// 플레이어가 타겟으로 잡혔다.
 		m_ePattern = (CEarthLoad::PATTERN)m_iPatternArr[m_iPatternCnt];
+		// m_ePattern = P_DRILL;
 		Attack_Pattern(_fdTime, fDis);
 	}// m_pTarget != nullptr
 

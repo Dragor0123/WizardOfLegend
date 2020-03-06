@@ -47,6 +47,13 @@ typedef struct tagLinePos
 	float fY;
 }LINEPOS;
 
+typedef struct tagEffectLine
+{
+	int iWidth;
+	float fRadian;
+	float fRange;
+}EFFECTLINE;
+
 //typedef struct tagLineInfo
 //{
 //	tagLineInfo() { ZeroMemory(this, sizeof(tagLineInfo)); }

@@ -4,10 +4,10 @@
 CArcRel::CArcRel()
 	: m_bCool(false), m_fCoolTime(0.f), m_fCoolTLimit(5.f),
 	m_bDead(false), m_pTarget(nullptr), m_strFrameKey(""),
-	m_bOutter(false), m_bInner(false)
+	m_bOutter(false), m_bInner(false), 
+	m_bSigniture(false), m_fSigEffectTime(0.f), m_fSigEffectTLimit(0.85f)
 {
 }
-
 
 CArcRel::~CArcRel()
 {

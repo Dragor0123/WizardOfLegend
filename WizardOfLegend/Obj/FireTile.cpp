@@ -14,9 +14,9 @@ CFireTile::~CFireTile()
 bool CFireTile::Initialize()
 {
 	CTile::Initialize();
-	m_drawID_row = 9;
-	m_drawID_col = 3;
-	m_eOption = TILEENUM::OPT_STOP;
+	m_drawID_row = 0;
+	m_drawID_col = 1;
+	m_eOption = TILEENUM::OPT_MOVE;
 	return true;
 }
 

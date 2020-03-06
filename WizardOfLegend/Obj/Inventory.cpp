@@ -5,6 +5,11 @@
 #include "../Manager/KeyMgr.h"
 #include "../Manager/ScrollMgr.h"
 #include "../Manager/CardMgr.h"
+#include "ArcanaCard.h"
+#include "ObjMgr.h"
+#include "ArcRel.h"
+#include "../Manager/SceneMgr.h"
+#include "FButton.h"
 
 CInventory::CInventory()
 	: ROWSIZE(2), COLSIZE(6),
@@ -101,8 +106,6 @@ void CInventory::Key_Check(float _fdTime)
 	m_tOutterFirstPOS.fX = (float)rc.left + fOutterSlot_X_Offset + (OutterSlotCX / 2.f);
 	m_tOutterFirstPOS.fY = (float)rc.top + fOutterSlot_Y_Offset + (OutterSlotCY / 2.f);
 
-
-
 	//m_iLastMouseOnIdx = -1;
 	//m_iClickedIdx = -1;
 	BOOL bPtInSlot = FALSE;
@@ -197,7 +200,17 @@ void CInventory::Key_Check(float _fdTime)
 		}
 	}
 	if (!bPtInSlot)
+	{
 		m_iLastMouseOnIdx = -1;
+		if (KEY_DOWN(VK_LBUTTON))		// 누르면...
+		{
+			Drop_Item();
+		}
+	} // !bPtInSlot
+	if (m_iClickedIdx != -1 && KEY_DOWN('F'))
+	{
+		Drop_Item();
+	}
 }
 
 int CInventory::Update(float _fdTime)
@@ -393,6 +406,7 @@ int CInventory::Push_Item_In_OuterArr(int _code)
 	}
 }
 
+// 0 리턴시 : 내부 배열 인벤토리가 가득 차서 집어 넣을 수 없음..
 int CInventory::Push_Item_In_InnerArr(int _code)
 {
 	for (int i = 0; i < INVEN_INARR_MAXNUM; ++i)
@@ -403,6 +417,63 @@ int CInventory::Push_Item_In_InnerArr(int _code)
 		}
 	}
 	return 0;
+}
+
+void CInventory::Drop_Item()
+{
+	int _code = -1;
+	if (m_iMouseCnt == 1)
+	{
+		if (m_iRemberIdx > 5)
+		{
+			_code = m_aInnerArray[m_iRemberIdx - 6];
+			m_aInnerArray[m_iRemberIdx - 6] = -1;
+		}
+		else if (m_iRemberIdx != 1)
+		{
+			_code = m_aOutterArray[m_iRemberIdx];
+			m_aOutterArray[m_iRemberIdx] = -1;
+		}
+
+		if (-1 != _code)
+		{
+			CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+			float fX = pPlayer->Get_PosX();
+			float fY = pPlayer->Get_Rect().top + 55.f;
+			OBJID::ID eID;
+			switch (CSceneMgr::Get_Instance()->Get_Scene_ID())
+			{
+			case CSceneMgr::SCENE_PLAZA:
+				eID = OBJID::PLAZA_UI;
+				break;
+			case CSceneMgr::SCENE_STAGE1:
+				eID = OBJID::STAGE1_UI;
+				break;
+			case CSceneMgr::SCENE_EARTHBOSS:
+				eID = OBJID::EARTHBSTAGE_UI;
+				break;
+			case CSceneMgr::SCENE_FIREBOSS:
+				eID = OBJID::FIREBSTAGE_UI;
+				break;
+			default:
+				eID = OBJID::END;
+				break;
+			}
+
+			CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
+			if (pArcRel && eID != OBJID::END)
+			{
+				CObj* pCard = CAbstractFactory<CArcanaCard>::Create(fX, fY, pArcRel->Get_Card_FrameKey());
+				CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pCard);
+				CObj* pButton = CAbstractFactory<CFButton>::Create(fX, fY - 74.f, eID);
+				CObjMgr::Get_Instance()->Add_Object(eID, pButton);
+				dynamic_cast<CFAble*>(pCard)->Set_fButton(pButton);
+			}
+		}
+		m_iMouseCnt = 0;
+		m_iClickedIdx = -1;
+		m_iRemberIdx = -1;
+	}
 }
 
 void CInventory::Pull_InArrayItems()

@@ -4,8 +4,11 @@
 #include "ObjMgr.h"
 #include "Player.h"
 
+// Set_Skill_Code(-1);
+
 CArcFrostFan::CArcFrostFan()
-	:m_iBulletCount(5), m_fBulletTick(0.f), m_bInitFire(false)
+	:m_iBulletCount(5), m_fBulletTick(0.f), m_bInitFire(false),
+	m_fAngle(0.f)
 {
 }
 
@@ -22,7 +25,7 @@ bool CArcFrostFan::Initialize()
 	if (m_strFrameKey != "FrostFan")
 		m_strFrameKey = "FrostFan";
 
-	m_fCoolTLimit = 0.2f;
+	m_fCoolTLimit = 4.0f;
 	return true;
 }
 
@@ -53,7 +56,7 @@ int CArcFrostFan::Update(float _fdTime)
 		m_fCoolTime += _fdTime;
 		return ARCRELIC_COOLING;
 	}
-	return OBJ_NOEVENT;
+	return ARCRELIC_IDLE;
 }
 
 void CArcFrostFan::Late_Update(float _fdTime)
@@ -89,9 +92,9 @@ void CArcFrostFan::Fire_Skill()
 				m_pTarget->Set_FrameKey("Player_Down");
 			}
 			m_bInitFire = true;
+			static_cast<CPlayer*>(m_pTarget)->Set_PlayerState(CPlayer::ATTACK);
+			static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
 		}
-		dynamic_cast<CPlayer*>(m_pTarget)->Set_PlayerState(CPlayer::ATTACK);
-		// 그리고 Player에게 어떤 조건값? int코드값? 이런 걸 넘겨서 attack frame이 다르게 움직이도록... 설정해준다.
 	}
 }
 

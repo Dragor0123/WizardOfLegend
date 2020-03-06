@@ -797,7 +797,7 @@ void CFireBoss::Attack_Pattern(float _fdTime, float _fDis)
 					float fX = m_tInfo.fX + cosf(Degree_To_Radian(60.f * m_iAttackCnt)) * 200.f;
 					float fY = m_tInfo.fY - sinf(Degree_To_Radian(60.f * m_iAttackCnt)) * 200.f;
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET,
-						Create_Bullet<CFireBall>(fX, fY, "FireBoss_Fireball", m_fAngle));
+						Create_Bullet<CFireBall>(fX, fY, "FireBall", m_fAngle));
 					m_bAttackCool = true;
 				}
 				else {

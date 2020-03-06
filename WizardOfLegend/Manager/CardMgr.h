@@ -24,6 +24,7 @@ public:
 	bool Insert_CodeImage35(int _iCardCode);
 	bool Insert_CodeImage46(int _iCardCode);
 	bool Insert_CodeArcana(int _code, CArcRel* _Arc);
+	// return 0: 인벤토리에 삽입 실패, 1 : Outter에 들어갔음, 2: Inner에 들어갔음
 	int  Insert_Item_To_Inventory(int _code);
 
 private:

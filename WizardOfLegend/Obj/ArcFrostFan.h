@@ -28,6 +28,8 @@ public:
 
 private:
 	CObj*	Create_Bullet(float _fAngle);
+
+private:
 	bool	m_bInitFire;
 	float	m_fAngle;
 	float	m_fBulletTick;

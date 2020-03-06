@@ -4,6 +4,8 @@
 #include "ObjMgr.h"
 #include "Player.h"
 
+// Set_Skill_Code(3);, Set_Skill_Code(-1);
+
 CArcSphere::CArcSphere()
 	: m_bShot(false), m_pLastMadeBullet(nullptr)
 {
@@ -36,7 +38,7 @@ int CArcSphere::Update(float _fdTime)
 		return ARCRELIC_COOLING;
 	}
 	else
-		return OBJ_NOEVENT;
+		return ARCRELIC_IDLE;
 }
 
 void CArcSphere::Late_Update(float _fdTime)
@@ -83,7 +85,7 @@ void CArcSphere::Fire_Skill()
 			assert(m_pLastMadeBullet);
 #endif
 			m_bShot = true;
-			dynamic_cast<CPlayer*>(m_pTarget)->Set_bShot(true);
+			static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(3);
 		}
 	}
 }
@@ -96,7 +98,7 @@ void CArcSphere::Key_Up_Action()
 		static_cast<CIceSphere*>(m_pLastMadeBullet)->Set_FireStartOn();
 		m_bShot = false;
 		m_bCool = true;
-		dynamic_cast<CPlayer*>(m_pTarget)->Set_bShot(false);
+		static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
 	}
 }
 

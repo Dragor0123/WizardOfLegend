@@ -6,6 +6,7 @@
 #define DRAGON_ARC			01
 
 class CArcRel;
+
 class CArcanaCard : public CCard
 {
 public:
@@ -25,7 +26,7 @@ public:
 	// Inherited via CFAble
 	virtual void Do_FButton_Action(float _fdTime);
 	virtual int Get_Collision_Code() const { return CC_FABLE_ARCANA; }
-	// Create_Arcana()
+
 private:
 	void MoveY(float yourSpeed, float fDeltaTime, MOVEDIR::FB eDir);
 

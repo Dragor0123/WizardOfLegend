@@ -4,6 +4,7 @@
 #define __NPC_H__
 
 #include "FAble.h"
+#include "Emoji.h"
 
 class CMyBitmap;
 
@@ -25,9 +26,15 @@ public:
 	virtual void Do_FButton_Action(float _fdTime) = 0;
 	virtual int Get_Collision_Code() const { return CC_FABLE_NPC; }
 
+public:
+	void Set_Emoji_State(const CEmoji::EMO_STATE& _eNewState) { m_eEmoState = _eNewState; }
+	
+	const CEmoji::EMO_STATE& Get_Emoji_State() const { return m_eEmoState; }
+
 protected:
-	TCHAR			szDialogue[128];
-	CMyBitmap*		m_pMyBitmap;
+	TCHAR				szDialogue[128];
+	CMyBitmap*			m_pMyBitmap;
+	CEmoji::EMO_STATE	m_eEmoState;
 };
 
 #endif

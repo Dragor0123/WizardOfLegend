@@ -4,7 +4,7 @@
 #include "../MyBitmap/MyBitmap.h"
 
 CNPC::CNPC()
-	:m_pMyBitmap(nullptr)
+	: m_pMyBitmap(nullptr), m_eEmoState(CEmoji::ES_END)
 {
 	ZeroMemory(szDialogue, sizeof(szDialogue));
 }
