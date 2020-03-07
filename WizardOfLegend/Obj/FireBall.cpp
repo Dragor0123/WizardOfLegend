@@ -47,10 +47,11 @@ bool CFireBall::Initialize()
 	m_tFrame.dwFrameTime = GetTickCount();
 	
 	if (m_bMonsters)
-		m_iAtt = rand() % 9 + 16;
+		m_iAtt = rand() % 8 + 20;
 	else
 		m_iAtt = rand() % 8 + 12;
-	//m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
+
+	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
 

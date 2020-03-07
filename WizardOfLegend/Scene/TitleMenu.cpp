@@ -6,6 +6,7 @@
 #include "../Obj/ObjMgr.h"
 #include "../Obj/MyButton.h"
 #include "../Manager/CtrlOwnerMgr.h"
+#include "../Manager/SoundMgr.h"
 
 const int CTitleMenu::iLogoX = 141;
 int CTitleMenu::iLogoY = 340;
@@ -54,6 +55,8 @@ bool CTitleMenu::Initialize()
 	pObj = CAbstractFactory<CMyButton>::Create(492.f, 540.f);
 	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Exit");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
+
+	CSoundMgr::Get_Instance()->PlayBGM(L"TitleScreen.wav");
 
 	return true;
 }
@@ -118,6 +121,7 @@ void CTitleMenu::Render(HDC _DC, float _fdTime)
 
 void CTitleMenu::Release()
 {
+	CSoundMgr::Get_Instance()->StopAll();
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MENU_UI);
 }
 

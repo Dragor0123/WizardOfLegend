@@ -10,6 +10,8 @@
 #include "ArcDragonarc.h"
 #include "ArcFireball.h"
 #include "ArcNormalAtt.h"
+#include "ArcEarthDrill.h"
+#include "ArcWindFalcon.h"
 #include "Player.h"
 #include "NPC.h"
 
@@ -35,23 +37,23 @@ bool CArcanaCard::Initialize()
 	if (m_strFrameKey == "")
 		return false;
 
-	if (m_strFrameKey == "GaiaShieldCard") //o
+	if (m_strFrameKey == "GaiaShieldCard") //  땅보스 깨면 또는 공간있으면 Stage1
 		m_iCardCode = 0;
-	if (m_strFrameKey == "DragonArcCard") //o
+	if (m_strFrameKey == "DragonArcCard") // 플라자
 		m_iCardCode = 1;
-	if (m_strFrameKey == "FireBallCard") //o
+	if (m_strFrameKey == "FireBallCard") // Stage1
 		m_iCardCode = 2;
-	if (m_strFrameKey == "IceSphereCard") //o
+	if (m_strFrameKey == "IceSphereCard") // 플라자
 		m_iCardCode = 3;
 	if (m_strFrameKey == "NormalDashCard") //o
 		m_iCardCode = 4;
-	if (m_strFrameKey == "FrostFanCard") //o
+	if (m_strFrameKey == "FrostFanCard") // Stage1
 		m_iCardCode = 5;
-	if (m_strFrameKey == "NormalAttackCard") //o
+	if (m_strFrameKey == "NormalAttackCard") // 플라자
 		m_iCardCode = 6;
-	if (m_strFrameKey == "EarthDrillCard")
+	if (m_strFrameKey == "EarthDrillCard")  // 땅보스 깨면
 		m_iCardCode = 7;
-	if (m_strFrameKey == "WindFalconCard")
+	if (m_strFrameKey == "WindFalconCard") // Stage1
 		m_iCardCode = 8;
 
 
@@ -141,8 +143,10 @@ CArcRel * CArcanaCard::Create_ArcanaRelic(int _bCondition)
 		pArcRel = CAbstractFactory<CArcNormalAtt>::Create("NormalAttack", pPlayer);
 		break;
 	case 7: // EarthDrillCard
+		pArcRel = CAbstractFactory<CArcEarthDrill>::Create("EarthDrill", pPlayer);
 		break;
 	case 8: // WindFalconCard
+		pArcRel = CAbstractFactory<CArcWindFalcon>::Create("WindFalcon", pPlayer);
 		break;
 	}
 

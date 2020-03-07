@@ -21,7 +21,11 @@
 #include "../Obj/FrostFan.h"
 #include "../Obj/FireBoss.h"
 #include "../Obj/Meteor.h"
+#include "../Obj/EarthDrill.h"
+#include "../Obj/WindFalcon.h"
 #include "DigitMgr.h"
+
+#define INC_MP 8
 
 CCollisionMgr::CCollisionMgr()
 {
@@ -73,8 +77,8 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-
 									static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
 									if (Collision_Obj_Tile(srcObj, &fX, &fY))
@@ -97,6 +101,7 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 									static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 								}
 							}
@@ -125,8 +130,8 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 								static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-
 								static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+								Add_MP_Logic(dstObj);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
 								if (Collision_Obj_Tile(srcObj, &fX, &fY)) //srcObj(몬스터)가 타일에 부딪혔을 경우
@@ -147,8 +152,8 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 								static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-
 								static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+								Add_MP_Logic(dstObj);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
@@ -468,7 +473,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 		{
 			for (auto& dstObj : _Dst)
 			{
-				if (static_cast<CBullet*>(dstObj)->Get_Collision())
+				if (static_cast<CBullet*>(dstObj)->Get_Collision() && !dynamic_cast<CEarthDrill*>(dstObj))
 					continue;
 				if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
 				{
@@ -488,10 +493,12 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										{
 											int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
 											static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
-											MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+											MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 											static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-											
 											static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+
+											Add_MP_Logic(dstObj);
+
 											static_cast<CBullet*>(dstObj)->Set_Collision(true);
 										}
 									}
@@ -499,10 +506,12 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									{
 										int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
 										static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
-										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-										
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+
+										Add_MP_Logic(dstObj);
+
 										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 										if (Collision_Obj_Tile(srcObj, &fX, &fY))
 										{
@@ -517,6 +526,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								}
 								else if (CC_PBULLET_NWALL_NPUSH_DRAG <= dstObjCode && dstObjCode < CC_PBULLET_NWALL_PUSH) // 밀지 않는 총알.
 								{
+									// 여기에 WindFalcon 예외처리.
 									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 									{
 										int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
@@ -525,6 +535,8 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+										
+										Add_MP_Logic(dstObj);
 										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 									}
 								}
@@ -536,7 +548,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-									
+										// MP 차게 하나?
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
 									}
 								}
@@ -606,6 +618,8 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										Add_MP_Logic(dstObj);
+										static_cast<CBullet*>(dstObj)->Set_Signiture(true);
 										static_cast<CBullet*>(dstObj)->Set_Att(0);
 
 										if (Collision_Obj_Tile(srcObj, &fX, &fY))
@@ -630,6 +644,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
 									if (Collision_Obj_Tile(srcObj, &fX, &fY)) //srcObj(몬스터)가 타일에 부딪혔을 경우
@@ -640,13 +655,53 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									{
 										CollisionRectPush(dstObj, srcObj, &fX, &fY);
 									}
-
-
 								}
 							}
 							else //충돌 시 밀어버리지 않는 총알.
 							{
-								if (dynamic_cast<CBullet*>(dstObj))
+								// WindFalcon 예외처리
+								if (dynamic_cast<CWindFalcon*>(dstObj))
+								{
+									bool _bAttackOn = static_cast<CWindFalcon*>(dstObj)->Get_bAttackOn();
+									if (_bAttackOn)
+									{
+										if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+										{
+											int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
+											static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
+											MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
+											static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
+											static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+											Add_MP_Logic(dstObj);
+											static_cast<CWindFalcon*>(dstObj)->Inc_TargetChangeCnt();
+											
+											static_cast<CWindFalcon*>(dstObj)->Set_bAttackOn(false);
+											if ( (size_t)static_cast<CWindFalcon*>(dstObj)->Get_TargetChangeCnt() 
+												>= CWindFalcon::iTARGET_CHANGE_MAX)
+											{
+												static_cast<CBullet*>(dstObj)->Set_Collision(true);
+											}
+										}
+									}
+									else // bAttackOn == false
+									{
+										bool _bNoHit = true;
+										for (auto& monster : CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER))
+										{
+											if (IntersectRect(&rc, &dstObj->Get_HitRect(), &monster->Get_HitRect()))
+											{
+												_bNoHit = false;
+												break;
+											}
+										}
+
+										if (_bNoHit)
+										{
+											static_cast<CWindFalcon*>(dstObj)->Set_bAttackOn(true);
+										}
+									}
+								}
+								else if (dynamic_cast<CBullet*>(dstObj))
 								{
 									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 									{
@@ -654,11 +709,16 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-										
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										Add_MP_Logic(dstObj);
 										if (dynamic_cast<CFrostFan*>(dstObj))
-											CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
-												CAbstractFactory<CIcicleEffect>::Create(srcObj));
+										{
+											if (static_cast<CFrostFan*>(dstObj)->Is_Making_Ice())
+											{
+												CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
+													CAbstractFactory<CIcicleEffect>::Create(srcObj));
+											}
+										}
 										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 									}
 								}
@@ -729,7 +789,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 		{
 			for (auto& dstObj : _Dst)
 			{
-				if (static_cast<CBullet*>(dstObj)->Get_Collision())
+				if (static_cast<CBullet*>(dstObj)->Get_Collision() && !dynamic_cast<CEarthDrill*>(dstObj))
 					continue;
 				// 먼저 플레이어와 충돌부터 시킬것!
 				if (_SrcGroupCode == 0x80)
@@ -847,6 +907,19 @@ void CCollisionMgr::Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src)
 				dstObj->Set_Dead();
 				srcObj->Set_Dead();
 			}
+		}
+	}
+}
+
+void CCollisionMgr::Add_MP_Logic(CObj* _dstObj)
+{
+	bool bSig = static_cast<CBullet*>(_dstObj)->Is_Signiture_On();
+	if (!bSig)
+	{
+		if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
+		{
+			CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+			static_cast<CPlayer*>(pPlayer)->Add_MP(INC_MP);
 		}
 	}
 }
@@ -1171,6 +1244,48 @@ bool CCollisionMgr::Check_CircleRect(CObj * _circle, CObj * _rect)
 	return false;
 }
 
+bool CCollisionMgr::Check_CircleRect(const RECT * _lhs, CObj * _rect)
+{
+	LONG _cX = LONG((_lhs->left + _lhs->right) >> 1);
+	LONG _cY = LONG((_lhs->top + _lhs->bottom) >> 1);
+	LONG _radius = LONG((_lhs->right - _lhs->left) >> 1);
+
+	const RECT& _rc = _rect->Get_HitRect();
+	POINT circlePt = { _cX, _cY };
+
+	if ((_rc.left <= _cX && _cX <= _rc.right) ||
+		(_rc.top <= _cY && _cY <= _rc.bottom))
+	{
+		RECT rcEx = { _rc.left - _radius,
+			_rc.top - _radius,
+			_rc.right + _radius,
+			_rc.bottom + _radius
+		};
+
+		if (Is_PointInRect(circlePt, &rcEx))
+			return true;
+	}
+	else {
+		POINT Pt1 = { _rc.left, _rc.top };
+		if (Is_PointInCircle(Pt1, circlePt, float(_radius)))
+			return true;
+
+		Pt1.x = _rc.right;
+		if (Is_PointInCircle(Pt1, circlePt, float(_radius)))
+			return true;
+
+		Pt1.x = _rc.left; Pt1.y = _rc.bottom;
+		if (Is_PointInCircle(Pt1, circlePt, float(_radius)))
+			return true;
+
+		Pt1.x = _rc.right;
+		if (Is_PointInCircle(Pt1, circlePt, float(_radius)))
+			return true;
+	}
+
+	return false;
+}
+
 // CObj* _lhs, *_rhs : 충돌검사할 두 사각형, _fX : 겹친 가로 길이, _fY : 겹친 세로 길이
 bool CCollisionMgr::Check_RectRect(CObj* _lhs, CObj* _rhs, float* _fX, float* _fY)
 {
@@ -1212,64 +1327,6 @@ bool CCollisionMgr::Check_RectRect(const RECT* _lhs, const RECT* _rhs, float* _f
 	}
 	else
 		return false;
-}
-
-// 충돌이 끝났는지 검사. Dst는 무조건 총알
-void CCollisionMgr::Collision_End_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
-{
-	RECT rc = {};
-
-	if (_Src.empty() || _Dst.empty())
-		return;
-
-	int _DstGroupCode = _Dst.front()->Get_Collision_Code();
-	int _SrcGroupCode = _Src.front()->Get_Collision_Code();
-
-	if (!(_DstGroupCode & 0x0F))
-		return;
-
-	if (0x01 <= _DstGroupCode && _DstGroupCode < CC_MSHIELD_NOREFLECT) // PLAYER BULLET과 SHIELD -> 몬스터와 검사.
-	{
-		if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
-		{
-			if (_SrcGroupCode & CC_MONSTER_BOSS)	// 보스냐
-			{
-				for (auto& srcObj : _Src)
-				{
-					bool bCollided = false;
-					for (auto& dstObj : _Dst)
-					{
-						if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-							bCollided = true;
-					}
-					if (!bCollided) {
-						if (CBoss::HIT == static_cast<CBoss*>(srcObj)->Get_Boss_State())
-							static_cast<CBoss*>(srcObj)->Set_Boss_State(0);	//idle == 0
-					}
-				}
-			}
-			else // 일반몹이냐
-			{
-				for (auto& srcObj : _Src)
-				{
-					bool bCollided = false;
-					for (auto& dstObj : _Dst)
-					{
-						if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-							bCollided = true;
-					}
-					if (!bCollided) {
-						if (CMonster::HIT == static_cast<CMonster*>(srcObj)->Get_Monster_State())
-							static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::IDLE);
-					}
-				}
-			}
-		}
-	}
-	else // 몬스터 총알 -> 플레이어와 검사
-	{
-
-	}
 }
 
 bool CCollisionMgr::CollisionDiagRectPush(CObj * _Pushee, CObj * _Pusher, float * _pfX, float * _pfY, float _pushScale)
@@ -1317,3 +1374,5 @@ bool CCollisionMgr::CollisionDiagRectPush(CObj * _Pushee, CObj * _Pusher, float 
 	}
 	return false;
 }
+
+// 충돌이 끝났는지 검사. Dst는 무조건 총알

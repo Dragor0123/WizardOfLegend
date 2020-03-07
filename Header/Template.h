@@ -22,18 +22,6 @@ void Safe_Delete(T& _obj)
 }
 
 template <typename T>
-class CObjDistCmp
-{
-public:
-	bool operator()(T _a, T _b)
-	{
-		return _a->Get_TargetDist() < _b->Get_TargetDist();
-	}
-};
-
-
-
-template <typename T>
 void Safe_Delete_VecList(T& _con)
 {
 	typename T::iterator iter;

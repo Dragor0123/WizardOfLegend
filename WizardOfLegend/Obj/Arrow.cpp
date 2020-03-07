@@ -31,7 +31,7 @@ bool CArrow::Initialize()
 
 	m_fShotRange = 720.f;
 	m_fSpeed = 900.f;
-	m_iAtt = 20;
+	m_iAtt = rand() % 8 + 15;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("Arrow");

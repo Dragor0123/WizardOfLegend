@@ -4,6 +4,9 @@
 #include "../Obj/ArcRel.h"
 #include "../Obj/Inventory.h"
 #include "../Obj/ObjMgr.h"
+#include "../Manager/SceneMgr.h"
+#include "../GetObjID.h"
+#include "../Obj/UISkillSet.h"
 
 CCardMgr::CCardMgr()
 {
@@ -107,7 +110,44 @@ void CCardMgr::Update(float _fdTime)
 		}
 		else
 		{
-			++iter;
+			OBJID::ID eID = Get_Obj_ID();
+			CObj* pUISkillSet = nullptr;
+			list<CObj*> _list = CObjMgr::Get_Instance()->Get_listObj(eID);
+			list<CObj*>::iterator iterBeg = _list.begin();
+			for (; iterBeg != _list.end(); ++iterBeg)
+			{
+				if ("UI_SKILLSET" == (*iterBeg)->Get_FrameKey())
+				{
+					pUISkillSet = *iterBeg;
+					break;
+				}
+			}
+
+			if (nullptr == pUISkillSet)
+			{
+				++iter;
+				continue;
+			}
+			else
+			{
+				if (ARCRELIC_COOLING == iEvent)
+				{
+					CObj* pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
+					int _idxOutter = static_cast<CInventory*>(pInven)->Find_Code_In_Outter(iter->first);
+					
+					if (_idxOutter != -1)
+						static_cast<CUISkillSet*>(pUISkillSet)->Set_CoolingArr(_idxOutter);	
+				}
+				else if (ARCRELIC_IDLE == iEvent)
+				{
+					CObj* pInven = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
+					int _idxOutter = static_cast<CInventory*>(pInven)->Find_Code_In_Outter(iter->first);
+
+					if (_idxOutter != -1)
+						static_cast<CUISkillSet*>(pUISkillSet)->Clear_CoolingArr(_idxOutter);
+				}
+				++iter;
+			}
 		}
 	}
 }

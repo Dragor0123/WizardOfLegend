@@ -23,7 +23,7 @@ bool CArcSphere::Initialize()
 	if (m_strFrameKey != "IceSphere")
 		m_strFrameKey = "IceSphere";
 
-	m_fCoolTLimit = 1.f;
+	m_fCoolTLimit = 3.f;
 	return true;
 }
 

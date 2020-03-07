@@ -34,7 +34,7 @@ bool CMeeleBullet::Initialize()
 		m_tInfo.iCY = 160;
 		m_tHitInfo.iCX = 128;
 		m_tHitInfo.iCY = 137;
-		m_iAtt = 7;
+		m_iAtt = rand() % 5 + 8;
 	}
 
 	// 쓸모 없음.

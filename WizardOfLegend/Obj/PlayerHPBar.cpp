@@ -95,15 +95,38 @@ void CPlayerHPBar::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrol
 		0, 0,
 		SRCCOPY);
 
+	HFONT hD2CodingFont, hOldFont;
+	HFONT hD2CodingFont2 = NULL;
+	hD2CodingFont = CreateFont(24, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET, 0, 0, 0,
+		VARIABLE_PITCH | FF_ROMAN, TEXT("Consolas"));
 
-	// 수정 폰트 크기 크게 키울것.
-	TCHAR szBuff[32] = L"";
-	swprintf_s(szBuff, 32, L" %3d / %3d", 
-		static_cast<CPlayer*>(m_pTarget)->Get_Hp(), static_cast<CPlayer*>(m_pTarget)->Get_MaxHp());
+	hOldFont = (HFONT)SelectObject(_DC, hD2CodingFont);
 	COLORREF oldFontColor = SetTextColor(_DC, RGB(255, 255, 255));
 	SetBkMode(_DC, TRANSPARENT);
-	TextOut(_DC, 852, 614, szBuff, lstrlen(szBuff));
+
+	TCHAR szBuff[32] = L"";
+	swprintf_s(szBuff, 32, L" %3d / %3d",
+		static_cast<CPlayer*>(m_pTarget)->Get_Hp(), static_cast<CPlayer*>(m_pTarget)->Get_MaxHp());
+	TextOut(_DC, 852, 606, szBuff, lstrlen(szBuff));
+
+	SelectObject(_DC, hOldFont);
+	DeleteObject(hD2CodingFont);
 	SetTextColor(_DC, oldFontColor);
+
+	if (static_cast<CPlayer*>(m_pTarget)->Is_MP_Max())
+	{
+		hD2CodingFont2 = CreateFont(20, 0, 0, 0, FW_BOLD, 0, 0, 0, ANSI_CHARSET, 0, 0, 0,
+			VARIABLE_PITCH | FF_ROMAN, TEXT("Consolas"));
+		hOldFont = (HFONT)SelectObject(_DC, hD2CodingFont2);
+		oldFontColor = SetTextColor(_DC, RGB(255, 255, 0));
+		swprintf_s(szBuff, 32, L"FULL!");
+		TextOut(_DC, m_tUserMPRC.right + 8, 669, szBuff, lstrlen(szBuff));
+
+		SelectObject(_DC, hOldFont);
+		DeleteObject(hD2CodingFont2);
+		SetTextColor(_DC, oldFontColor);
+	}
+	SetBkMode(_DC, OPAQUE);
 }
 
 void CPlayerHPBar::Release()
@@ -117,18 +140,3 @@ void CPlayerHPBar::Key_Check(float _fdTime)
 {
 }
 
-
-/*
-
-HBRUSH  oldBrush;
-if (m_Target) {
-wsprintf(szBuff, L"%ls[%d] HP ", dynamic_cast<CMonster*>(m_Target)->Get_Name(), dynamic_cast<CMonster*>(m_Target)->Get_MonsterID());
-TextOut(_DC, 108, 18, szBuff, lstrlen(szBuff));
-Rectangle(_DC, m_tRect.left, m_tRect.top, m_tRect.right, m_tRect.bottom);
-
-oldBrush = (HBRUSH)SelectObject(_DC, m_EnemyHpBrush);
-int iHpRight = m_tRect.left + int(m_tInfo.iCX * m_fRate);
-Rectangle(_DC, m_tRect.left, m_tRect.top, iHpRight, m_tRect.bottom);
-SelectObject(_DC, oldBrush);
-}
-*/

@@ -166,5 +166,9 @@ void CMonster::Move_Frame()
 void CMonster::Set_Monster_State(CMonster::MONSTATE _eNewState)
 {
 	if (m_eCurState != CMonster::DEAD)
+	{
 		m_eCurState = _eNewState;
+		//if (_eNewState == CMonster::HIT)
+		//	m_iHitStateCount = 0;
+	}
 }

@@ -45,6 +45,7 @@ bool CNoMoveBullet::Initialize()
 		m_tFrame.dwFrameSpeed = 120;
 	}
 
+	m_iAtt = rand() % 11 + 30;
 	m_ePreState = m_eCurState = CBullet::END;
 	return true;
 }
@@ -57,7 +58,7 @@ int CNoMoveBullet::Update(float _fdTime)
 	if (!m_bCrevisInit)
 	{
 		CObj* pCrevis = CAbstractFactory<CUnderDeco>::Create(m_tHitInfo.fX, m_tHitInfo.fY, "Crevis");
-		CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pCrevis);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::DECO, pCrevis);
 		m_bCrevisInit = true;
 	}
 

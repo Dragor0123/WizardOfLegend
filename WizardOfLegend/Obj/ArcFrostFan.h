@@ -28,12 +28,19 @@ public:
 
 private:
 	CObj*	Create_Bullet(float _fAngle);
-
+	CObj*	Create_SigBullet(float _fAngle, bool _bMakingIce);
 private:
 	bool	m_bInitFire;
 	float	m_fAngle;
 	float	m_fBulletTick;
 	int		m_iBulletCount;
+
+	float	m_fSigCycleTick;
+	int		m_iSigCycleCount;
+	bool	m_bSigCycleTime;
+
+	static const int iBULLETMAX;
+	static const int iSIG_CYCLEMAX;
 };
 
 #endif

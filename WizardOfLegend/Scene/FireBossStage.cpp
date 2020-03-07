@@ -44,7 +44,7 @@ bool CFireBossStage::Initialize()
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
 	// 파이어 보스 삽입, HPBAR도 삽입해야한다. 그리고 이따가 이거 update쪽으로 바꾸자.
-	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 		CAbstractFactory<CFireBoss>::Create(1601.f, 968.f));
 
 	return true;
@@ -55,10 +55,10 @@ int CFireBossStage::Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Update(_fdTime);
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+	auto& rFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
 
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
-		auto& rFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();
 		CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 			CAbstractFactory<CBossHPBar>::Create(rFireBoss));
 		m_bBossHPBarInserted = true;

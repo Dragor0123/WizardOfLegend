@@ -27,10 +27,8 @@ bool CUnderDeco::Initialize()
 {
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/EarthBoss/EarthCrevis.bmp", "Crevis"))
 		return false;
-
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/CastingCircle.bmp", "CastingCircle"))
 		return false;
-
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/rot400.bmp", "rot400"))
 		return false;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/empty400.bmp", "empty400"))

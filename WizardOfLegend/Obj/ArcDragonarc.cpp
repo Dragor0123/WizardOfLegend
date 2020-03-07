@@ -25,7 +25,7 @@ bool CArcDragonarc::Initialize()
 	if (m_strFrameKey != "DragonArc")
 		m_strFrameKey = "DragonArc";
 
-	m_fCoolTLimit = 5.5f;
+	m_fCoolTLimit = 5.0f;
 	return true;
 }
 
@@ -172,8 +172,9 @@ CObj * CArcDragonarc::Create_SigBullet(bool _bClockwise, float _fAngle)
 	pBullet = CAbstractFactory<CScrewBullet>::Create(
 		m_pTarget->Get_HitInfo().fX, m_pTarget->Get_HitInfo().fY,
 		_fAngle, "DragonArc");
+	static_cast<CBullet*>(pBullet)->Set_Signiture(true);
 	static_cast<CScrewBullet*>(pBullet)->Set_Rotation_Dir(_bClockwise);
-	static_cast<CBullet*>(pBullet)->Set_Att(static_cast<CBullet*>(pBullet)->Get_Att() * 2.f);
+	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 2.f));
 	CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, pBullet);
 	return pBullet;
 }

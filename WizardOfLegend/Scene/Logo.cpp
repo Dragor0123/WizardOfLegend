@@ -37,6 +37,7 @@ bool CLogo::Initialize()
 	m_tBF.SourceConstantAlpha = 255;
 	m_tBF.AlphaFormat = AC_SRC_OVER;
 
+	//
 	m_iKeyCnt = 3;
 	return true;
 }

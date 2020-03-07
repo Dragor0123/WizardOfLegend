@@ -13,7 +13,7 @@ CCard::~CCard()
 {
 	if (m_pPriceTag)
 	{
-		CObjMgr::Get_Instance()->Delete_A_Obj(OBJID::OBSTACLE, m_pPriceTag);
+		CObjMgr::Get_Instance()->Delete_A_Obj(OBJID::DECO, m_pPriceTag);
 	}
 }
 
@@ -23,7 +23,7 @@ void CCard::Set_Price_Tag(int _iGold)
 
 	if (m_pPriceTag)
 	{
-		CObjMgr::Get_Instance()->Delete_A_Obj(OBJID::OBSTACLE, m_pPriceTag);
+		CObjMgr::Get_Instance()->Delete_A_Obj(OBJID::DECO, m_pPriceTag);
 		m_pPriceTag = nullptr;
 	}
 
@@ -41,7 +41,7 @@ void CCard::Set_Price_Tag(int _iGold)
 	}
 	m_pPriceTag = CAbstractFactory<CPriceTag>::Create(m_tInfo.fX, m_tInfo.fY + 72.f, str);
 	
-	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::DECO,
 		m_pPriceTag);
 }
 

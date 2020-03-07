@@ -2,7 +2,10 @@
 #include "EarthDrill.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "EarthLoad.h"
+#include "Player.h"
 
+const float CEarthDrill::fPLAYER_POSIN_RANGE = 100.f;
+const DWORD CEarthDrill::dwFIRE_FRAMESPEED = 100L;
 CEarthDrill::CEarthDrill()
 {
 	m_bMonsters = true;
@@ -23,14 +26,12 @@ bool CEarthDrill::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Monster/EarthBoss/empty160.bmp", "EDrill_Empty"))
 		return false;
 
-	m_fSpeed = 0.f;
+	m_fSpeed = 180.f;
 	m_tInfo.iCX = 160;
 	m_tInfo.iCY = 160;
 	Equalize_HitPosInfoPos();
 	m_tHitInfo.iCX = 126;
 	m_tHitInfo.iCY = 93;
-
-	m_iAtt = rand() % 7 + 11;
 
 	m_strFrameKey = "EarthDrill";
 
@@ -40,9 +41,15 @@ bool CEarthDrill::Initialize()
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 2;
 	m_tFrame.iFrameScene = 0;
-	m_tFrame.dwFrameSpeed = 100;
+	m_tFrame.dwFrameSpeed = dwFIRE_FRAMESPEED;
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
+
+	if (m_bMonsters)
+		m_iAtt = rand() % 8 + 10;
+	else
+		m_iAtt = rand() % 8 + 5;
+
 	return true;
 }
 
@@ -51,18 +58,17 @@ int CEarthDrill::Update(float _fdTime)
 	if (m_bDead)
 		return OBJ_DEAD;
 
-	if (!m_pTarget)
-		return OBJ_DEAD;
-
-	if (dynamic_cast<CEarthLoad*>(m_pTarget)) {
-		m_tInfo.fX = (float)(static_cast<CEarthLoad*>(m_pTarget)->Get_PosinPt().x);
-		m_tInfo.fX = (float)(static_cast<CEarthLoad*>(m_pTarget)->Get_PosinPt().y);
+	MoveAngle(_fdTime);
+	Equalize_HitPosInfoPos();
+	
+	if (m_bCollision) {
+		m_fSpeed /= 2.f;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
 	}
 
-	Equalize_HitPosInfoPos();
 	Move_Frame();
 	Scene_Change();
-	Change_HitRect();
 	Update_Rect();
 	Update_HitRect();
 	return OBJ_NOEVENT;
@@ -70,11 +76,6 @@ int CEarthDrill::Update(float _fdTime)
 
 void CEarthDrill::Late_Update(float _fdTime)
 {
-	if (m_bCollision) {
-		m_eCurState = CBullet::COLLISION;
-		m_tHitInfo.iCX = 0;
-		m_tHitInfo.iCY = 0;
-	}
 	Update_Rect();
 	Update_HitRect();
 
@@ -122,14 +123,15 @@ void CEarthDrill::Move_Frame()
 	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
 	{
 		++m_tFrame.iFrameStart;
+		Change_HitRect();
 		m_tFrame.dwFrameTime = GetTickCount();
 
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 		{
 			if (m_ePreState == CBullet::FIRE)
-				m_tFrame.iFrameStart = 0;
+				m_eCurState = CBullet::COLLISION;
 			if (m_ePreState == CBullet::COLLISION)
-				m_bDead;
+				m_bDead = true;
 		}
 	}
 }
@@ -144,7 +146,7 @@ void CEarthDrill::Scene_Change()
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 2;
 			m_tFrame.iFrameScene = 0;
-			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameSpeed = dwFIRE_FRAMESPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case CBullet::COLLISION:
@@ -166,7 +168,7 @@ int CEarthDrill::Get_Collision_Code() const
 	if (m_bMonsters)
 		return CC_MBULLET_NWALL_NPUSH;
 	else
-		return CC_MBULLET_NWALL_PUSH;
+		return CC_PBULLET_NWALL_NPUSH_NDRAG;
 }
 
 void CEarthDrill::Change_HitRect()

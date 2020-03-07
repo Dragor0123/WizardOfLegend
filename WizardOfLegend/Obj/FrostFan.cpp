@@ -3,7 +3,7 @@
 #include "../MyBitmap/BmpMgr.h"
 
 CFrostFan::CFrostFan()
-	: m_bHit(false)
+	: m_bHit(false), m_bMakingIce(true)
 {
 }
 

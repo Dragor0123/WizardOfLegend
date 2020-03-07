@@ -490,7 +490,7 @@ void CEarthLoad::Attack_Pattern(float _fdTime, float _fDis)
 				++m_iAttackCnt;
 				if (m_iAttackCnt <= m_iAttackCntLimit[m_ePattern]) {
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET,
-						Create_Bullet<CEarthDrill>((float)m_tPosin.x, (float)m_tPosin.y, "EarthDrill"));
+						Create_Bullet<CEarthDrill>((float)m_tPosin.x, (float)m_tPosin.y, "EarthDrill", nullptr));
 					m_bAttackCool = true;
 				}
 				else {

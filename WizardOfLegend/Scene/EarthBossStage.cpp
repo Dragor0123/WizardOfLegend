@@ -36,6 +36,7 @@ bool CEarthBossStage::Initialize()
 
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(1601.f, 3134.f);
+
 	// ÇÃ·¹ÀÌ¾î HPBAR, SKILLBAR, µ· UI »ðÀÔ
 	CObjMgr::Get_Instance()->Add_Object(OBJID::EARTHBSTAGE_UI,
 		CAbstractFactory<CPlayerHPBar>::Create(rPlayer));
@@ -45,7 +46,7 @@ bool CEarthBossStage::Initialize()
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
 	// ¶¥ º¸½º »ðÀÔ.
-	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 		CAbstractFactory<CEarthLoad>::Create(1601.f, 968.f));
 
 	return true;
@@ -56,10 +57,10 @@ int CEarthBossStage::Update(float _fdTime)
 	CTileMgr::Get_Instance()->Update(_fdTime);
 
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
+	auto& rEarthBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
 
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
-		auto& rEarthBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();
 		CObjMgr::Get_Instance()->Add_Object(OBJID::EARTHBSTAGE_UI,
 			CAbstractFactory<CBossHPBar>::Create(rEarthBoss));
 		m_bBossHPBarInserted = true;

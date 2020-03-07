@@ -3,11 +3,11 @@
 
 
 CBullet::CBullet()
-	: m_iAtt(1), m_fShotRange(700.f), m_bCollision(false), m_bMonsters(false)
+	: m_iAtt(1), m_fShotRange(700.f), m_bCollision(false),
+	m_bMonsters(false), m_bSignitureOn(false)
 {
 	ZeroMemory(m_tRotPoint, sizeof(m_tRotPoint));
 }
-
 
 CBullet::~CBullet()
 {

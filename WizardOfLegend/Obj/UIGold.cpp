@@ -60,8 +60,8 @@ void CUIGold::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 	HFONT hFont, hOldFont;
 	hFont = CreateFont(28, 0, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET, 0, 0, 0,
-		VARIABLE_PITCH | FF_ROMAN, TEXT("Arial"));
-	
+		VARIABLE_PITCH | FF_ROMAN, TEXT("Consolas"));
+	// Arial
 	TCHAR szBuff[16] = L"";
 	swprintf_s(szBuff, 16, L" %3d",
 		static_cast<CPlayer*>(m_pTarget)->Get_Gold());
@@ -72,6 +72,7 @@ void CUIGold::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 	SelectObject(_DC, hOldFont);
 	DeleteObject(hFont);
 	SetTextColor(_DC, oldFontColor);
+	SetBkMode(_DC, OPAQUE);
 }
 
 void CUIGold::Release()

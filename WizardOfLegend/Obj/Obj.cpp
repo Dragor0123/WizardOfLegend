@@ -100,3 +100,31 @@ void CObj::Set_Pos(float _x, float _y)
 	m_tInfo.fY = _y;
 	Equalize_HitPosInfoPos();
 }
+
+const float CObj::Get_Distance(const CObj * _rhs) const
+{	
+#ifdef _DEBUG
+	assert(_rhs);
+#endif
+
+	float fdX = 0.f, fdY = 0.f, fRadian = 0.f;
+
+	fdX = _rhs->Get_Info().fX - m_tInfo.fX;
+	fdY = _rhs->Get_Info().fY - m_tInfo.fY;
+
+	return sqrtf(fdX * fdX + fdY * fdY);
+}
+
+const float CObj::Get_Distance(CObj * _rhs) const
+{
+#ifdef _DEBUG
+	assert(_rhs);
+#endif
+
+	float fdX = 0.f, fdY = 0.f, fRadian = 0.f;
+
+	fdX = _rhs->Get_Info().fX - m_tInfo.fX;
+	fdY = _rhs->Get_Info().fY - m_tInfo.fY;
+
+	return sqrtf(fdX * fdX + fdY * fdY);
+}

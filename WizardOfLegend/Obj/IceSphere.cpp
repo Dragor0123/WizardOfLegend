@@ -32,7 +32,7 @@ bool CIceSphere::Initialize()
 	m_tHitInfo.iCY = 16;
 	m_fShotRange = 5000.f;
 	m_fSpeed = 1400.f;
-	m_iAtt = 20;
+	m_iAtt = rand() % 8 + 15;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("IceSphere");

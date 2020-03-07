@@ -22,6 +22,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{284A
 		Header\Template.h = Header\Template.h
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FmodLib", "FmodLib", "{4072CE78-C19A-4EFD-9431-D7B83569BC0D}"
+	ProjectSection(SolutionItems) = preProject
+		FmodLib\fmod.h = FmodLib\fmod.h
+		FmodLib\fmod.hpp = FmodLib\fmod.hpp
+		FmodLib\fmod_codec.h = FmodLib\fmod_codec.h
+		FmodLib\fmod_dsp.h = FmodLib\fmod_dsp.h
+		FmodLib\fmod_errors.h = FmodLib\fmod_errors.h
+		FmodLib\fmod_memoryinfo.h = FmodLib\fmod_memoryinfo.h
+		FmodLib\fmod_output.h = FmodLib\fmod_output.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

@@ -29,10 +29,13 @@ protected:
 public:
 	virtual int		Get_Collision_Code() const { return CC_MBULLET_WALL_PUSH; }
 	int				Get_Att() const { return m_iAtt; }
-	bool		Get_Collision() const { return m_bCollision; }
-	float		Get_ShotRange() const { return m_fShotRange; }
-	bool		Get_bMonsters()  const { return m_bMonsters; }
+	bool			Get_Collision() const { return m_bCollision; }
+	float			Get_ShotRange() const { return m_fShotRange; }
+	bool			Get_bMonsters() const { return m_bMonsters; }
+	bool			Is_Signiture_On() const { return m_bSignitureOn; }
 
+
+	void		Set_Signiture(bool _b) { m_bSignitureOn = _b; }
 	// _b == false -> player의 총알, _b == true -> 몬스터 총알
 	void		Set_bMonsters(bool _b) { m_bMonsters = _b; }
 	void		Set_Att(int _iAtt) { m_iAtt = _iAtt; }
@@ -47,6 +50,7 @@ protected:
 	BULLSTATE		m_ePreState;
 	BULLSTATE		m_eCurState;
 
+	bool			m_bSignitureOn;
 	bool			m_bMonsters;  // false->player의 총알, _b == true->몬스터 총알
 protected:
 	POINT		m_tRotPoint[3];

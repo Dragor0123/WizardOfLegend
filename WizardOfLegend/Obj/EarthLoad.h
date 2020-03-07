@@ -55,6 +55,15 @@ private:
 	}
 
 	template <typename T>
+	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey, CObj* _pTarget)
+	{
+		CObj* pObj = CAbstractFactory<T>::Create(_fx, _fy,
+			m_fAngle, _frameKey);
+		dynamic_cast<CBullet*>(pObj)->Set_Target(_pTarget);
+		return pObj;
+	}
+
+	template <typename T>
 	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey, float _fRange = 600.f)
 	{
 		CObj* pObj = CAbstractFactory<T>::Create(_fx, _fy,

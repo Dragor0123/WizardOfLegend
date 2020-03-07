@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef __UISKILLSET_H__
+#define __UISKILLSET_H__
+
 #include "StopObj.h"
 
 class CUISkillSet : public CStopObj
@@ -16,10 +20,16 @@ public:
 	virtual void Render(HDC _DC, float _fdTime, float _fScrollX = 0.f, float _fScrollY = 0.f) override;
 	virtual void Release() override;
 
+public:
+	void Set_CoolingArr(int _idx) { m_bCoolingArr[_idx] = true; }
+	void Clear_CoolingArr(int _idx) { m_bCoolingArr[_idx] = false; }
+
 private:
 	void Render_Skill_Sets(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY);
 
 private:
-	array<int, 6>* m_pInvenOuter;
+	array<int, 6>* m_pInvenOutter;
+	bool m_bCoolingArr[6];
 };
 
+#endif

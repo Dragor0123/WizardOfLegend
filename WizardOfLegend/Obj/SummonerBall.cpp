@@ -9,7 +9,7 @@ const DWORD CSummonerBall::ATT_FRAME_SPEED = 140;
 // IDLE -> 속도 200.f, 어택 -> 속도 1000.f
 
 CSummonerBall::CSummonerBall()
-	: m_iAtt(8), m_fMoveTime(0.f)
+	: m_fMoveTime(0.f)
 {
 	ZeroMemory(m_tRotPoint, sizeof(m_tRotPoint));
 	ZeroMemory(&m_tPosin, sizeof(m_tPosin));
@@ -118,6 +118,7 @@ int CSummonerBall::Update(float _fdTime)
 		else
 		{
 			if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd) {
+				m_iAtt = rand() % 5 + 6;
 				fDX = (float)(m_fEndX - m_tInfo.fX);
 				fDY = (float)(m_fEndY - m_tInfo.fY);
 				m_fFireDis = sqrtf(fDX * fDX + fDY * fDY);

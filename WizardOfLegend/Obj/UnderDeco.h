@@ -25,6 +25,9 @@ public:
 	void Scene_Change();
 
 public:
+	virtual int	Get_Collision_Code() const { return CC_ONLYTILE_COLLISION; }
+
+public:
 	int		Get_DrawID() const { return m_iDrawID; }
 	void	Set_DrawID(int i) { m_iDrawID = i; }
 

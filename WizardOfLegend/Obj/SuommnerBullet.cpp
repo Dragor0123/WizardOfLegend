@@ -32,7 +32,7 @@ bool CSummonerBullet::Initialize()
 
 	m_fShotRange = 650.f;
 	m_fSpeed = 575.f;
-	m_iAtt = 15;
+	m_iAtt = rand() % 10 + 10;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = string("SummonerBullet");

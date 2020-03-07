@@ -328,6 +328,18 @@
     <Filter Include="Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\00.WindFalcon">
       <UniqueIdentifier>{7e3b1d05-adc3-4890-b765-f672eceae7f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\06.EarthDrillArcana">
+      <UniqueIdentifier>{5121f5a3-ff19-4325-808e-e2c844d56df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\02.Obj\02.StopObj\06.ArcRel\07.WindFalconArcana">
+      <UniqueIdentifier>{e6572c0b-0a82-473f-a577-32a40c06d537}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\00.MainGame\Functor">
+      <UniqueIdentifier>{7694f172-ce8c-407c-a498-c5604cd5cc57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\01.Manager\12.SoundMgr">
+      <UniqueIdentifier>{ba7d61a8-6e92-4ae5-a173-eaac92c2b423}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -376,9 +388,6 @@
       <Filter>Source Files\02.Obj\01.MoveObj\01.Player</Filter>
     </ClInclude>
     <ClInclude Include="Hittable.h">
-      <Filter>Source Files\00.MainGame\abstract_class</Filter>
-    </ClInclude>
-    <ClInclude Include="Ref.h">
       <Filter>Source Files\00.MainGame\abstract_class</Filter>
     </ClInclude>
     <ClInclude Include="MyBitmap\BmpMgr.h">
@@ -627,6 +636,24 @@
     <ClInclude Include="Obj\Emoji.h">
       <Filter>Source Files\02.Obj\02.StopObj\98.Effect\02.Emoji</Filter>
     </ClInclude>
+    <ClInclude Include="Obj\ArcEarthDrill.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\06.EarthDrillArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\WindFalcon.h">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\00.WindFalcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ArcWindFalcon.h">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\07.WindFalconArcana</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj\ObjDistCmp.h">
+      <Filter>Source Files\00.MainGame\Functor</Filter>
+    </ClInclude>
+    <ClInclude Include="GetObjID.h">
+      <Filter>Source Files\05.GlobalFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\SoundMgr.h">
+      <Filter>Source Files\01.Manager\12.SoundMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WizardOfLegend.cpp">
@@ -666,9 +693,6 @@
       <Filter>Source Files\02.Obj\01.MoveObj\01.Player</Filter>
     </ClCompile>
     <ClCompile Include="Hittable.cpp">
-      <Filter>Source Files\00.MainGame\abstract_class</Filter>
-    </ClCompile>
-    <ClCompile Include="Ref.cpp">
       <Filter>Source Files\00.MainGame\abstract_class</Filter>
     </ClCompile>
     <ClCompile Include="Obj\Obj.cpp">
@@ -919,6 +943,21 @@
     </ClCompile>
     <ClCompile Include="Obj\Emoji.cpp">
       <Filter>Source Files\02.Obj\02.StopObj\98.Effect\02.Emoji</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcEarthDrill.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\06.EarthDrillArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\WindFalcon.cpp">
+      <Filter>Source Files\02.Obj\01.MoveObj\03.Bullet\02.GuideBullet\00.WindFalcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ArcWindFalcon.cpp">
+      <Filter>Source Files\02.Obj\02.StopObj\06.ArcRel\07.WindFalconArcana</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj\ObjDistCmp.cpp">
+      <Filter>Source Files\00.MainGame\Functor</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\SoundMgr.cpp">
+      <Filter>Source Files\01.Manager\12.SoundMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

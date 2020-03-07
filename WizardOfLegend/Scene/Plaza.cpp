@@ -65,17 +65,18 @@ bool CPlaza::Initialize()
 	static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
 	
 	// 장애물, 데코레이션 삽입
-	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::DECO,
 		CAbstractFactory<COverDeco>::Create(2048.f, 1688.f, "PlazaArch"));
 	
 	// NPC 삽입
-	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::DECO,
 		CAbstractFactory<COverDeco>::Create(2621.f, 1874.f, "PurpleTent"));
 	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,
 		CAbstractFactory<CSpellSeller>::Create(2723.f, 1966.f, "SpellSeller"));
-	CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::DECO,
 		CAbstractFactory<CUnderDeco>::Create(2621.f, 2100.f, "Carpet_0"));
 
+	// Plaza에 넣을거 -> NormalAttackCard, DragonArcCard, IceSphereCard
 	//// 아르카나 카드 삽입. Fbutton은 카드y의 -74.f
 	CObj* pNormalAttCard = CAbstractFactory<CArcanaCard>::Create(2448.f, 2092.f, "NormalAttackCard");
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pNormalAttCard);
@@ -95,6 +96,31 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pIceSphereFButton);
 	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
 
+	//////////////////
+	//CObj* pFireBallCard = CAbstractFactory<CArcanaCard>::Create(2718, 2092.f, "FireBallCard");
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFireBallCard);
+	//CObj* pFireBallFButton = CAbstractFactory<CFButton>::Create(2718, 2018.f, OBJID::PLAZA_UI);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFireBallFButton);
+	//dynamic_cast<CFAble*>(pFireBallCard)->Set_fButton(pFireBallFButton);
+
+	//CObj* pEarthDrillCard = CAbstractFactory<CArcanaCard>::Create(2358.f, 2092.f, "EarthDrillCard");
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pEarthDrillCard);
+	//CObj* pEarthDrillFButton = CAbstractFactory<CFButton>::Create(2358.f, 2018.f, OBJID::PLAZA_UI);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pEarthDrillFButton);
+	//dynamic_cast<CFAble*>(pEarthDrillCard)->Set_fButton(pEarthDrillFButton);
+
+	//CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(2268.f, 2092.f, "FrostFanCard");
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
+	//CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(2268.f, 2018.f, OBJID::PLAZA_UI);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFrostFanFButton);
+	//dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
+
+	//CObj* pWindFalconCard = CAbstractFactory<CArcanaCard>::Create(2178.f, 2092.f, "WindFalconCard");
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pWindFalconCard);
+	//CObj* pFalconFButton = CAbstractFactory<CFButton>::Create(2178.f, 2018.f, OBJID::PLAZA_UI);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFalconFButton);
+	//dynamic_cast<CFAble*>(pWindFalconCard)->Set_fButton(pFalconFButton);
+
 	//// 옷장 NPC 추가
 	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,
 		CAbstractFactory<CWardrobe>::Create(3350.f, 528.f));
@@ -102,7 +128,15 @@ bool CPlaza::Initialize()
 	// 몬스터 테스트.
 	//ADD_OBJECT(OBJID::MONSTER,
 	//	CAbstractFactory<CArcher>::Create(3495.f, 2269.f));
-	
+	//ADD_OBJECT(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(3300.f, 2433.f));
+	//ADD_OBJECT(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(3382.f, 1837.f));
+	//ADD_OBJECT(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(3595.f, 2079.f));
+	//ADD_OBJECT(OBJID::MONSTER,
+	//	CAbstractFactory<CArcher>::Create(3648.f, 2430.f));
+
 	return true;
 }
 

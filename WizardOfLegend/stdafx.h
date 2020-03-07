@@ -39,5 +39,10 @@
 #include <stack>
 #include <random>
 
+// Sound ฐüทร
+#include <io.h>
+#include "fmod.h"
+#pragma comment(lib, "fmodex_vc.lib")
+
 using namespace std;
 #include "Include.h"

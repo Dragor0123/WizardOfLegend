@@ -39,6 +39,8 @@ private:
 
 	virtual CObj * Create_Bullet(const string & _frameKey = "") override;
 
+	CObj* Create_DragonBullet(float _fx, float _fy, bool _bClockWise);
+
 	template <typename T>
 	CObj* Create_Bullet(float _fx, float _fy, const string& _frameKey, float _fAngle)
 	{

@@ -19,7 +19,7 @@ bool CScrewBullet::Initialize()
 	// 이 Insert_Bmp부분을 ArcanaMgr에서 다 한꺼번에 삽입 시킨다.
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/dragon_arc116.bmp", "DragonArc"))
 		return false;
-	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/rot116.bmp", "DragonArcRot"))
+	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/rot116.bmp", "rot116"))
 		return false;
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Skill/stretch116.bmp", "DArc_Stretch"))
 		return false;
@@ -134,7 +134,7 @@ void CScrewBullet::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrol
 {
 
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image(m_strFrameKey);
-	HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("DragonArcRot");
+	HDC hRotDC = CBmpMgr::Get_Instance()->Find_Image("rot116");
 	HDC hStrDC = CBmpMgr::Get_Instance()->Find_Image("DArc_Stretch");
 
 	if (m_ePreState == CBullet::COLLISION)

@@ -27,6 +27,7 @@ public:
 
 private:
 	CObj*	Create_Bullet();
+	CObj*	Create_SigBullet(float _fAngle);
 
 private:
 	bool		m_bInitFire;

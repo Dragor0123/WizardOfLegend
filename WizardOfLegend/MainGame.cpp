@@ -11,6 +11,7 @@
 #include "Manager\CtrlOwnerMgr.h"
 #include "Manager\CardMgr.h"
 #include "Manager\DigitMgr.h"
+#include "Manager\SoundMgr.h"
 
 CMainGame::CMainGame()
 	: m_hInst(NULL), m_hDC(NULL)
@@ -73,6 +74,8 @@ bool CMainGame::Initialize(HINSTANCE _hInst)
 	// 숫자 매니저 초기화
 	if (!CDigitMgr::Get_Instance()->Initialize())
 		return false;
+	
+	CSoundMgr::Get_Instance()->Initialize();
 
 	return true;
 }
@@ -91,16 +94,16 @@ void CMainGame::Logic()
 
 void CMainGame::Update(float _fdTime)
 {
-	CSceneMgr::Get_Instance()->Update(_fdTime);
 	CCardMgr::Get_Instance()->Update(_fdTime);
+	CSceneMgr::Get_Instance()->Update(_fdTime);
 }
 
 void CMainGame::Late_Update(float _fdTime)
 {
+	CCardMgr::Get_Instance()->Late_Update(_fdTime);
 	CSceneMgr::Get_Instance()->Late_Update(_fdTime);
 	CKeyMgr::Get_Instance()->Key_Update();
 	CScrollMgr::Get_Instance()->Scroll_Lock();
-	CCardMgr::Get_Instance()->Late_Update(_fdTime);
 }
 
 void CMainGame::Collision(float _fdTime)
@@ -132,6 +135,7 @@ void CMainGame::Release()
 	CDigitMgr::Destroy_Instance();
 	CBmpMgr::Destroy_Instance(); 
 	CSceneMgr::Destroy_Instance(); 
+	CSoundMgr::Destroy_Instance();
 	CTileMgr::Destroy_Instance(); 
 	CObjMgr::Destroy_Instance(); 
 	CTimer::Destroy_Instance(); 

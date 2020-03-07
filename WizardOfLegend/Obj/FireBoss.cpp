@@ -887,15 +887,10 @@ void CFireBoss::Attack_Pattern(float _fdTime, float _fDis)
 						{
 							for (int i = -1; i < 1; ++i)
 							{
-								CObj* pDragonBullet = Create_Bullet<CScrewBullet>(fPosX + i * 80, fPosY, "DragonArc",
-									m_fAngle);
-								static_cast<CBullet*>(pDragonBullet)->Set_bMonsters(true);
+								// fPosX + i * 80, fPosY
+								CObj* pDragonBullet = Create_DragonBullet(fPosX + i * 80, fPosY, false);
 								CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET, pDragonBullet);
-
-								pDragonBullet = Create_Bullet<CScrewBullet>(fPosX + i * 80, fPosY, "DragonArc",
-									m_fAngle);
-								static_cast<CBullet*>(pDragonBullet)->Set_bMonsters(true);
-								static_cast<CScrewBullet*>(pDragonBullet)->Set_Rotation_Dir(true);
+								pDragonBullet = Create_DragonBullet(fPosX + i * 80, fPosY, true);
 								CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET, pDragonBullet);
 							}
 						}
@@ -1005,6 +1000,20 @@ void CFireBoss::Attack_Pattern(float _fdTime, float _fDis)
 			
 		}
 	}
+}
+
+CObj * CFireBoss::Create_DragonBullet(float _fx, float _fy, bool _bClockWise)
+{
+	CObj* pDragonBullet = new CScrewBullet;
+	pDragonBullet->Set_Pos(_fx, _fy);
+	pDragonBullet->Set_FrameKey("DragonArc");
+	pDragonBullet->Set_Angle(m_fAngle);
+	pDragonBullet->Set_Target(m_pTarget);
+	static_cast<CBullet*>(pDragonBullet)->Set_bMonsters(true);
+	static_cast<CScrewBullet*>(pDragonBullet)->Set_Rotation_Dir(_bClockWise);
+	pDragonBullet->Initialize();
+
+	return pDragonBullet;
 }
 
 //if (m_iPatternCnt >= tempnum)

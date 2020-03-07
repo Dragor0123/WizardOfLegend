@@ -10,6 +10,7 @@
 #include "ArcRel.h"
 #include "../Manager/SceneMgr.h"
 #include "FButton.h"
+#include "../GetObjID.h"
 
 CInventory::CInventory()
 	: ROWSIZE(2), COLSIZE(6),
@@ -332,6 +333,21 @@ void CInventory::Release()
 {
 }
 
+int CInventory::Find_Code_In_Outter(int _code) const
+{
+	if (_code < 0 || _code >= 100)
+	{
+		return -1;
+	}
+
+	for (size_t i = 0; i < m_aOutterArray.size(); ++i)
+	{
+		if (m_aOutterArray[i] == _code)
+			return (int)i;
+	}
+	return -1;
+}
+
 bool CInventory::Is_Outter_Empty()
 {
 	bool bRes = true;
@@ -440,25 +456,7 @@ void CInventory::Drop_Item()
 			CObj* pPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 			float fX = pPlayer->Get_PosX();
 			float fY = pPlayer->Get_Rect().top + 55.f;
-			OBJID::ID eID;
-			switch (CSceneMgr::Get_Instance()->Get_Scene_ID())
-			{
-			case CSceneMgr::SCENE_PLAZA:
-				eID = OBJID::PLAZA_UI;
-				break;
-			case CSceneMgr::SCENE_STAGE1:
-				eID = OBJID::STAGE1_UI;
-				break;
-			case CSceneMgr::SCENE_EARTHBOSS:
-				eID = OBJID::EARTHBSTAGE_UI;
-				break;
-			case CSceneMgr::SCENE_FIREBOSS:
-				eID = OBJID::FIREBSTAGE_UI;
-				break;
-			default:
-				eID = OBJID::END;
-				break;
-			}
+			OBJID::ID eID = Get_Obj_ID();
 
 			CArcRel* pArcRel = CCardMgr::Get_Instance()->Find_ArcRel(_code);
 			if (pArcRel && eID != OBJID::END)

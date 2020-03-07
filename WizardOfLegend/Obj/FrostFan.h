@@ -21,12 +21,15 @@ public:
 public:
 	virtual int	Get_Collision_Code() const;
 	bool Get_bHit() const { return m_bHit; }
+	bool Is_Making_Ice() const { return m_bMakingIce; }
 
+	void Set_bMaking_Ice(bool _b) { m_bMakingIce = _b; }
 	void Set_bHit(bool _b) { m_bHit = _b; }
 protected:
 	virtual void  Change_HitRect();
 
 private:
+	bool		m_bMakingIce;
 	bool		m_bHit;	//몬스터를 딱 한번만 때림. 몬스터랑 충돌은 나도 그냥 지나만 갑니다.
 
 };

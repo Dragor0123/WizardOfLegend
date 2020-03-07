@@ -41,13 +41,15 @@ bool CGuideLBullet::Initialize()
 
 		m_tHitInfo.iCX = 80;
 		m_tHitInfo.iCY = 36;
-		m_fSpeed = 450.f;
+		m_fSpeed = 530.f;
+		m_iAtt = rand() % 10 + 16;
 		m_ePreState = m_eCurState = CBullet::END;
 	}
 
 	//m_ePreState = CBullet::END;
 	//m_eCurState = CBullet::FIRE;
 	// m_ePreState = m_eCurState = CBullet::END;
+
 	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 	return true;
 }
@@ -123,6 +125,7 @@ void CGuideLBullet::Late_Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
+
 	float	fDis = sqrtf(float((m_tInfo.iCX >> 1) * (m_tInfo.iCX >> 1) + (m_tInfo.iCY >> 1) * (m_tInfo.iCY >> 1)));
 	m_tRotPoint[0].x = LONG((m_tInfo.iCX >> 1) + (cosf((m_fAngle + 135.f) * PI / 180.f) * fDis));
 	m_tRotPoint[0].y = LONG((m_tInfo.iCY >> 1) - (sinf((m_fAngle + 135.f) * PI / 180.f) * fDis));

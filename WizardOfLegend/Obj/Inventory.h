@@ -26,8 +26,10 @@ public:
 	// Save()
 	// Load()
 
-	int  Get_OutterArr_Code(int _idx) const { if (_idx >= 0 && (size_t)_idx < m_aOutterArray.size()) return m_aOutterArray[_idx]; else return -1; }
-	int  Get_InnerArr_Code(int _idx) const { if (_idx >= 0 && (size_t)_idx < m_aInnerArray.size()) return m_aInnerArray[_idx]; else return -1; };
+	// Get idx in Outter Arr whose code is _code
+	int Find_Code_In_Outter(int _code) const;
+	int Get_OutterArr_Code(int _idx) const { if (_idx >= 0 && (size_t)_idx < m_aOutterArray.size()) return m_aOutterArray[_idx]; else return -1; }
+	int Get_InnerArr_Code(int _idx) const { if (_idx >= 0 && (size_t)_idx < m_aInnerArray.size()) return m_aInnerArray[_idx]; else return -1; };
 	bool Is_Outter_Empty();
 	bool Is_Outter_Full();
 	bool Is_Inner_Empty();

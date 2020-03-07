@@ -4,14 +4,14 @@
 #include "ObjMgr.h"
 #include "Player.h"
 
-// Set_Skill_Code(-1);
-
+// Set_Skill_Code(5);
+const int CArcFrostFan::iBULLETMAX = 5;
+const int CArcFrostFan::iSIG_CYCLEMAX = 3;
 CArcFrostFan::CArcFrostFan()
-	:m_iBulletCount(5), m_fBulletTick(0.f), m_bInitFire(false),
-	m_fAngle(0.f)
+	:m_iBulletCount(iBULLETMAX), m_fBulletTick(0.f), m_bInitFire(false),
+	m_fAngle(0.f), m_fSigCycleTick(0.f), m_iSigCycleCount(iSIG_CYCLEMAX), m_bSigCycleTime(false)
 {
 }
-
 
 CArcFrostFan::~CArcFrostFan()
 {
@@ -25,7 +25,7 @@ bool CArcFrostFan::Initialize()
 	if (m_strFrameKey != "FrostFan")
 		m_strFrameKey = "FrostFan";
 
-	m_fCoolTLimit = 4.0f;
+	m_fCoolTLimit = 3.6f;
 	return true;
 }
 
@@ -36,20 +36,77 @@ int CArcFrostFan::Update(float _fdTime)
 
 	if (m_bInitFire)
 	{
-		m_fBulletTick += _fdTime;
-		if (m_fBulletTick >= 0.0125f)
+		if (!m_bSigniture)
 		{
-			m_fBulletTick = 0.f;
-			Create_Bullet(m_fAngle + m_iBulletCount * 8.f - 15.f);
-			--m_iBulletCount;
-			if (m_iBulletCount <= 0)
+			m_fBulletTick += _fdTime;
+			if (m_fBulletTick >= 0.0125f)
 			{
-				m_bCool = true;
-				m_bInitFire = false;
-				m_iBulletCount = 5;
+				m_fBulletTick = 0.f;
+				Create_Bullet(m_fAngle + m_iBulletCount * 8.f - 15.f);
+				--m_iBulletCount;
+				if (m_iBulletCount <= 0)
+				{
+					m_bCool = true;
+					m_bInitFire = false;
+					static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
+					m_iBulletCount = iBULLETMAX;
+				}
 			}
 		}
-	}
+		else
+		{
+			m_fSigEffectTime += _fdTime;
+
+			if (m_fSigEffectTime > m_fSigEffectTLimit)
+			{
+				if (true == static_cast<CPlayer*>(m_pTarget)->Get_Signiture())
+					static_cast<CPlayer*>(m_pTarget)->Set_Signiture(false);
+				
+				if (m_bSigCycleTime)
+					m_fSigCycleTick += _fdTime;
+
+				if (m_fSigCycleTick > 0.2f)
+				{
+					m_bSigCycleTime = false;
+					m_fSigCycleTick = 0.f;
+				}
+
+				if (!m_bSigCycleTime)
+				{
+					m_fBulletTick += _fdTime;
+					if (m_fBulletTick >= 0.0125f)
+					{
+						m_fBulletTick = 0.f;
+						if (m_iSigCycleCount > 1)
+							Create_SigBullet(m_fAngle + m_iBulletCount * 8.f - 15.f, false);
+						else
+							Create_SigBullet(m_fAngle + m_iBulletCount * 8.f - 15.f, true);
+
+						--m_iBulletCount;
+						if (m_iBulletCount <= 0)
+						{
+							m_bSigCycleTime = true;
+							m_iBulletCount = iBULLETMAX;
+							--m_iSigCycleCount;
+							if (m_iSigCycleCount <= 0)
+							{
+								m_bCool = true;
+								m_bInitFire = false;
+								m_bSigniture = false;
+								m_fSigEffectTime = 0.f;
+								static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
+								m_iBulletCount = iBULLETMAX;
+
+								m_fSigCycleTick = 0.f;
+								m_bSigCycleTime = false;
+								m_iSigCycleCount = iSIG_CYCLEMAX;
+							}
+						}
+					}
+				}
+			}
+		}
+	} //	if (m_bInitFire)
 
 	if (m_bCool)
 	{
@@ -92,8 +149,21 @@ void CArcFrostFan::Fire_Skill()
 				m_pTarget->Set_FrameKey("Player_Down");
 			}
 			m_bInitFire = true;
+			if (static_cast<CPlayer*>(m_pTarget)->Is_MP_Max())
+			{
+				m_bSigniture = true;
+				static_cast<CPlayer*>(m_pTarget)->Set_Signiture(true);
+				static_cast<CPlayer*>(m_pTarget)->Init_Effect_Line();
+				static_cast<CPlayer*>(m_pTarget)->Set_MP_Zero();
+				// 스킬코드를 따로 주던지...
+				static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(1000 + 5);
+				m_iBulletCount = iBULLETMAX;
+			}
+			else
+			{
+				static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(5);
+			}
 			static_cast<CPlayer*>(m_pTarget)->Set_PlayerState(CPlayer::ATTACK);
-			static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);
 		}
 	}
 }
@@ -110,6 +180,20 @@ CObj * CArcFrostFan::Create_Bullet(float _fAngle)
 	return pBullet;
 }
 
+CObj * CArcFrostFan::Create_SigBullet(float _fAngle, bool _bMakingIce)
+{
+	CObj* pBullet = nullptr;
+	pBullet = CAbstractFactory<CFrostFan>::Create(
+		m_pTarget->Get_PosX(), m_pTarget->Get_PosY(), _fAngle, "FrostFan");
+
+	static_cast<CBullet*>(pBullet)->Set_Signiture(true);
+	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 1.5f));
+	static_cast<CFrostFan*>(pBullet)->Set_bMaking_Ice(_bMakingIce);
+	if (pBullet)
+		CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, pBullet);
+
+	return pBullet;
+}
 
 void CArcFrostFan::Key_Up_Action()
 {

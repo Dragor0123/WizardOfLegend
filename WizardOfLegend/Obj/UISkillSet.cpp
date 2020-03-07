@@ -2,13 +2,14 @@
 #include "UISkillSet.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "ObjMgr.h"
-#include "Inventory.h"
 #include "../Manager/CardMgr.h"
+#include "Inventory.h"
+#include "ArcRel.h"
 
 CUISkillSet::CUISkillSet()
 {
+	ZeroMemory(m_bCoolingArr, sizeof(m_bCoolingArr));
 }
-
 
 CUISkillSet::~CUISkillSet()
 {
@@ -24,7 +25,7 @@ bool CUISkillSet::Initialize()
 		return false;
 	
 	CObj* pInventory = CObjMgr::Get_Instance()->Get_listObj(OBJID::INVENTORY).front();
-	m_pInvenOuter = &static_cast<CInventory*>(pInventory)->m_aOutterArray;
+	m_pInvenOutter = &static_cast<CInventory*>(pInventory)->m_aOutterArray;
 
 	m_tInfo.iCX = 411;
 	m_tInfo.iCY = 81;
@@ -47,6 +48,7 @@ int CUISkillSet::Update(float _fdTime)
 
 void CUISkillSet::Late_Update(float _fdTime)
 {
+
 }
 
 void CUISkillSet::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
@@ -73,11 +75,19 @@ void CUISkillSet::Release()
 void CUISkillSet::Render_Skill_Sets(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
 	HDC hMemDC_35;
-	for (size_t i = 0; i < m_pInvenOuter->size(); ++i)
+	HFONT hMyFont, hOldFont;
+	COLORREF oldFontColor = NULL;
+	TCHAR szBuff[16] = L"";
+
+	hMyFont = CreateFont(20, 0, 0, 0, FW_SEMIBOLD, 0, 0, 0, ANSI_CHARSET, 0, 0, 0,
+		VARIABLE_PITCH | FF_ROMAN, TEXT("Consolas"));
+
+	for (size_t i = 0; i < m_pInvenOutter->size(); ++i)
 	{
-		if ((*m_pInvenOuter)[i] != -1)
+		int _iCardCode = (*m_pInvenOutter)[i];
+		if (_iCardCode != -1)
 		{
-			hMemDC_35 = CCardMgr::Get_Instance()->Find_Image35((*m_pInvenOuter)[i]);
+			hMemDC_35 = CCardMgr::Get_Instance()->Find_Image35(_iCardCode);
 			float fX = float(m_tRect.left + 22.f + i * 60.f);
 			float fY = m_tRect.top + 52.f;
 
@@ -88,8 +98,26 @@ void CUISkillSet::Render_Skill_Sets(HDC _DC, float _fdTime, float _fScrollX, flo
 				0, 0,
 				35, 35,
 				MAGENTA_COLOR);
+
+			hOldFont = (HFONT)SelectObject(_DC, hMyFont);
+			oldFontColor = SetTextColor(_DC, RGB(255, 255, 255));
+			SetBkMode(_DC, TRANSPARENT);
+			if (true == m_bCoolingArr[i])
+			{
+				CArcRel* pArc = CCardMgr::Get_Instance()->Find_ArcRel(_iCardCode);
+				swprintf_s(szBuff, 16, L"%.1f", pArc->Get_Remained_Cool());
+				TextOut(_DC, 
+					(int)(fX - 15.f),
+					(int)(fY + 19.f), 
+					szBuff, lstrlen(szBuff));
+			}
 		}
 	}
+
+	SelectObject(_DC, hOldFont);
+	DeleteObject(hMyFont);
+	SetTextColor(_DC, oldFontColor);
+	SetBkMode(_DC, OPAQUE);
 }
 
 void CUISkillSet::Key_Check(float _fdTime)

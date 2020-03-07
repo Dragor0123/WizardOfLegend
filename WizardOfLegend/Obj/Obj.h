@@ -38,6 +38,9 @@ public:
 	void Set_Dead() { m_bDead = true; }
 	void Set_Target(CObj* _pTarget) { m_pTarget = _pTarget; }
 
+	const float Get_Distance(const CObj* _rhs) const;
+	const float Get_Distance(CObj* _rhs) const;
+
 public:
 	virtual bool Initialize() = 0;
 	virtual void Key_Check(float _fdTime) = 0;
@@ -56,6 +59,7 @@ protected:
 	void Equalize_HitSzInfoSz() { m_tHitInfo.iCX = m_tInfo.iCX; m_tHitInfo.iCY = m_tInfo.iCY; }
 	void Draw_HitBox(HDC _DC, float _fScrollX = 0.f, float _fScrollY = 0.f);
 	void Draw_HitCircle(HDC _DC, float _fScrollX = 0.f, float _fScrollY = 0.f);
+
 protected:
 	GROUPID::ID		m_eRenderGroupID;
 	OBJID::ID		m_eID;

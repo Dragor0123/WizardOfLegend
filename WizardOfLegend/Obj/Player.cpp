@@ -9,6 +9,7 @@
 #include "Inventory.h"
 #include "ArcRel.h"
 // 아래 헤더 지워 줄것
+#include "WindFalcon.h"
 
 namespace PLAYER_Space
 {
@@ -281,8 +282,6 @@ void CPlayer::Key_Check(float _fdTime)
 		Reset_Hp();
 	}
 
-
-
 	Skill_Button_KeyCheck(VK_LBUTTON);
 	Skill_Button_KeyCheck(VK_RBUTTON);
 	Skill_Button_KeyCheck('Q');
@@ -403,8 +402,13 @@ void CPlayer::Move_Frame()
 				m_tFrame.iFrameStart = 0;
 			}
 			else
-			{
-				if (0 > m_iSkillCode)
+			{	
+				if (-2 == m_iSkillCode)
+				{
+					if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd - 1)
+						m_eCurState = STATE::IDLE;
+				}
+				if (-1 == m_iSkillCode)
 				{
 					if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 						m_eCurState = STATE::IDLE;
@@ -413,6 +417,11 @@ void CPlayer::Move_Frame()
 				{
 					if (m_tFrame.iFrameStart >= m_tFrame.iFrameEnd)
 						m_tFrame.iFrameStart = m_tFrame.iFrameEnd - 1;
+				}
+				if (5 == m_iSkillCode)
+				{
+					if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+						m_tFrame.iFrameStart = 0;
 				}
 				if (6 == m_iSkillCode)
 				{
@@ -434,8 +443,12 @@ void CPlayer::Move_Frame()
 						}
 					}
 				}
+				if (7 == m_iSkillCode)
+				{
+					m_tFrame.iFrameStart = 1;
+				}
 
-				if (1000 < m_iSkillCode)
+				if (999 <= m_iSkillCode)
 				{
 					if (m_bSigniture)
 					{

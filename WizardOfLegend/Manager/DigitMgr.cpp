@@ -35,7 +35,7 @@ void CDigitMgr::Make_Hit_Digit(int _number, CObj * _pObj, DIGIT::COLOR _eCol)
 		m_stackDigit.swap(stack<int>());
 
 	int iWOffset = Digit_space::iDIG_WIDTH;
-	int iHOffset = Digit_space::iDIG_WIDTH + 10;
+	int iHOffset = Digit_space::iDIG_WIDTH + 16;
 
 	float fX = _pObj->Get_PosX() - Digit_space::iDIG_WIDTH;
 	float fY = _pObj->Get_PosY() - (_pObj->Get_HitInfo().iCY >> 1);
