@@ -3,6 +3,7 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "UnderDeco.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 using namespace Meteor_Space;
 
@@ -64,6 +65,8 @@ int CMeteor::Update(float _fdTime)
 		dynamic_cast<CUnderDeco*>(m_pCastingCircle)->Set_DrawID(1);
 		m_pCastingCircle->Set_Target(this);
 		CObjMgr::Get_Instance()->Add_Object(OBJID::UNDERDECO, m_pCastingCircle);
+		STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+		PLAY_SOUND(L"MeteorFire.wav", CSoundMgr::MONSTER_EFFECT);
 		m_bCircleInit = true;
 	}
 	
@@ -198,6 +201,8 @@ void CMeteor::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = METEOR_FIRE_FRAMESPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			//STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			//PLAY_SOUND(L"MeteorFire.wav", CSoundMgr::MONSTER_EFFECT);
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;
@@ -205,6 +210,8 @@ void CMeteor::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameSpeed = METEOR_COLLISION_FRAMESPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			PLAY_SOUND(L"FireSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
 			break;
 		default:
 			break;

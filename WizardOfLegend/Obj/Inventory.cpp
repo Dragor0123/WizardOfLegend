@@ -541,6 +541,7 @@ void CInventory::Render_Inventory_Items(HDC _DC, float _fdTime, float _fScrollX,
 			hMemDC_35 = CCardMgr::Get_Instance()->Find_Image35(m_aOutterArray[i]);
 			float fX = m_tOutterFirstPOS.fX + i * fXOuterGap;
 			float fY = m_tOutterFirstPOS.fY;
+
 			fX += _fScrollX;
 			fY += _fScrollY;
 			GdiTransparentBlt(_DC,

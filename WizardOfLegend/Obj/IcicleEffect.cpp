@@ -4,6 +4,7 @@
 #include "../Hittable.h"
 #include "Player.h"
 #include "Monster.h"
+#include "../Manager/SoundMgr.h"
 
 const float CIcicleEffect::m_fLifeTLimit = 3.6f;
 CIcicleEffect::CIcicleEffect()
@@ -42,8 +43,11 @@ bool CIcicleEffect::Initialize()
 int CIcicleEffect::Update(float _fdTime)
 {
 	if (m_bDead)
+	{
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"IceBreak.wav", CSoundMgr::EFFECT);
 		return OBJ_DEAD;
-	
+	}
 	m_fLifeTime += _fdTime;
 	Update_Rect();
 

@@ -645,6 +645,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 											static_cast<CIceSphere*>(dstObj)->Set_bMonsterWall(true);
 											CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
 												CAbstractFactory<CIcicleEffect>::Create(srcObj));
+											static_cast<CBullet*>(dstObj)->Set_Collision(true);
 										}
 
 										if (Collision_Obj_Obstacle(srcObj, &fX, &fY))
@@ -652,6 +653,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 											static_cast<CIceSphere*>(dstObj)->Set_bMonsterWall(true);
 											CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
 												CAbstractFactory<CIcicleEffect>::Create(srcObj));
+											static_cast<CBullet*>(dstObj)->Set_Collision(true);
 										}
 									}
 								}

@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "Prison.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CPrison::CPrison()
 {
@@ -41,6 +42,7 @@ bool CPrison::Initialize()
 	Update_Rect();
 	Update_HitRect();
 
+	PLAY_SOUND(L"PRISON_START.wav", CSoundMgr::DECO_EFFECT);
 	return true;
 }
 
@@ -75,6 +77,8 @@ void CPrison::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 void CPrison::Release()
 {
+	STOP_SOUND(CSoundMgr::DECO_EFFECT);
+	PLAY_SOUND(L"PRISON_END.wav", CSoundMgr::DECO_EFFECT);
 }
 
 void CPrison::Key_Check(float _fdTime)

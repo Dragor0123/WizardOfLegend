@@ -2,6 +2,7 @@
 #include "Swordman.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 using namespace Monster_space;
 
@@ -24,7 +25,7 @@ bool CSwordman::Initialize()
 	m_tHitInfo.iCX = 92;
 	m_tHitInfo.iCY = 136;
 	
-	m_iMaxHp = 300;
+	m_iMaxHp = 350;
 	m_iHp = m_iMaxHp;
 	m_eAttDir = CMeeleBullet::END;
 	
@@ -123,12 +124,14 @@ int CSwordman::Update(float _fdTime)
 		if (fRealDX >= fRealDY && floor(fDis) > 128.f)
 		{
 			MoveAngle(_fdTime);
+			PLAY_SOUND(L"SWORDMAN_RUN.wav", CSoundMgr::MONSTER);
 			m_eCurState = WALK;
 			m_tFrame.iFrameEnd = 5;
 		}
 		else if (fRealDX < fRealDY && floor(fDis) > 128.f)
 		{
 			MoveAngle(_fdTime);
+			PLAY_SOUND(L"SWORDMAN_RUN.wav", CSoundMgr::MONSTER);
 			m_eCurState = WALK;
 			m_tFrame.iFrameEnd = 5;
 		}
@@ -141,6 +144,8 @@ int CSwordman::Update(float _fdTime)
 				m_tFrame.iFrameEnd = 2;
 				if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 				{
+					STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+					PLAY_SOUND(L"SWORDMAN_ATTACK.wav", CSoundMgr::MONSTER_EFFECT);
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET, Create_Bullet("SwordmanAtt"));
 					m_bAttackCool = true;
 				}

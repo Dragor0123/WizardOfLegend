@@ -191,6 +191,9 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 				static_cast<CPlayer*>(pPlayer)->Sub_Gold(this->m_iPriceAsGold);
 				// m_pTarget의 표정 만들어주기.
 				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_YES);
+				STOP_SOUND(CSoundMgr::UI);
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"Correct_Sound.wav", CSoundMgr::UI);
 				PLAY_SOUND(L"Get_Skill.wav", CSoundMgr::EFFECT);
 				m_bDead = true;
 			}
@@ -198,6 +201,7 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 			{
 				// 인벤토리가 가득 찼습니다!
 				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+				STOP_SOUND(CSoundMgr::EFFECT);
 				PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 			}
 		}
@@ -205,6 +209,7 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 		{
 			// 금액이 모자랍니다! m_pTarget 표정 만들기
 			static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+			STOP_SOUND(CSoundMgr::EFFECT);
 			PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 		}
 	}
@@ -219,12 +224,16 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 			bool bSuccess = false;
 			CArcRel* pArcRel = Create_ArcanaRelic(bInsertCondition);
 			bSuccess = CCardMgr::Get_Instance()->Insert_CodeArcana(m_iCardCode, pArcRel);
+			STOP_SOUND(CSoundMgr::UI);
+			STOP_SOUND(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"Correct_Sound.wav", CSoundMgr::UI);
 			PLAY_SOUND(L"Get_Skill.wav", CSoundMgr::EFFECT);
 			m_bDead = true;
 		}
 		else
 		{
 			// 인벤토리가 가득 찼습니다!
+			STOP_SOUND(CSoundMgr::EFFECT);
 			PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 		}
 	}

@@ -2,6 +2,7 @@
 #include "FireKick.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "FireBoss.h"
+#include "../Manager/SoundMgr.h"
 
 CFireKick::CFireKick()
 	: m_fDeadTime(0.f)
@@ -133,6 +134,8 @@ void CFireKick::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			PLAY_SOUND(L"FireKick.wav", CSoundMgr::MONSTER_EFFECT);
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;

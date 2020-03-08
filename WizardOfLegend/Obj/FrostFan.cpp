@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "FrostFan.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CFrostFan::CFrostFan()
 	: m_bHit(false), m_bMakingIce(true)
@@ -59,6 +60,8 @@ void CFrostFan::Late_Update(float _fdTime)
 		m_bDead = true;
 		m_tHitInfo.iCX = 0;
 		m_tHitInfo.iCY = 0;
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"IceSkillEnd.wav", CSoundMgr::EFFECT);
 	}
 
 	float fdX = 0.f, fdY = 0.f;
@@ -133,7 +136,31 @@ void CFrostFan::Move_Frame()
 
 void CFrostFan::Scene_Change()
 {
-	CLineBullet::Scene_Change();
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case CBullet::FIRE:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"IceSkillStart.wav", CSoundMgr::EFFECT);
+			break;
+		case CBullet::COLLISION:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameTime = GetTickCount();
+			break;
+		default:
+			break;
+		}
+		m_ePreState = m_eCurState;
+	}
 }
 
 int CFrostFan::Get_Collision_Code() const

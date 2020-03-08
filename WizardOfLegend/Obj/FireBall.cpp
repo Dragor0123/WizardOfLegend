@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "FireBall.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CFireBall::CFireBall()
 	: m_fRisingTime(0.f), m_fRisingLimit(.76f)
@@ -171,6 +172,16 @@ void CFireBall::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			if (m_bMonsters)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"FireBallStart.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else
+			{
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"FireBallStart.wav", CSoundMgr::EFFECT);
+			}
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;
@@ -178,6 +189,16 @@ void CFireBall::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			if (m_bMonsters)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"FireSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else
+			{
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"FireSkillEnd.wav", CSoundMgr::EFFECT);
+			}
 			break;
 		default:
 			break;

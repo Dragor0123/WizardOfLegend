@@ -3,6 +3,7 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "EarthLoad.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 const float CEarthDrill::fPLAYER_POSIN_RANGE = 100.f;
 const DWORD CEarthDrill::dwFIRE_FRAMESPEED = 100L;
@@ -148,6 +149,16 @@ void CEarthDrill::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = dwFIRE_FRAMESPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			if (m_bMonsters)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"EarthDrill.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else
+			{
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"EarthDrill.wav", CSoundMgr::EFFECT);
+			}
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;

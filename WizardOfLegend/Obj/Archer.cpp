@@ -29,7 +29,7 @@ bool CArcher::Initialize()
 	m_fSpeed = 330.f;
 	
 	// 체력 및 기본 전투 스탯 초기화
-	m_iMaxHp = 270;
+	m_iMaxHp = 300;
 	m_iHp = m_iMaxHp;
 
 	// 공격 주기 구하기
@@ -102,6 +102,7 @@ int CArcher::Update(float _fdTime)
 		if (fDis > 720.f)
 		{
 			MoveAngle(_fdTime);
+			PLAY_SOUND(L"SWORDMAN_RUN.wav", CSoundMgr::MONSTER);
 			m_eCurState = WALK;
 			m_tFrame.iFrameEnd = 4;
 		}

@@ -3,6 +3,7 @@
 #include "GaiaShield.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 CArcGaia::CArcGaia()
 {
@@ -63,6 +64,8 @@ void CArcGaia::Fire_Skill()
 
 	if (!m_bCool)
 	{
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"GAIA_ARMOR_START.wav", CSoundMgr::EFFECT);
 		for (int i = 0; i < 12; ++i)
 		{
 			Create_Shield((float)i * 30.f);

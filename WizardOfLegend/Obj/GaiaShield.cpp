@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "GaiaShield.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CGaiaShield::CGaiaShield()
 {
@@ -55,6 +56,12 @@ int CGaiaShield::Update(float _fdTime)
 void CGaiaShield::Late_Update(float _fdTime)
 {
 	CShield::Late_Update(_fdTime);
+	if (true == m_bDead)
+	{
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"GAIA_ARMOR_END.wav", CSoundMgr::EFFECT);
+	}
+
 	Update_Rect();
 	Update_HitRect();
 }

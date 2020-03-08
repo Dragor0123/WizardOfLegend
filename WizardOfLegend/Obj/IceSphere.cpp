@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "IceSphere.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CIceSphere::CIceSphere()
 	:m_bFireStart(false), m_bMonsterAtWall(false)
@@ -178,7 +179,33 @@ void CIceSphere::Move_Frame()
 
 void CIceSphere::Scene_Change()
 {
-	CLineBullet::Scene_Change();
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{
+		case CBullet::FIRE:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"IceSkillStart.wav", CSoundMgr::EFFECT);
+			break;
+		case CBullet::COLLISION:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 0;
+			m_tFrame.iFrameScene = 0;
+			m_tFrame.dwFrameSpeed = 100;
+			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"IceSkillEnd.wav", CSoundMgr::EFFECT);
+			break;
+		default:
+			break;
+		}
+		m_ePreState = m_eCurState;
+	}
 }
 
 int CIceSphere::Get_Collision_Code() const

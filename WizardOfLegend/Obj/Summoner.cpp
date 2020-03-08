@@ -4,6 +4,7 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "SuommnerBullet.h"
 #include "SummonCard.h"
+#include "../Manager/SoundMgr.h"
 
 using namespace Monster_space;
 
@@ -33,9 +34,9 @@ bool CSummoner::Initialize()
 	m_tHitInfo.iCY = 128;
 
 	// m_fSpeed
-	m_iMaxHp = 300;
+	m_iMaxHp = 350;
 	m_iHp = m_iMaxHp;
-	m_fBulletTick = 0.f;
+	m_fBulletTick = 0.1125f;
 	m_iBulletCount = 4;
 	m_bBulletTickFlag = false;
 	m_iPattern = 0;
@@ -99,6 +100,7 @@ int CSummoner::Update(float _fdTime)
 		if (fDis > 600.f)
 		{
 			MoveAngle(_fdTime);
+			PLAY_SOUND(L"SWORDMAN_RUN.wav", CSoundMgr::MONSTER);
 			m_eCurState = WALK;
 			m_tFrame.iFrameEnd = 4;
 		}
@@ -373,6 +375,8 @@ CObj * CSummoner::Create_Bullet(const string & _frameKey)
 {
 	CObj* pObj = CAbstractFactory<CSummonerBullet>::Create(
 		m_tHitInfo.fX, m_tHitInfo.fY, m_fAngle, _frameKey);
+	STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+	PLAY_SOUND(L"BALL_ATTACK.wav", CSoundMgr::MONSTER_EFFECT);
 	return pObj;
 }
 
@@ -380,5 +384,7 @@ CObj * CSummoner::Create_Bullet(float _fAngle, const string & _frameKey)
 {
 	CObj* pObj = CAbstractFactory<CSummonerBullet>::Create(
 		m_tHitInfo.fX, m_tHitInfo.fY, _fAngle, _frameKey);
+	STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+	PLAY_SOUND(L"BALL_ATTACK.wav", CSoundMgr::MONSTER_EFFECT);
 	return pObj;
 }

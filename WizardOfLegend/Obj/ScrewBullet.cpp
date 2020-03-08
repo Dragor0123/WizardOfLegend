@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "ScrewBullet.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CScrewBullet::CScrewBullet()
 	: m_fRotAngle(0.f), m_fRotDis(0.f), m_fRotSpeed(0.f)
@@ -223,6 +224,16 @@ void CScrewBullet::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			if (m_bMonsters)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"FireArcStart.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else
+			{
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"FireArcStart.wav", CSoundMgr::EFFECT);
+			}
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;
@@ -230,6 +241,16 @@ void CScrewBullet::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			if (m_bMonsters)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"FireSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else
+			{
+				STOP_SOUND(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"FireSkillEnd.wav", CSoundMgr::EFFECT);
+			}
 			break;
 		default:
 			break;

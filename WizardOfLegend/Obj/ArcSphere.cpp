@@ -3,6 +3,7 @@
 #include "IceSphere.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 // Set_Skill_Code(3);, Set_Skill_Code(-1);
 
@@ -96,6 +97,8 @@ void CArcSphere::Key_Up_Action()
 		!static_cast<CIceSphere*>(m_pLastMadeBullet)->Get_bFireStart())
 	{
 		static_cast<CIceSphere*>(m_pLastMadeBullet)->Set_FireStartOn();
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"IceSphereShoot.wav", CSoundMgr::EFFECT);
 		m_bShot = false;
 		m_bCool = true;
 		static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1);

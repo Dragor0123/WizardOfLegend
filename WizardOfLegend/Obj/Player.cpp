@@ -320,6 +320,7 @@ void CPlayer::Key_Check(float _fdTime)
 		pt.y -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollY());
 		CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
 			CAbstractFactory<CSummonCard>::Create(pt.x, pt.y, "ARCHER_SCARD"));
+		// ARCHER_SCARD
 		// SWORDMAN_SCARD
 		// SUMMONERBALL_SCARD
 		// SUMMONER_SCARD
@@ -410,6 +411,14 @@ void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 		Draw_HitBox(_DC, _fScrollX, _fScrollY);
 	}
+
+	TCHAR szText[64] = L"";
+	HDC hOneTileDC = GetDC(g_hWnd);
+	Rectangle(hOneTileDC, 1030, 110, 1300, 190);
+	swprintf_s(szText, 64, L"fScroolX [%.f], fScroolY [%.f]", _fScrollX, _fScrollY);
+	TextOut(hOneTileDC, 1060, 130, szText, lstrlen(szText));
+	ReleaseDC(g_hWnd, hOneTileDC);
+
 	//char strGold[64] = "";
 	//sprintf_s(strGold, "gold : %d\n", m_iGold);
 	//_cprintf(strGold);

@@ -2,11 +2,10 @@
 #include "SummonerBall.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 using Monster_space::HIT_FRAME_SPEED;
 const DWORD CSummonerBall::ATT_FRAME_SPEED = 140;
-
-// IDLE -> 속도 200.f, 어택 -> 속도 1000.f
 
 CSummonerBall::CSummonerBall()
 	: m_fMoveTime(0.f)
@@ -117,7 +116,12 @@ int CSummonerBall::Update(float _fdTime)
 		}
 		else
 		{
-			if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd) {
+			if (!m_bAttackCool && m_tFrame.iFrameStart == 0)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"BALL_ATTACKMODE.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			else if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd) {
 				m_iAtt = rand() % 5 + 6;
 				fDX = (float)(m_fEndX - m_tInfo.fX);
 				fDY = (float)(m_fEndY - m_tInfo.fY);
@@ -126,8 +130,10 @@ int CSummonerBall::Update(float _fdTime)
 				if (0 < fDY)
 					m_fPosinRad = 2 * PI - m_fPosinRad;
 
-				if (m_fFireDis > 1.000f)
+				if (m_fFireDis > 1.f)
 				{
+					STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+					PLAY_SOUND(L"BALL_ATTACK.wav", CSoundMgr::MONSTER_EFFECT);
 					m_tInfo.fX += cosf(m_fPosinRad) * (1300.f) * _fdTime;
 					m_tInfo.fY -= sinf(m_fPosinRad) * (1300.f) * _fdTime;
 				}
@@ -206,12 +212,12 @@ void CSummonerBall::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScro
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 	Draw_DetectCircle(_DC, _fScrollX, _fScrollY);
 
-	TCHAR szText[64] = L"";
-	HDC hOneTileDC = GetDC(g_hWnd);
-	Rectangle(hOneTileDC, 1030, 110, 1500, 190);
-	swprintf_s(szText, L"m_bAttackCool: %d, 이전상태: %d, 현상태: %d, 거리 %.4f", m_bAttackCool, (int)m_ePreState, (int)m_eCurState, m_fFireDis);
-	TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
-	ReleaseDC(g_hWnd, hOneTileDC);
+	//TCHAR szText[64] = L"";
+	//HDC hOneTileDC = GetDC(g_hWnd);
+	//Rectangle(hOneTileDC, 1030, 110, 1500, 190);
+	//swprintf_s(szText, L"m_bAttackCool: %d, 이전상태: %d, 현상태: %d, 거리 %.4f", m_bAttackCool, (int)m_ePreState, (int)m_eCurState, m_fFireDis);
+	//TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
+	//ReleaseDC(g_hWnd, hOneTileDC);
 }
 
 void CSummonerBall::Move_Frame()

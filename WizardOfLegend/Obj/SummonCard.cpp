@@ -80,7 +80,7 @@ void CSummonCard::Move_Frame()
 		++m_tFrame.iFrameStart;
 		m_tFrame.dwFrameTime = GetTickCount();
 
-		if (m_tFrame.iFrameStart == 1)
+		if (m_tFrame.iFrameStart == 2)
 		{
 			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
 			PLAY_SOUND(L"CardSpawn.wav", CSoundMgr::MONSTER_EFFECT);
