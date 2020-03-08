@@ -107,4 +107,9 @@ void CTeleCircle::Change_Scene()
 		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_FIREBOSS);
 		return;
 	}
+
+	if (CSceneMgr::Get_Instance()->Get_Scene_ID() == CSceneMgr::SCENE_FIREBOSS) {
+		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_LAST);
+		return;
+	}
 }

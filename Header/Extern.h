@@ -8,5 +8,6 @@ extern bool g_bGameLoop;
 extern bool g_FPS_ON;
 extern bool g_HitBox_On;
 extern bool g_bBGM_On;
+extern bool g_bPlayerNoDie;
 
 #endif // !__EXTERN_H__

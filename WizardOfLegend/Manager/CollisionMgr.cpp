@@ -23,6 +23,8 @@
 #include "../Obj/Meteor.h"
 #include "../Obj/EarthDrill.h"
 #include "../Obj/WindFalcon.h"
+#include "../Obj/NoMoveBullet.h"
+#include "../Obj/FireKick.h"
 #include "DigitMgr.h"
 #include "SoundMgr.h"
 
@@ -79,6 +81,13 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 									static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+
+									STOP_SOUND(CSoundMgr::MONSTER);
+									if (dynamic_cast<CFireBoss*>(srcObj))
+										PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+									else
+										PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
+
 									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
@@ -102,6 +111,12 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 									static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+
+									STOP_SOUND(CSoundMgr::MONSTER);
+									if (dynamic_cast<CFireBoss*>(srcObj))
+										PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+									else
+										PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
 									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 								}
@@ -219,13 +234,16 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 					{
 						if (Check_CircleRect(dstObj, srcObj))
 						{
-							int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
-							static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
-							MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
-							static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-							static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
-							STOP_SOUND(CSoundMgr::PLAYER);
-							PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+							if (!g_bPlayerNoDie)
+							{
+								int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
+								static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
+								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+									static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								STOP_SOUND(CSoundMgr::PLAYER);
+								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+							}
 							static_cast<CBullet*>(dstObj)->Set_Collision(true);
 						}
 					}
@@ -234,15 +252,19 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 					{
 						if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
 						{
-							int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
-							static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
-							MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
-							static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-							static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+							if (!g_bPlayerNoDie)
+							{
+								int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
+								static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
+								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+									static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								STOP_SOUND(CSoundMgr::PLAYER);
+								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+							}
+
 							Collision_Obj_Tile(srcObj, &fX, &fY);
 							Collision_Obj_Obstacle(srcObj, &fX, &fY);
-							STOP_SOUND(CSoundMgr::PLAYER);
-							PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 							static_cast<CBullet*>(dstObj)->Set_Collision(true);
 						}
 					}
@@ -265,6 +287,19 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
+					}
+				}
+			}
+			else if (CC_PSHIELD_NOREFLECT == _SrcGroupCode || CC_PSHIELD_REFLECT == _SrcGroupCode)
+			{
+				for (auto& srcObj : _Src)
+				{
+					if (dynamic_cast<CMeteor*>(dstObj) || dynamic_cast<CFireKick*>(dstObj))
+						break;
+					else
+					{
+						if (Check_CircleRect(dstObj, srcObj))
+							static_cast<CBullet*>(dstObj)->Set_Collision(true);
 					}
 				}
 			}
@@ -391,23 +426,31 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								{
 									if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 									{
-										int iDamage = static_cast<CSummonerBall*>(srcObj)->Get_Att();
-										static_cast<CPlayer*>(dstObj)->Sub_Hp(iDamage);
-										MAKE_DIGIT(iDamage, dstObj, DIGIT::DC_WHITE)
-										static_cast<CPlayer*>(dstObj)->Inc_HitDigitCnt();
-
-										static_cast<CPlayer*>(dstObj)->Set_PlayerState(CPlayer::HIT);
+										if (!g_bPlayerNoDie)
+										{
+											int iDamage = static_cast<CSummonerBall*>(srcObj)->Get_Att();
+											static_cast<CPlayer*>(dstObj)->Sub_Hp(iDamage);
+											MAKE_DIGIT(iDamage, dstObj, DIGIT::DC_WHITE);
+											static_cast<CPlayer*>(dstObj)->Inc_HitDigitCnt();
+											STOP_SOUND(CSoundMgr::PLAYER);
+											PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+											static_cast<CPlayer*>(dstObj)->Set_PlayerState(CPlayer::HIT);
+										}
 									}
 								}
 							}
 							else if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 							{
-								int iDamage = rand() % 6 + 6;
-								static_cast<CPlayer*>(dstObj)->Sub_Hp(iDamage);
-								MAKE_DIGIT(iDamage, dstObj, DIGIT::DC_WHITE)
-								static_cast<CPlayer*>(dstObj)->Inc_HitDigitCnt();
-								
-								static_cast<CPlayer*>(dstObj)->Set_PlayerState(CPlayer::HIT);
+								if (!g_bPlayerNoDie)
+								{
+									int iDamage = rand() % 6 + 6;
+									static_cast<CPlayer*>(dstObj)->Sub_Hp(iDamage);
+									MAKE_DIGIT(iDamage, dstObj, DIGIT::DC_WHITE);
+									static_cast<CPlayer*>(dstObj)->Inc_HitDigitCnt();
+									STOP_SOUND(CSoundMgr::PLAYER);
+									PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+									static_cast<CPlayer*>(dstObj)->Set_PlayerState(CPlayer::HIT);
+								}
 							}
 						}
 					}
@@ -488,6 +531,24 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 		{
 			for (auto& dstObj : _Dst)
 			{
+				if (dynamic_cast<CShield*>(dstObj))
+				{ // 플레이어 쉴드와 적 총알 충돌검사.
+					for (auto& srcObj : _Src)
+					{
+						if (srcObj->Get_Collision_Code() >= CC_MBULLET_NWALL_NPUSH &&
+							srcObj->Get_Collision_Code() <= CC_MBULLET_WALL_PUSH)
+						{
+							if (dynamic_cast<CMeeleBullet*>(srcObj))
+								continue;
+							if (dynamic_cast<CNoMoveBullet*>(srcObj))
+								continue;
+							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
+							{
+								static_cast<CBullet*>(srcObj)->Set_Collision(true);
+							}
+						}
+					}
+				}
 				if (static_cast<CBullet*>(dstObj)->Get_Collision() && !dynamic_cast<CEarthDrill*>(dstObj))
 					continue;
 				if (!(_SrcGroupCode & 0xF00) && (_SrcGroupCode & 0x070)) // monster임
@@ -511,6 +572,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 											MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 											static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 											static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+											STOP_SOUND(CSoundMgr::MONSTER);
+											if (dynamic_cast<CFireBoss*>(srcObj))
+												PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+											else
+												PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
 
 											Add_MP_Logic(dstObj);
 
@@ -524,6 +590,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+										STOP_SOUND(CSoundMgr::MONSTER);
+										if (dynamic_cast<CFireBoss*>(srcObj))
+											PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+										else
+											PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
 
 										Add_MP_Logic(dstObj);
 
@@ -550,7 +621,12 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
-										
+										STOP_SOUND(CSoundMgr::MONSTER);
+										if (dynamic_cast<CFireBoss*>(srcObj))
+											PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+										else
+											PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
+
 										Add_MP_Logic(dstObj);
 										static_cast<CBullet*>(dstObj)->Set_Collision(true);
 									}
@@ -565,6 +641,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										// MP 차게 하나?
 										static_cast<CBoss*>(srcObj)->Set_Boss_State(7);
+										STOP_SOUND(CSoundMgr::MONSTER);
+										if (dynamic_cast<CFireBoss*>(srcObj))
+											PLAY_SOUND(L"FireBossHurt.wav", CSoundMgr::MONSTER);
+										else
+											PLAY_SOUND(L"EarthBossHurt.wav", CSoundMgr::MONSTER);
 									}
 								}
 							}
@@ -806,22 +887,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						}
 					}
 				}
-
-				if (dstObj->Get_Collision_Code() == CC_PSHIELD_NOREFLECT || dstObj->Get_Collision_Code() == CC_PSHIELD_REFLECT)
-				{ // 플레이어 쉴드와 적 총알 충돌검사.
-					if (_SrcGroupCode >= CC_MBULLET_NWALL_NPUSH && _SrcGroupCode <= CC_MBULLET_WALL_PUSH)
-					{
-						for (auto& srcObj : _Src) {
-							if (dynamic_cast<CMeeleBullet*>(srcObj))
-								continue;
-							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
-							{
-								static_cast<CBullet*>(srcObj)->Set_Collision(true);
-							}
-						}
-					}
-				}
-			}
+			}			//for (auto& dstObj : _Dst)
 		}// 플레이어 총알 & 플레이어 쉴드 if문 끝! /// 0x01 <= _DstGroupCode && _DstGroupCode <= CC_PSHIELD_REFLECT
 
 		else // 모든 MONSTER BULLET OR MONSTER SHIELD
@@ -841,14 +907,17 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						{
 							if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 							{
-								int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
-								static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
-								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
-								static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-							
-								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
-								STOP_SOUND(CSoundMgr::PLAYER);
-								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+								if (!g_bPlayerNoDie)
+								{
+									int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
+									static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
+									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+										static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+
+									static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+									STOP_SOUND(CSoundMgr::PLAYER);
+									PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+								}
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
@@ -856,15 +925,18 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						{
 							if (CollisionRectPush(dstObj, srcObj, &fX, &fY, 2.0f))
 							{
-								int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
-								static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
-								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
-								static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								if (!g_bPlayerNoDie)
+								{
+									int iDamage = static_cast<CBullet*>(dstObj)->Get_Att();
+									static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
+									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
+										static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+									static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+									STOP_SOUND(CSoundMgr::PLAYER);
+									PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+								}
 								Collision_Obj_Tile(srcObj, &fX, &fY);
 								Collision_Obj_Obstacle(srcObj, &fX, &fY);
-								STOP_SOUND(CSoundMgr::PLAYER);
-								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
@@ -874,13 +946,16 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							{
 								if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 								{
-									int iDamage = static_cast<CShield*>(dstObj)->Get_Att();
-									static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
-									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
-									static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-									STOP_SOUND(CSoundMgr::PLAYER);
-									PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
-									static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+									if (!g_bPlayerNoDie)
+									{
+										int iDamage = static_cast<CShield*>(dstObj)->Get_Att();
+										static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
+										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
+										static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+										STOP_SOUND(CSoundMgr::PLAYER);
+										PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
+										static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+									}
 								}
 							}
 						}

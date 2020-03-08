@@ -2,6 +2,7 @@
 #include "GuideLBullet.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 //Bullet & Skill
 #define G_BULLET_LIFETIME_LIMIT 2.35f
@@ -121,7 +122,11 @@ int CGuideLBullet::Update(float _fdTime)
 void CGuideLBullet::Late_Update(float _fdTime)
 {
 	if (m_bCollision || (m_bMonsters && m_fLifeTime > G_BULLET_LIFETIME_LIMIT))
+	{
 		m_bDead = true;
+		STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+		PLAY_SOUND(L"EarthSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
+	}
 
 	if (m_pTarget->Get_Dead())
 		m_pTarget = nullptr;
@@ -185,6 +190,8 @@ void CGuideLBullet::Scene_Change()
 				m_tFrame.iFrameScene = 0;
 				m_tFrame.dwFrameSpeed = 100;
 				m_tFrame.dwFrameTime = GetTickCount();
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"EarthSkillFire.wav", CSoundMgr::MONSTER_EFFECT);
 			}
 			break;
 		case CBullet::COLLISION:

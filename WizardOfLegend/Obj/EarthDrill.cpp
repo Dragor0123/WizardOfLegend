@@ -59,6 +59,15 @@ int CEarthDrill::Update(float _fdTime)
 	if (m_bDead)
 		return OBJ_DEAD;
 
+	if (m_bMonsters)
+		m_iAtt = rand() % 8 + 10;
+	else
+	{
+		m_iAtt = rand() % 8 + 5;
+		if (m_bSignitureOn)
+			m_iAtt = m_iAtt << 1;
+	}
+
 	MoveAngle(_fdTime);
 	Equalize_HitPosInfoPos();
 	

@@ -24,8 +24,8 @@ bool CGaiaShield::Initialize()
 	m_tInfo.iCX = 100;
 	m_tInfo.iCY = 100;
 
-	m_tHitInfo.iCX = 56;
-	m_tHitInfo.iCY = 62;
+	m_tHitInfo.iCX = 80;
+	m_tHitInfo.iCY = 80;
 
 	if (m_strFrameKey == "")
 		m_strFrameKey = "GaiaShield";

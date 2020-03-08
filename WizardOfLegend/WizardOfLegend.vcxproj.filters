@@ -340,6 +340,9 @@
     <Filter Include="Source Files\01.Manager\12.SoundMgr">
       <UniqueIdentifier>{ba7d61a8-6e92-4ae5-a173-eaac92c2b423}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\04.Scene\97.LastScene">
+      <UniqueIdentifier>{f739bff9-7989-48e3-8bd8-e60248ae2b5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -654,6 +657,9 @@
     <ClInclude Include="Manager\SoundMgr.h">
       <Filter>Source Files\01.Manager\12.SoundMgr</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\LastScene.h">
+      <Filter>Source Files\04.Scene\97.LastScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WizardOfLegend.cpp">
@@ -958,6 +964,9 @@
     </ClCompile>
     <ClCompile Include="Manager\SoundMgr.cpp">
       <Filter>Source Files\01.Manager\12.SoundMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\LastScene.cpp">
+      <Filter>Source Files\04.Scene\97.LastScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

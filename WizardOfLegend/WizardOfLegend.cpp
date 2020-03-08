@@ -11,7 +11,8 @@
 bool g_HitBox_On = false;
 bool g_FPS_ON = false;
 bool g_bGameLoop = true;
-bool g_bBGM_On = false;
+bool g_bBGM_On = true;
+bool g_bPlayerNoDie = false;
 
 HWND g_hWnd;
 HINSTANCE hInst;                                // current instance
@@ -157,12 +158,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			g_HitBox_On = (g_HitBox_On) ? false : true;
 			break;
 		case VK_F3:
+			g_bPlayerNoDie = (g_bPlayerNoDie) ? false : true;
+			break;
+		case VK_F4:
 			g_bBGM_On = (g_bBGM_On) ? false : true;
 			break;
 		}
 		break;
     case WM_DESTROY:
 		g_bGameLoop = false;
+		CMainGame::Destroy_Instance();
         PostQuitMessage(0);
         break;
     default:

@@ -261,6 +261,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\EarthBossStage.h" />
     <ClInclude Include="Scene\FireBossStage.h" />
+    <ClInclude Include="Scene\LastScene.h" />
     <ClInclude Include="Scene\Logo.h" />
     <ClInclude Include="Scene\Plaza.h" />
     <ClInclude Include="Scene\Scene.h" />
@@ -636,6 +637,10 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Scene\FireBossStage.cpp">
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Scene\LastScene.cpp">
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>

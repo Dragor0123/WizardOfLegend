@@ -1,7 +1,7 @@
 #include "../stdafx.h"
 #include "EarthBossBox.h"
 #include "../MyBitmap/BmpMgr.h"
-
+#include "../Manager/SoundMgr.h"
 
 CEarthBossBox::CEarthBossBox()
 	: m_fRisingTime(0.f), m_fRisingLimit(0.3f)
@@ -41,7 +41,7 @@ bool CEarthBossBox::Initialize()
 	m_tFrame.dwFrameTime = GetTickCount();
 	m_eRenderGroupID = GROUPID::GAMEOBJECT_2;
 
-	m_iAtt = rand() % 8 + 20;
+	m_iAtt = rand() % 8 + 16;
 
 	return true;
 }
@@ -139,6 +139,8 @@ void CEarthBossBox::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			PLAY_SOUND(L"EarthSkillFire.wav", CSoundMgr::MONSTER_EFFECT);
 			break;
 		case CBullet::COLLISION:
 			m_tFrame.iFrameStart = 0;
@@ -146,6 +148,8 @@ void CEarthBossBox::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = 100;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			PLAY_SOUND(L"EarthSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
 			break;
 		default:
 			break;

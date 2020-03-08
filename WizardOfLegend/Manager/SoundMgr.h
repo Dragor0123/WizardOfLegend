@@ -22,7 +22,7 @@ public:
 		}
 	}
 public:
-	enum CHANNELID {BGM, PLAYER, MONSTER, BOSS, EFFECT, MONSTER_EFFECT, DECO_EFFECT, UI, MAXCHANNEL};
+	enum CHANNELID {BGM, PLAYER, MONSTER, EFFECT, MONSTER_EFFECT, DECO_EFFECT, UI, MAXCHANNEL};
 private:
 	CSoundMgr();
 	~CSoundMgr();
@@ -34,6 +34,7 @@ public:
 public:
 	void PlaySound(TCHAR* pSoundKey, CHANNELID eID);
 	void PlayBGM(TCHAR* pSoundKey);
+	void PlayBGM_NOLOOP(TCHAR * pSoundKey);
 	void StopSound(CHANNELID eID);
 	void StopAll();
 

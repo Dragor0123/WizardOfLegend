@@ -82,21 +82,25 @@ void CObjMgr::Collision(float _fdTime)
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::NPC]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::CARD]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::BOSS]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::GOODS]);
 	
 	// 쉴드
-	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_SHIELD], m_listObj[OBJID::M_CIRBULLET]);
+	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::M_CIRBULLET], m_listObj[OBJID::P_SHIELD]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_SHIELD], m_listObj[OBJID::M_RECTBULLET]);
 
 	// 총알
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_RECTBULLET], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_RECTBULLET], m_listObj[OBJID::BOSS]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::M_RECTBULLET], m_listObj[OBJID::PLAYER]);
 	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::P_CIRBULLET], m_listObj[OBJID::MONSTER]);
+	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::P_CIRBULLET], m_listObj[OBJID::BOSS]);
 	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::M_CIRBULLET], m_listObj[OBJID::PLAYER]);
 
 	// 장애물 충돌판정
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::PLAYER], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::MONSTER], m_listObj[OBJID::OBSTACLE]);
+	CCollisionMgr::Collision_Rect(m_listObj[OBJID::BOSS], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::P_RECTBULLET], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_Rect(m_listObj[OBJID::M_RECTBULLET], m_listObj[OBJID::OBSTACLE]);
 	CCollisionMgr::Collision_CircleRect(m_listObj[OBJID::P_CIRBULLET], m_listObj[OBJID::OBSTACLE]);

@@ -203,21 +203,20 @@ void CSummonerBall::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScro
 
 	BitBlt(hRotDC, 0, 0, m_tInfo.iCX, m_tInfo.iCY, hEmpDC, 0, 0, SRCCOPY);
 
+	HPEN hMyPen, hOldPen;
+	hMyPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
 	if (m_tFrame.iFrameScene == 2 && m_tFrame.iFrameStart != m_tFrame.iFrameEnd)
 	{
+		hOldPen = (HPEN)SelectObject(_DC, hMyPen);
 		MoveToEx(_DC, (int)(m_tInfo.fX + _fScrollX), (int)(m_tInfo.fY + _fScrollY), NULL);
 		LineTo(_DC, (int)(m_tPosin.x + _fScrollX), (int)(m_tPosin.y + _fScrollY));
+		SelectObject(_DC, hOldPen);
+
 	}
+	DeleteObject(hMyPen);
 
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 	Draw_DetectCircle(_DC, _fScrollX, _fScrollY);
-
-	//TCHAR szText[64] = L"";
-	//HDC hOneTileDC = GetDC(g_hWnd);
-	//Rectangle(hOneTileDC, 1030, 110, 1500, 190);
-	//swprintf_s(szText, L"m_bAttackCool: %d, 이전상태: %d, 현상태: %d, 거리 %.4f", m_bAttackCool, (int)m_ePreState, (int)m_eCurState, m_fFireDis);
-	//TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
-	//ReleaseDC(g_hWnd, hOneTileDC);
 }
 
 void CSummonerBall::Move_Frame()

@@ -7,6 +7,7 @@
 #include "Meteor.h"
 #include "ScrewBullet.h"
 #include "FireKick.h"
+#include "../Manager/SoundMgr.h"
 
 namespace FIREBOSS_Space
 {
@@ -248,6 +249,7 @@ void CFireBoss::Late_Update(float _fdTime)
 {
 	if (0 >= m_iHp)
 	{
+		PLAY_SOUND(L"BOSS_DEAD.wav", CSoundMgr::MONSTER);
 		m_eFIRECurState = CFireBoss::FIRE_DEAD;
 		m_tHitInfo.iCX = 0;
 		m_tHitInfo.iCY = 0;
@@ -339,8 +341,7 @@ void CFireBoss::Release()
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireBoss");
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireBoss_stretch");
 	CBmpMgr::Get_Instance()->Delete_Bmp("Meteor");
-	// FireBall은 플레이어도 쓸 가능성이 농후함.
-	// FIREKICK.... 
+	CBmpMgr::Get_Instance()->Delete_Bmp("FireKick");
 }
 
 void CFireBoss::Scene_Change()
@@ -435,6 +436,8 @@ void CFireBoss::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameSpeed = MOVE_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER);
+			PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::MONSTER);
 			break;
 		case CFireBoss::ATT_MOVE_DOWN:
 			m_tFrame.iFrameStart = 0;
@@ -442,6 +445,8 @@ void CFireBoss::Scene_Change()
 			m_tFrame.iFrameScene = 3;
 			m_tFrame.dwFrameSpeed = MOVE_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER);
+			PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::MONSTER);
 			break;
 		case CFireBoss::ATT_MOVE_UP:
 			m_tFrame.iFrameStart = 0;
@@ -449,6 +454,8 @@ void CFireBoss::Scene_Change()
 			m_tFrame.iFrameScene = 4;
 			m_tFrame.dwFrameSpeed = MOVE_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::MONSTER);
+			PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::MONSTER);
 			break;
 		case CFireBoss::ATT_KICK:
 			m_tFrame.iFrameStart = 0;
@@ -465,6 +472,8 @@ void CFireBoss::Scene_Change()
 			m_tFrame.dwFrameSpeed = JUMP_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
 			m_bHittable = false;
+			STOP_SOUND(CSoundMgr::MONSTER);
+			PLAY_SOUND(L"BOSS_JUMP.wav", CSoundMgr::MONSTER);
 			break;
 		default:
 			break;
@@ -534,6 +543,11 @@ void CFireBoss::Move_Frame()
 		else if (m_eFIREPreState == FIRE_DANCE)
 		{
 			m_tFrame.dwFrameSpeed = DANCE_FRAME_SPEED;
+			if (m_tFrame.iFrameStart == 1 || m_tFrame.iFrameStart == 6)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER);
+				PLAY_SOUND(L"FireBossFlex.wav", CSoundMgr::MONSTER);
+			}
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				++iDanceCount;
 				if (iDanceCount > B_DANCE_COUNTMAX) {

@@ -73,6 +73,23 @@ void CSoundMgr::PlayBGM(TCHAR * pSoundKey)
 	FMOD_System_Update(m_pSystem);
 }
 
+void CSoundMgr::PlayBGM_NOLOOP(TCHAR * pSoundKey)
+{
+	map<TCHAR*, FMOD_SOUND*>::iterator iter;
+
+	iter = find_if(m_mapSound.begin(), m_mapSound.end(), [&](auto& iter)
+	{
+		return !lstrcmp(pSoundKey, iter.first);
+	});
+
+	if (iter == m_mapSound.end())
+		return;
+
+	FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[BGM]);
+	FMOD_Channel_SetMode(m_pChannelArr[BGM], FMOD_LOOP_OFF);
+	FMOD_System_Update(m_pSystem);
+}
+
 void CSoundMgr::StopSound(CHANNELID eID)
 {
 	FMOD_Channel_Stop(m_pChannelArr[eID]);

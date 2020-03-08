@@ -7,6 +7,7 @@
 #include "../Scene/Plaza.h"
 #include "../Scene/FireBossStage.h"
 #include "../Scene/EarthBossStage.h"
+#include "../Scene/LastScene.h"
 #include "../Obj/ObjMgr.h"
 #include "CtrlOwnerMgr.h"
 #include "KeyMgr.h"
@@ -30,9 +31,6 @@ bool CSceneMgr::Initialize()
 
 void CSceneMgr::Update(float _fdTime)
 {
-	if (KEY_DOWN(VK_F3))
-		g_HitBox_On = (g_HitBox_On) ? false : true;
-
 	m_pScene->Update(_fdTime);
 }
 
@@ -94,6 +92,9 @@ void CSceneMgr::Scene_Change(SCENEID _eScene)
 			break;
 		case SCENE_EARTHBOSS:
 			m_pScene = new CEarthBossStage;
+			break;
+		case SCENE_LAST:
+			m_pScene = new CLastScene;
 			break;
 		case SCENE_EDIT:
 			m_pScene = new CTileEdit;

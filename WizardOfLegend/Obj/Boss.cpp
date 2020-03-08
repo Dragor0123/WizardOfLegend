@@ -2,7 +2,7 @@
 #include "Boss.h"
 
 
-const int CBoss::B_HIT_FRAME_COUNTMAX = 7;
+const int CBoss::B_HIT_FRAME_COUNTMAX = 10;
 const int CBoss::B_DANCE_COUNTMAX = 1;
 CBoss::CBoss()
 	: m_bDanceCool(false), m_bHittable(false),
@@ -25,8 +25,7 @@ bool CBoss::Initialize()
 	m_ePreState = EARTHB_STATE::S_END;
 	m_eCurState = EARTHB_STATE::IDLE;
 
-	//m_iMaxHp = 2000;
-	m_iMaxHp = 300;
+	m_iMaxHp = 1500;
 	m_iHp = m_iMaxHp;
 	m_fAngle = 0.f;
 	m_fDetectRange = DEFAULT_DETECT_RAD * 1.07f;
@@ -36,18 +35,7 @@ bool CBoss::Initialize()
 
 void CBoss::Late_Update(float _fdTime)
 {
-	if (0 >= m_iHp)
-	{
-		m_eCurState = CBoss::DEAD;
-		m_tHitInfo.iCX = 0;
-		m_tHitInfo.iCY = 0;
-	}
 
-	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_ePreState != CBoss::HIT)
-		Reset_HitDigitCnt();
-
-	Update_Rect();
-	Update_HitRect();
 }
 
 void CBoss::Release()

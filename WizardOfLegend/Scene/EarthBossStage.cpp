@@ -53,7 +53,7 @@ bool CEarthBossStage::Initialize()
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
 	// ¶¥ º¸½º »ðÀÔ.
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
 		CAbstractFactory<CEarthLoad>::Create(1601.f, 968.f));
 
 	return true;
@@ -65,8 +65,8 @@ int CEarthBossStage::Update(float _fdTime)
 
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	CObj* pEarthBoss = nullptr;
-	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).empty())
-		pEarthBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
+	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).empty())
+		pEarthBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();
 
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
@@ -103,6 +103,8 @@ int CEarthBossStage::Update(float _fdTime)
 			CObjMgr::Get_Instance()->Add_Object(OBJID::EARTHBSTAGE_UI, pPotionFButton);
 			dynamic_cast<CFAble*>(pPotion)->Set_fButton(pPotionFButton);
 
+			STOP_SOUND(CSoundMgr::BGM);
+			CSoundMgr::Get_Instance()->PlayBGM_NOLOOP(L"WIN_Bgm.wav");
 			m_bTeleCircleInserted = true;
 		}
 	}

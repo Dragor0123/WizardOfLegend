@@ -357,9 +357,9 @@ void CPlayer::Late_Update(float _fdTime)
 {
 	if (0 >= m_iHp)
 	{
-		//m_eCurState = CPlayer::DEAD;
-		//m_tHitInfo.iCX = 0;
-		//m_tHitInfo.iCY = 0;
+		m_eCurState = CPlayer::DEAD;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
 	}
 
 	Update_Rect();

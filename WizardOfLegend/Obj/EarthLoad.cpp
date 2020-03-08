@@ -7,6 +7,7 @@
 #include "EarthPillarMaker.h"
 #include "NoMoveBullet.h"
 #include "GuideLBullet.h"
+#include "../Manager/SoundMgr.h"
 
 // HIT FRAME_SPEED start 0번 : 100, 1번 : 200
 namespace EARTHLOAD_space
@@ -21,7 +22,7 @@ namespace EARTHLOAD_space
 using namespace EARTHLOAD_space;
 
 CEarthLoad::CEarthLoad()
-	: m_fPosinRange(110.f)
+	: m_fPosinRange(110.f), m_bDashSoundOn(false)
 {
 	ZeroMemory(&m_tPosin, sizeof(m_tPosin));
 }
@@ -163,7 +164,6 @@ int CEarthLoad::Update(float _fdTime)
 
 		// 플레이어가 타겟으로 잡혔다.
 		m_ePattern = (CEarthLoad::PATTERN)m_iPatternArr[m_iPatternCnt];
-		// m_ePattern = P_DRILL;
 		Attack_Pattern(_fdTime, fDis);
 	}// m_pTarget != nullptr
 
@@ -180,7 +180,19 @@ int CEarthLoad::Update(float _fdTime)
 // enum BOSSSTATE {IDLE, DANCE, ATT1, ATT2, ATT3_RIGHT, ATT3_BOT, ATT3_UP, HIT, DEAD, S_END};
 void CEarthLoad::Late_Update(float _fdTime)
 {
-	CBoss::Late_Update(_fdTime);
+	if (0 >= m_iHp)
+	{
+		PLAY_SOUND(L"BOSS_DEAD.wav", CSoundMgr::MONSTER);
+		m_eCurState = CBoss::DEAD;
+		m_tHitInfo.iCX = 0;
+		m_tHitInfo.iCY = 0;
+	}
+
+	if (m_iHitDigitCnt > HIT_DIGIT_CNT_MAX || m_ePreState != CBoss::HIT)
+		Reset_HitDigitCnt();
+
+	Update_Rect();
+	Update_HitRect();
 
 	if (m_bAttackCool &&
 		m_tFrame.iFrameStart == 0 &&
@@ -377,13 +389,19 @@ void CEarthLoad::Move_Frame()
 		else if (m_ePreState == CEarthLoad::DANCE)
 		{
 			m_tFrame.dwFrameSpeed = 120;
+			if (m_tFrame.iFrameStart == 1 || m_tFrame.iFrameStart == 5)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER);
+				PLAY_SOUND(L"EarthBossFlex.wav", CSoundMgr::MONSTER);
+			}
+
 			if (m_tFrame.iFrameStart > 5 && m_tFrame.iFrameStart <= 7)
 				m_tFrame.dwFrameSpeed = 200;
 			if (m_tFrame.iFrameStart >= 8)
 				m_tFrame.dwFrameSpeed = 260;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				++iDanceCount;
-				if (iDanceCount > B_DANCE_COUNTMAX) {
+				if (iDanceCount > B_DANCE_COUNTMAX + 1) {
 					m_eCurState = CEarthLoad::ATT1;
 					iDanceCount = 0;
 				}
@@ -488,22 +506,44 @@ void CEarthLoad::Attack_Pattern(float _fdTime, float _fDis)
 			if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 			{
 				++m_iAttackCnt;
-				if (m_iAttackCnt <= m_iAttackCntLimit[m_ePattern]) {
+				if (m_iAttackCnt <= m_iAttackCntLimit[m_ePattern])
+				{
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET,
 						Create_Bullet<CEarthDrill>((float)m_tPosin.x, (float)m_tPosin.y, "EarthDrill", nullptr));
 					m_bAttackCool = true;
 				}
-				else {
+				else
+				{
 					++m_iPatternCnt;
 					m_iAttackCnt = 0;
 					m_eCurState = IDLE;
 					m_tFrame.iFrameStart = 0;
 				}
+				m_bDashSoundOn = false;
 			}
+
 			if (m_eDir == CEarthLoad::LEFT || m_eDir == CEarthLoad::RIGHT) {
-				if (floor(_fDis) > 100.f) MoveAngle(_fdTime);
+				if (floor(_fDis) > 100.f)
+				{
+					MoveAngle(_fdTime);
+					if (!m_bDashSoundOn)
+					{
+						STOP_SOUND(CSoundMgr::MONSTER);
+						PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::MONSTER);
+						m_bDashSoundOn = true;
+					}
+				}
 			}
-			else if (floor(_fDis) > 128.f) MoveAngle(_fdTime);
+			else if (floor(_fDis) > 128.f)
+			{
+				MoveAngle(_fdTime);
+				if (!m_bDashSoundOn)
+				{
+					STOP_SOUND(CSoundMgr::MONSTER);
+					PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::MONSTER);
+					m_bDashSoundOn = true;
+				}
+			}
 		}
 		else if (P_PILLAR == m_ePattern)
 		{
@@ -515,7 +555,7 @@ void CEarthLoad::Attack_Pattern(float _fdTime, float _fDis)
 				++m_iAttackCnt;
 				if (m_iAttackCnt <= m_iAttackCntLimit[m_ePattern]) {
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET,
-						Create_Bullet<CEarthPillarMaker>("", 1000.f,
+						Create_Bullet<CEarthPillarMaker>("EarthBoss_Pillar", 1000.f,
 							m_fAngle));
 					m_bAttackCool = true;
 				}

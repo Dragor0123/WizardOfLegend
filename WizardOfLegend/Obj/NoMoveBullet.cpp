@@ -3,6 +3,7 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "UnderDeco.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 namespace NoMoveBul_Space{
 	const float PILLAR_Y_OFFSET = 90;
@@ -125,8 +126,14 @@ void CNoMoveBullet::Move_Frame()
 		++m_tFrame.iFrameStart;
 		m_tFrame.dwFrameTime = GetTickCount();
 
+
 		if (m_strFrameKey == "EarthBoss_Pillar")
 		{
+			if (m_tFrame.iFrameStart == 1)
+				PLAY_SOUND(L"EarthSkillEnd.wav", CSoundMgr::MONSTER_EFFECT);
+			else if (m_tFrame.iFrameStart == 2)
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+
 			if (m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 				m_tFrame.dwFrameSpeed = 1600;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {

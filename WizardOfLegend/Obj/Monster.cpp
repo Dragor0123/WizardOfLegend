@@ -16,11 +16,8 @@ CMonster::CMonster()
 
 CMonster::~CMonster()
 {
-	if (!dynamic_cast<CBoss*>(this))
-	{
-		CObjMgr::Get_Instance()->Add_Object(OBJID::GOODS,
-			CAbstractFactory<CGold>::Create(m_tInfo.fX, m_tInfo.fY));
-	}
+	CObjMgr::Get_Instance()->Add_Object(OBJID::GOODS,
+		CAbstractFactory<CGold>::Create(m_tInfo.fX, m_tInfo.fY));
 	Release();
 }
 

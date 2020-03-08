@@ -48,7 +48,7 @@ bool CFireBossStage::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
+	CObjMgr::Get_Instance()->Add_Object(OBJID::BOSS,
 		CAbstractFactory<CFireBoss>::Create(1601.f, 968.f));
 
 	return true;
@@ -60,8 +60,8 @@ int CFireBossStage::Update(float _fdTime)
 
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	CObj* pFireBoss = nullptr;
-	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).empty())
-		pFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
+	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).empty())
+		pFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::BOSS).front();
 
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
@@ -85,7 +85,8 @@ int CFireBossStage::Update(float _fdTime)
 			CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(1601.f, 968.f, OBJID::FIREBSTAGE_UI);
 			CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI, pTeleFButton);
 			static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
-
+			STOP_SOUND(CSoundMgr::BGM);
+			CSoundMgr::Get_Instance()->PlayBGM_NOLOOP(L"WIN_Bgm.wav");
 			m_bTeleCircleInserted = true;
 		}
 	}
@@ -119,6 +120,8 @@ void CFireBossStage::Release()
 		CObjMgr::Get_Instance()->Delete_ID((OBJID::ID)i);
 	}
 
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::PLAYER);
+	CObjMgr::Get_Instance()->Delete_ID(OBJID::INVENTORY);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::DIGIT_UI);
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::FIREBSTAGE_UI);
 	CBmpMgr::Get_Instance()->Delete_Bmp("FireTile");

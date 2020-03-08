@@ -79,7 +79,7 @@ private:
 	PATTERN			m_ePattern;
 	int				m_iPatternArr[CEarthLoad::P_END];
 	int				m_iAttackCntLimit[CEarthLoad::P_END];
-
+	bool			m_bDashSoundOn;
 	// Inherited via CMonster
 	virtual CObj * Create_Bullet(const string & _frameKey = "");
 
