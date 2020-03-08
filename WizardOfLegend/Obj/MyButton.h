@@ -22,6 +22,7 @@ public:
 
 private:
 	int			m_iDrawID;
+	bool		m_bMouseOn;
 };
 
 #endif

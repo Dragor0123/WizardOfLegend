@@ -36,9 +36,6 @@
 //MONSTER
 #define DEFAULT_DETECT_RAD 380.f
 
-//Bullet & Skill
-#define G_BULLET_LIFETIME_LIMIT 3.0f
-
 #define HIT_DIGIT_CNT_MAX 6
 
 // OBJECT COLLISION CODE

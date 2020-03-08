@@ -41,16 +41,14 @@ bool CScrewBullet::Initialize()
 		m_fShotRange = 1600.f;
 
 	m_fRotAngle = 0.f;
-	if (!m_bMonsters)
-	{
-		m_fRotSpeed = 4.f;
-		m_fRotDis = 40.f;
-	}
-	else
-	{
-		m_fRotSpeed = 12.f;
-		m_fRotDis = 80.f;
-	}
+	m_fRotSpeed = 4.f;
+	m_fRotDis = 40.f;
+
+	//else
+	//{
+	//	m_fRotSpeed = 12.f;
+	//	m_fRotDis = 80.f;
+	//}
 	m_bStart = true;
 	m_bClockWise = false;
 

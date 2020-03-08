@@ -25,7 +25,8 @@ bool CBoss::Initialize()
 	m_ePreState = EARTHB_STATE::S_END;
 	m_eCurState = EARTHB_STATE::IDLE;
 
-	m_iMaxHp = 2000;
+	//m_iMaxHp = 2000;
+	m_iMaxHp = 300;
 	m_iHp = m_iMaxHp;
 	m_fAngle = 0.f;
 	m_fDetectRange = DEFAULT_DETECT_RAD * 1.07f;
@@ -47,8 +48,6 @@ void CBoss::Late_Update(float _fdTime)
 
 	Update_Rect();
 	Update_HitRect();
-
-
 }
 
 void CBoss::Release()

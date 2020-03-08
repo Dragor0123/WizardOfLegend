@@ -3,6 +3,7 @@
 #include "FrostFan.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 // Set_Skill_Code(5);
 const int CArcFrostFan::iBULLETMAX = 5;
@@ -156,6 +157,8 @@ void CArcFrostFan::Fire_Skill()
 				static_cast<CPlayer*>(m_pTarget)->Init_Effect_Line();
 				static_cast<CPlayer*>(m_pTarget)->Set_MP_Zero();
 				// 스킬코드를 따로 주던지...
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"Player_Ult_Use.wav", CSoundMgr::EFFECT);
 				static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(1000 + 5);
 				m_iBulletCount = iBULLETMAX;
 			}

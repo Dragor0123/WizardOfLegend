@@ -113,6 +113,7 @@ private:
 	//bool		m_bDeadInit;		// true일경우 SceneChange 에서 STATE를 DEAD로 바꾼다.
 									// DEAD프레임 끝나면 플레이어 소멸시킨다.
 
+	bool		m_bManaFullSound;
 	bool		m_bDontDraw;
 	// 대쉬 관련
 	LINEPOS		m_tBeforeDashPos;

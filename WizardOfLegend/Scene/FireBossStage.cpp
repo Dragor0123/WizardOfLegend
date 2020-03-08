@@ -13,6 +13,8 @@
 #include "../Obj/UIGold.h"
 #include "../Obj/FireBoss.h"
 #include "../Obj/BossHPBar.h"
+#include "../Obj/Prison.h"
+#include "../Manager/SoundMgr.h"
 
 CFireBossStage::CFireBossStage()
 	: m_bTeleCircleInserted(false), m_bBossHPBarInserted(false)
@@ -33,6 +35,9 @@ bool CFireBossStage::Initialize()
 		return false;
 	CTileMgr::Get_Instance()->Load_Tile("FireBossTile");
 
+	if (g_bBGM_On)
+		CSoundMgr::Get_Instance()->PlayBGM(L"BossBgm.wav");
+
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(1601.f, 3344.f);
 	// 플레이어 HPBAR, SKILLBAR, 돈 UI 삽입
@@ -43,25 +48,46 @@ bool CFireBossStage::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
 		CAbstractFactory<CUIGold>::Create(rPlayer));
 
-	// 파이어 보스 삽입, HPBAR도 삽입해야한다. 그리고 이따가 이거 update쪽으로 바꾸자.
 	CObjMgr::Get_Instance()->Add_Object(OBJID::MONSTER,
 		CAbstractFactory<CFireBoss>::Create(1601.f, 968.f));
 
 	return true;
 }
 
-// 보스 방에 감옥 넣기!
 int CFireBossStage::Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Update(_fdTime);
+
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
-	auto& rFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
+	CObj* pFireBoss = nullptr;
+	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).empty())
+		pFireBoss = CObjMgr::Get_Instance()->Get_listObj(OBJID::MONSTER).front();
 
 	if (rPlayer->Get_HitRect().bottom < 1540.f && !m_bBossHPBarInserted)
 	{
 		CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI,
-			CAbstractFactory<CBossHPBar>::Create(rFireBoss));
+			CAbstractFactory<CBossHPBar>::Create(pFireBoss));
+
+		CObj* pPrison1 = CAbstractFactory<CPrison>::Create(1504.f, 1628.f, 0.f);
+		CObj* pPrison2 = CAbstractFactory<CPrison>::Create(1696.f, 1628.f, 0.f);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison1);
+		CObjMgr::Get_Instance()->Add_Object(OBJID::OBSTACLE, pPrison2);
+
 		m_bBossHPBarInserted = true;
+	}
+
+	if (m_bBossHPBarInserted && !pFireBoss)
+	{
+		if (!m_bTeleCircleInserted)
+		{
+			CObj* pTeleCircle = CAbstractFactory<CTeleCircle>::Create(1601.f, 968.f);
+			CObjMgr::Get_Instance()->Add_Object(OBJID::TELECIR, pTeleCircle);
+			CObj* pTeleFButton = CAbstractFactory<CFButton>::Create(1601.f, 968.f, OBJID::FIREBSTAGE_UI);
+			CObjMgr::Get_Instance()->Add_Object(OBJID::FIREBSTAGE_UI, pTeleFButton);
+			static_cast<CFAble*>(pTeleCircle)->Set_fButton(pTeleFButton);
+
+			m_bTeleCircleInserted = true;
+		}
 	}
 
 	CObjMgr::Get_Instance()->Update(_fdTime);

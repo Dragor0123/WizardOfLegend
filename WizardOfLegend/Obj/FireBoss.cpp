@@ -321,17 +321,17 @@ void CFireBoss::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 	Draw_DetectCircle(_DC, _fScrollX, _fScrollY);
 
 
-	//TCHAR szText[64] = L"";
-	//HDC hOneTileDC = GetDC(g_hWnd);
-	//Rectangle(hOneTileDC, 1030, 110, 1600, 200);
-	//swprintf_s(szText, L"PatternCnt : %d", m_iPatternCnt);
-	//TextOut(hOneTileDC, 1060, 120, szText, lstrlen(szText));
-	//swprintf_s(szText, L"이전상태: %d, 현재상태: %d", (int)m_eFIREPreState, (int)m_eFIRECurState);
-	//TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
-	//swprintf_s(szText, L"프레임start: %d, 프레임End: %d", m_tFrame.iFrameStart, m_tFrame.iFrameEnd);
-	//TextOut(hOneTileDC, 1060, 180, szText, lstrlen(szText));
+	TCHAR szText[64] = L"";
+	HDC hOneTileDC = GetDC(g_hWnd);
+	Rectangle(hOneTileDC, 1030, 110, 1600, 200);
+	swprintf_s(szText, L"PatternCnt : %d", m_iPatternCnt);
+	TextOut(hOneTileDC, 1060, 120, szText, lstrlen(szText));
+	swprintf_s(szText, L"이전상태: %d, 현재상태: %d", (int)m_eFIREPreState, (int)m_eFIRECurState);
+	TextOut(hOneTileDC, 1060, 150, szText, lstrlen(szText));
+	swprintf_s(szText, L"프레임start: %d, 프레임End: %d", m_tFrame.iFrameStart, m_tFrame.iFrameEnd);
+	TextOut(hOneTileDC, 1060, 180, szText, lstrlen(szText));
 
-	//ReleaseDC(g_hWnd, hOneTileDC);
+	ReleaseDC(g_hWnd, hOneTileDC);
 }
 
 void CFireBoss::Release()

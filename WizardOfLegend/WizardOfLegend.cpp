@@ -11,6 +11,8 @@
 bool g_HitBox_On = false;
 bool g_FPS_ON = false;
 bool g_bGameLoop = true;
+bool g_bBGM_On = false;
+
 HWND g_hWnd;
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
@@ -148,12 +150,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			//g_bGameLoop = false;
 			//DestroyWindow(hWnd);
 			break;
-
 		case VK_F1:
 			g_FPS_ON = (g_FPS_ON) ? false : true;
 			break;
 		case VK_F2:
 			g_HitBox_On = (g_HitBox_On) ? false : true;
+			break;
+		case VK_F3:
+			g_bBGM_On = (g_bBGM_On) ? false : true;
+			break;
 		}
 		break;
     case WM_DESTROY:

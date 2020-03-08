@@ -3,6 +3,7 @@
 #include "ScrewBullet.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 const int CArcDragonarc::iBULLETMAX = 12;
 const int CArcDragonarc::iSIG_BULLETMAX = 36;
@@ -25,7 +26,7 @@ bool CArcDragonarc::Initialize()
 	if (m_strFrameKey != "DragonArc")
 		m_strFrameKey = "DragonArc";
 
-	m_fCoolTLimit = 5.0f;
+	m_fCoolTLimit = 4.8f;
 	return true;
 }
 
@@ -141,6 +142,8 @@ void CArcDragonarc::Fire_Skill()
 				static_cast<CPlayer*>(m_pTarget)->Init_Effect_Line();
 				static_cast<CPlayer*>(m_pTarget)->Set_MP_Zero();
 				// 스킬코드를 따로 주던지...
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"Player_Ult_Use.wav", CSoundMgr::EFFECT);
 				static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(1001);
 				m_iBulletCount = iSIG_BULLETMAX;
 			}

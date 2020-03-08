@@ -2,6 +2,10 @@
 #include "Monster.h"
 #include "Gold.h"
 #include "ObjMgr.h"
+#include "Boss.h"
+#include "SummonerBall.h"
+#include "../Manager/SoundMgr.h"
+
 const int CMonster::M_HIT_FRAME_COUNTMAX = 3;
 using namespace Monster_space;
 
@@ -12,8 +16,11 @@ CMonster::CMonster()
 
 CMonster::~CMonster()
 {
-	CObjMgr::Get_Instance()->Add_Object(OBJID::GOODS,
-		CAbstractFactory<CGold>::Create(m_tInfo.fX, m_tInfo.fY));
+	if (!dynamic_cast<CBoss*>(this))
+	{
+		CObjMgr::Get_Instance()->Add_Object(OBJID::GOODS,
+			CAbstractFactory<CGold>::Create(m_tInfo.fX, m_tInfo.fY));
+	}
 	Release();
 }
 
@@ -51,6 +58,7 @@ void CMonster::Late_Update(float _fdTime)
 
 	if (0 >= m_iHp)
 	{
+		PLAY_SOUND(L"EnemyDead1.wav", CSoundMgr::MONSTER);
 		m_eCurState = CMonster::DEAD;
 		m_eMez = MEZ::MZ_NONE;
 		m_tHitInfo.iCX = 0;

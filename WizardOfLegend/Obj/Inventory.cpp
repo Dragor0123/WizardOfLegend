@@ -11,6 +11,7 @@
 #include "../Manager/SceneMgr.h"
 #include "FButton.h"
 #include "../GetObjID.h"
+#include "../Manager/SoundMgr.h"
 
 CInventory::CInventory()
 	: ROWSIZE(2), COLSIZE(6),
@@ -83,6 +84,7 @@ void CInventory::Key_Check(float _fdTime)
 	{
 		Pull_InArrayItems();
 		CCtrlOwnerMgr::Get_Instance()->Inventory_Off();
+		PLAY_SOUND(L"InventoryClose.wav", CSoundMgr::UI);
 		m_iMouseCnt = 0;
 		m_iClickedIdx = -1;
 		m_iLastMouseOnIdx = -1;
@@ -129,17 +131,24 @@ void CInventory::Key_Check(float _fdTime)
 					if (KEY_DOWN(VK_LBUTTON))		// 누르면...
 					{
 						m_iIdxInner = i * COLSIZE + j;
-						/*if (m_iMouseCnt == 0 && m_aInnerArray[m_iIdxInner] == -1)
-							break;*/
-						if (m_iMouseCnt == 0)
-							m_iClickedIdx = m_iIdxInner + 6;
 
+						if (m_iMouseCnt == 0)
+						{
+							m_iClickedIdx = m_iIdxInner + 6;
+							PLAY_SOUND(L"MenuClicked.wav", CSoundMgr::UI);
+						}
 						if (m_iMouseCnt == 1)
 						{
 							if (m_iRemberIdx > 5) // 이전 클릭 했던게 InnerArray에 있던거
+							{
 								Swap(&m_aInnerArray[m_iRemberIdx - 6], &m_aInnerArray[m_iIdxInner]);
+								PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
+							}
 							else if (m_iRemberIdx != 1)
+							{
 								Swap(&m_aOutterArray[m_iRemberIdx], &m_aInnerArray[m_iIdxInner]);
+								PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
+							}
 						}
 						++m_iMouseCnt;
 						if (m_iMouseCnt > 1)
@@ -174,14 +183,23 @@ void CInventory::Key_Check(float _fdTime)
 					m_iIdxOutter = i;
 					
 					if (m_iMouseCnt == 0)
+					{
 						m_iClickedIdx = m_iIdxOutter;
+						PLAY_SOUND(L"MenuClicked.wav", CSoundMgr::UI);
+					}
 					if (m_iMouseCnt == 1)
 					{
 						if (m_iIdxOutter != 1) {
 							if (m_iRemberIdx > 5) // 이전 클릭 했던게 InnerArray에 있던거
+							{
 								Swap(&m_aInnerArray[m_iRemberIdx - 6], &m_aOutterArray[m_iIdxOutter]);
+								PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
+							}
 							else
+							{
 								Swap(&m_aOutterArray[m_iRemberIdx], &m_aOutterArray[m_iIdxOutter]);
+								PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
+							}
 						}
 					}
 					++m_iMouseCnt;
@@ -206,11 +224,13 @@ void CInventory::Key_Check(float _fdTime)
 		if (KEY_DOWN(VK_LBUTTON))		// 누르면...
 		{
 			Drop_Item();
+			PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
 		}
 	} // !bPtInSlot
 	if (m_iClickedIdx != -1 && KEY_DOWN('F'))
 	{
 		Drop_Item();
+		PLAY_SOUND(L"InventorySwap.wav", CSoundMgr::UI);
 	}
 }
 
@@ -405,16 +425,32 @@ bool CInventory::Is_Inner_Full()
 
 int CInventory::Push_Item_In_OuterArr(int _code)
 {
+	size_t i, j;
 	if (_code < 100)	// 스킬일 경우
 	{
-		for (size_t i = 0; i < m_aOutterArray.size(); ++i)
+		for (i = 0; i < m_aOutterArray.size(); ++i)
 		{
 			if (m_aOutterArray[i] == -1) {
 				m_aOutterArray[i] = _code;
 				return 1;
 			}
 		}
-		return Push_Item_In_InnerArr(_code);
+
+		if (i == m_aOutterArray.size())
+		{
+			int _lastArcCode = m_aOutterArray[i - 1];
+			for (j = 0; j < m_aInnerArray.size(); ++j)
+			{
+				if (m_aInnerArray[j] == -1)
+				{
+					m_aInnerArray[j] = _lastArcCode;
+					m_aOutterArray[i - 1] = _code;
+					return 1;
+				}
+			}
+			if (j == m_aInnerArray.size())
+				return 0;
+		}
 	}
 	else
 	{
@@ -466,6 +502,7 @@ void CInventory::Drop_Item()
 				CObj* pButton = CAbstractFactory<CFButton>::Create(fX, fY - 74.f, eID);
 				CObjMgr::Get_Instance()->Add_Object(eID, pButton);
 				dynamic_cast<CFAble*>(pCard)->Set_fButton(pButton);
+				pArcRel->Set_Outter_Inner_Off();
 			}
 		}
 		m_iMouseCnt = 0;

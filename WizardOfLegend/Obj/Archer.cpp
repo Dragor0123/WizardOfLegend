@@ -3,7 +3,7 @@
 #include "../Obj/Arrow.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "../Obj/ObjMgr.h"
-
+#include "../Manager/SoundMgr.h"
 using namespace Monster_space;
 
 CArcher::CArcher()
@@ -29,7 +29,7 @@ bool CArcher::Initialize()
 	m_fSpeed = 330.f;
 	
 	// 체력 및 기본 전투 스탯 초기화
-	m_iMaxHp = 300;
+	m_iMaxHp = 270;
 	m_iHp = m_iMaxHp;
 
 	// 공격 주기 구하기
@@ -114,6 +114,8 @@ int CArcher::Update(float _fdTime)
 				// 어택하면 됨
 				if (!m_bAttackCool && m_tFrame.iFrameStart == m_tFrame.iFrameEnd)
 				{
+					STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+					PLAY_SOUND(L"Mon_ArcherAttackRelease.wav", CSoundMgr::MONSTER_EFFECT);
 					CObjMgr::Get_Instance()->Add_Object(OBJID::M_RECTBULLET, Create_Bullet("Arrow"));
 					m_bAttackCool = true;
 				}
@@ -309,7 +311,7 @@ void CArcher::Scene_Change()
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 3;
 			m_tFrame.iFrameScene = 2;
-			m_tFrame.dwFrameSpeed = 300;
+			m_tFrame.dwFrameSpeed = 400;
 			m_tFrame.dwFrameTime = GetTickCount();
 			break;
 		case CMonster::HIT:
@@ -342,5 +344,69 @@ void CArcher::Scene_Change()
 
 void CArcher::Move_Frame()
 {
-	CMonster::Move_Frame();
+	if (m_tFrame.dwFrameTime + m_tFrame.dwFrameSpeed < GetTickCount())
+	{
+		++m_tFrame.iFrameStart;
+		m_tFrame.dwFrameTime = GetTickCount();
+		if (m_ePreState == CMonster::DEAD)
+		{
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_bDead = true;
+		}
+		else if (m_ePreState == CMonster::ATTACK)
+		{
+			if (m_tFrame.iFrameStart == 1)
+			{
+				STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+				PLAY_SOUND(L"Mon_ArcherAttackWindup.wav", CSoundMgr::MONSTER_EFFECT);
+			}
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = 0;
+		}
+		else if (m_ePreState == CMonster::HIT)
+		{
+			if (m_tFrame.iFrameStart == 0)
+				m_tFrame.dwFrameSpeed = HIT_FRAME_SPEED;
+			else
+				m_tFrame.dwFrameSpeed = (DWORD)(HIT_FRAME_SPEED * 1.5f);
+
+			if (m_eMez == MEZ::MZ_FROZEN)
+			{
+				if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				{
+					m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+				}
+			}
+			else
+			{
+				if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				{
+					++m_iHitStateCount;
+					if (m_iHitStateCount > M_HIT_FRAME_COUNTMAX)
+					{
+						m_eCurState = CMonster::IDLE;
+						m_iHitStateCount = 0;
+					}
+					else
+					{
+						m_tFrame.iFrameStart = 0;
+					}
+				}
+			}
+		}
+		else if (m_ePreState == CMonster::IDLE)
+		{
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = 0;
+		}
+		else if (m_ePreState == CMonster::WALK)
+		{
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = 0;
+		}
+		else if (m_ePreState == CMonster::FALL)
+		{	// 여기 신경 쓸 것
+			--m_tFrame.iFrameStart;
+		}
+	}
 }

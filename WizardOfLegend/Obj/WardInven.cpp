@@ -9,6 +9,7 @@
 #include "RobeIcon.h"
 #include "Player.h"
 #include "../ReplaceColor.h"
+#include "../Manager/SoundMgr.h"
 
 const float CWardInven::m_fRADIUS = 156.f;
 const float CWardInven::m_fCircleY = 231.f;
@@ -196,6 +197,8 @@ void CWardInven::Key_Check(float _fdTime)
 				(*rIterBeg)->Set_Pos(fNewX, fNewY);
 			}
 			(*rIterBeg)->Set_Pos(firstPosX, firstPosY);
+			STOP_SOUND(CSoundMgr::UI);
+			PLAY_SOUND(L"MenuMove.wav", CSoundMgr::UI);
 		}
 		else if (KEY_DOWN('A') || KEY_DOWN(VK_LEFT))
 		{
@@ -213,6 +216,8 @@ void CWardInven::Key_Check(float _fdTime)
 				(*IterBeg)->Set_Pos(fNewX, fNewY);
 			}
 			(*IterBeg)->Set_Pos(firstPosX, firstPosY);
+			STOP_SOUND(CSoundMgr::UI);
+			PLAY_SOUND(L"MenuMove.wav", CSoundMgr::UI);
 		}
 
 		if (KEY_DOWN(VK_SPACE) || KEY_DOWN(VK_RETURN))
@@ -248,6 +253,8 @@ void CWardInven::Key_Check(float _fdTime)
 					Obj->Late_Update(_fdTime);
 				}
 			}
+			STOP_SOUND(CSoundMgr::UI);
+			PLAY_SOUND(L"MenuClicked.wav", CSoundMgr::UI);
 		}
 	}
 }

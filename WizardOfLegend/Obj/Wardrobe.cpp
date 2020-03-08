@@ -1,10 +1,11 @@
 #include "../stdafx.h"
 #include "Wardrobe.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "WardInven.h"
 #include "FButton.h"
 #include "ObjMgr.h"
 #include "../Manager/CtrlOwnerMgr.h"
-#include "WardInven.h"
+#include "../Manager/SoundMgr.h"
 
 const DWORD CWardrobe::IDLE_FRAME_SPEED = 85L;
 const DWORD CWardrobe::OPEN_FRAME_SPEED = 40L;
@@ -89,15 +90,6 @@ void CWardrobe::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 	//히트박스 조건 걸자
 	Draw_HitBox(_DC, _fScrollX, _fScrollY);
 
-	//TCHAR szText[64] = L"";
-	//HDC hTempDC = GetDC(g_hWnd);
-	//Rectangle(hTempDC, 1030, 110, 1600, 200);
-	//swprintf_s(szText, L"이전상태: %d, 현재상태: %d, 버튼:[%c]", (int)m_ePreState, (int)m_eCurState,
-	//	(dynamic_cast<CFButton*>(m_pFbutton)->Is_Enable()) ? 'T':'F');
-	//TextOut(hTempDC, 1060, 150, szText, lstrlen(szText));
-	//swprintf_s(szText, L"프레임start: %d, 프레임End: %d", m_tFrame.iFrameStart, m_tFrame.iFrameEnd);
-	//TextOut(hTempDC, 1060, 180, szText, lstrlen(szText));
-	//ReleaseDC(g_hWnd, hTempDC);
 }
 
 void CWardrobe::Release()
@@ -127,6 +119,8 @@ void CWardrobe::Scene_Change()
 			m_tFrame.iFrameScene = 1;
 			m_tFrame.dwFrameSpeed = OPEN_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"DoorOpen.wav", CSoundMgr::EFFECT);
 			break;
 		case CWardrobe::CLOSE:
 			m_tFrame.iFrameStart = 0;
@@ -134,6 +128,8 @@ void CWardrobe::Scene_Change()
 			m_tFrame.iFrameScene = 2;
 			m_tFrame.dwFrameSpeed = OPEN_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+			PLAY_SOUND(L"DoorClose.wav", CSoundMgr::EFFECT);
 			break;
 		}
 		m_ePreState = m_eCurState;

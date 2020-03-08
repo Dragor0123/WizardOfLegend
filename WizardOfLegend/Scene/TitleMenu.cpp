@@ -40,23 +40,8 @@ bool CTitleMenu::Initialize()
 	if (!CBmpMgr::Get_Instance()->Insert_Bmp(L"Bitmap/Menu/exit_button.bmp", "Exit"))
 		return false;
 
-	CObj*	pObj = CAbstractFactory<CMyButton>::Create(492.f, 360.f);
-	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Start");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(492.f, 420.f);
-	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Edit");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(492.f, 480.f);
-	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Developer");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
-
-	pObj = CAbstractFactory<CMyButton>::Create(492.f, 540.f);
-	dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Exit");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
-
-	CSoundMgr::Get_Instance()->PlayBGM(L"TitleScreen.wav");
+	if (g_bBGM_On)
+		CSoundMgr::Get_Instance()->PlayBGM(L"TitleScreen.wav");
 
 	return true;
 }
@@ -121,7 +106,6 @@ void CTitleMenu::Render(HDC _DC, float _fdTime)
 
 void CTitleMenu::Release()
 {
-	CSoundMgr::Get_Instance()->StopAll();
 	CObjMgr::Get_Instance()->Delete_ID(OBJID::MENU_UI);
 }
 
@@ -135,8 +119,25 @@ bool CTitleMenu::Key_Check()
 				continue;
 			if (KEY_DOWN(i))
 			{
+				CObj*	pObj = CAbstractFactory<CMyButton>::Create(492.f, 360.f);
+				dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Start");
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
+
+				pObj = CAbstractFactory<CMyButton>::Create(492.f, 420.f);
+				dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Edit");
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
+
+				pObj = CAbstractFactory<CMyButton>::Create(492.f, 480.f);
+				dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Developer");
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
+
+				pObj = CAbstractFactory<CMyButton>::Create(492.f, 540.f);
+				dynamic_cast<CMyButton*>(pObj)->Set_FrameKey("Exit");
+				CObjMgr::Get_Instance()->Add_Object(OBJID::MENU_UI, pObj);
+
 				m_bTitleLogoUp = true;
 				CCtrlOwnerMgr::Get_Instance()->TitleMenu_Off();
+				PLAY_SOUND(L"MenuClicked.wav", CSoundMgr::UI);
 			}
 		}
 	}

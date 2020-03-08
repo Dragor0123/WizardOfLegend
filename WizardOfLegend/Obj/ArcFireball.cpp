@@ -3,6 +3,7 @@
 #include "FireBall.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 const int CArcFireball::iSIG_BULLETMAX = 8;
 
@@ -132,7 +133,8 @@ void CArcFireball::Fire_Skill()
 				static_cast<CPlayer*>(m_pTarget)->Set_Signiture(true);
 				static_cast<CPlayer*>(m_pTarget)->Init_Effect_Line();
 				static_cast<CPlayer*>(m_pTarget)->Set_MP_Zero();
-				// 스킬코드를 따로 주던지...
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+				PLAY_SOUND(L"Player_Ult_Use.wav", CSoundMgr::EFFECT);
 				static_cast<CPlayer*>(m_pTarget)->Set_Skill_Code(-1 + 1000);
 				m_iBulletCount = iSIG_BULLETMAX;
 			}

@@ -6,6 +6,7 @@
 #include "Summoner.h"
 #include "SummonerBall.h"
 #include "ObjMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CSummonCard::CSummonCard()
 {
@@ -78,6 +79,12 @@ void CSummonCard::Move_Frame()
 	{
 		++m_tFrame.iFrameStart;
 		m_tFrame.dwFrameTime = GetTickCount();
+
+		if (m_tFrame.iFrameStart == 1)
+		{
+			STOP_SOUND(CSoundMgr::MONSTER_EFFECT);
+			PLAY_SOUND(L"CardSpawn.wav", CSoundMgr::MONSTER_EFFECT);
+		}
 
 		if (m_tFrame.iFrameStart == 27) {
 			CObj* pObj = Create_Monster();

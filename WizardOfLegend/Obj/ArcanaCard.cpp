@@ -14,6 +14,7 @@
 #include "ArcWindFalcon.h"
 #include "Player.h"
 #include "NPC.h"
+#include "../Manager/SoundMgr.h"
 
 // CArcanaCard 의 m_pTarget은 nullptr일 수도 있고, SpellSeller일 수도 있다.
 CArcanaCard::CArcanaCard()
@@ -37,23 +38,23 @@ bool CArcanaCard::Initialize()
 	if (m_strFrameKey == "")
 		return false;
 
-	if (m_strFrameKey == "GaiaShieldCard") //  땅보스 깨면 또는 공간있으면 Stage1
+	if (m_strFrameKey == "GaiaShieldCard") // stage1
 		m_iCardCode = 0;
-	if (m_strFrameKey == "DragonArcCard") // 플라자
+	if (m_strFrameKey == "DragonArcCard") // plaza
 		m_iCardCode = 1;
-	if (m_strFrameKey == "FireBallCard") // Stage1
+	if (m_strFrameKey == "FireBallCard") // stage1
 		m_iCardCode = 2;
-	if (m_strFrameKey == "IceSphereCard") // 플라자
+	if (m_strFrameKey == "IceSphereCard") // plaza
 		m_iCardCode = 3;
-	if (m_strFrameKey == "NormalDashCard") //o
+	if (m_strFrameKey == "NormalDashCard") // 기본
 		m_iCardCode = 4;
-	if (m_strFrameKey == "FrostFanCard") // Stage1
+	if (m_strFrameKey == "FrostFanCard") //  stage1
 		m_iCardCode = 5;
-	if (m_strFrameKey == "NormalAttackCard") // 플라자
+	if (m_strFrameKey == "NormalAttackCard") //  plaza
 		m_iCardCode = 6;
-	if (m_strFrameKey == "EarthDrillCard")  // 땅보스 깨면
+	if (m_strFrameKey == "EarthDrillCard")  // earthboss  깨면
 		m_iCardCode = 7;
-	if (m_strFrameKey == "WindFalconCard") // Stage1
+	if (m_strFrameKey == "WindFalconCard") // stage1
 		m_iCardCode = 8;
 
 
@@ -166,7 +167,7 @@ void CArcanaCard::MoveY(float yourSpeed, float fDeltaTime, MOVEDIR::FB eDir)
 
 void CArcanaCard::Do_FButton_Action(float _fdTime)
 {
-	if (m_pTarget && m_iPriceAsGold > 0)
+	if (m_pTarget && m_iPriceAsGold > 0) //유료일경우,
 	{
 		if (!dynamic_cast<CNPC*>(m_pTarget))
 			return;
@@ -190,21 +191,24 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 				static_cast<CPlayer*>(pPlayer)->Sub_Gold(this->m_iPriceAsGold);
 				// m_pTarget의 표정 만들어주기.
 				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_YES);
+				PLAY_SOUND(L"Get_Skill.wav", CSoundMgr::EFFECT);
 				m_bDead = true;
 			}
 			else
 			{
 				// 인벤토리가 가득 찼습니다!
 				static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+				PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 			}
 		}
 		else // 플레이어의 금액이 상품의 가격보다 적을 경우
 		{
 			// 금액이 모자랍니다! m_pTarget 표정 만들기
 			static_cast<CNPC*>(m_pTarget)->Set_Emoji_State(CEmoji::ES_NO);
+			PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 		}
 	}
-	else
+	else //무료일경우
 	{
 		CCardMgr::Get_Instance()->Insert_CodeImage35(m_iCardCode);
 		CCardMgr::Get_Instance()->Insert_CodeImage46(m_iCardCode);
@@ -215,11 +219,13 @@ void CArcanaCard::Do_FButton_Action(float _fdTime)
 			bool bSuccess = false;
 			CArcRel* pArcRel = Create_ArcanaRelic(bInsertCondition);
 			bSuccess = CCardMgr::Get_Instance()->Insert_CodeArcana(m_iCardCode, pArcRel);
+			PLAY_SOUND(L"Get_Skill.wav", CSoundMgr::EFFECT);
 			m_bDead = true;
 		}
 		else
 		{
 			// 인벤토리가 가득 찼습니다!
+			PLAY_SOUND(L"Error_Sound.wav", CSoundMgr::EFFECT);
 		}
 	}
 }

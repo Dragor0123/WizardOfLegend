@@ -3,6 +3,9 @@
 #include "../MyBitmap/BmpMgr.h"
 #include "ObjMgr.h"
 
+//Bullet & Skill
+#define G_BULLET_LIFETIME_LIMIT 2.35f
+
 namespace GuideLBullet_space
 {
 	const float fLaunchLimit = 1.2f;

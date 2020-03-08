@@ -17,6 +17,7 @@
 #include "../Obj/SpellSeller.h"
 #include "../Obj/UnderDeco.h"
 #include "../Obj/ArcanaCard.h"
+#include "../Manager/SoundMgr.h"
 // 나중에 없애줄것
 #include "../Obj/Archer.h"
 
@@ -37,6 +38,9 @@ bool CPlaza::Initialize()
 	if (!CTileMgr::Get_Instance()->Initialize("PlazaTile"))
 		return false;
 	CTileMgr::Get_Instance()->Load_Tile("PlazaTile");
+
+	if (g_bBGM_On)
+		CSoundMgr::Get_Instance()->PlayBGM(L"HubBgm.wav");
 
 	// 플레이어 삽입
 	// 원위치 (2080.f, 2356.f )
@@ -96,30 +100,37 @@ bool CPlaza::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pIceSphereFButton);
 	dynamic_cast<CFAble*>(pIceSphereCard)->Set_fButton(pIceSphereFButton);
 
-	//////////////////
-	//CObj* pFireBallCard = CAbstractFactory<CArcanaCard>::Create(2718, 2092.f, "FireBallCard");
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFireBallCard);
-	//CObj* pFireBallFButton = CAbstractFactory<CFButton>::Create(2718, 2018.f, OBJID::PLAZA_UI);
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFireBallFButton);
-	//dynamic_cast<CFAble*>(pFireBallCard)->Set_fButton(pFireBallFButton);
+	////
+	CObj* pFireBallCard = CAbstractFactory<CArcanaCard>::Create(2718, 2092.f, "FireBallCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFireBallCard);
+	CObj* pFireBallFButton = CAbstractFactory<CFButton>::Create(2718, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFireBallFButton);
+	dynamic_cast<CFAble*>(pFireBallCard)->Set_fButton(pFireBallFButton);
 
-	//CObj* pEarthDrillCard = CAbstractFactory<CArcanaCard>::Create(2358.f, 2092.f, "EarthDrillCard");
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pEarthDrillCard);
-	//CObj* pEarthDrillFButton = CAbstractFactory<CFButton>::Create(2358.f, 2018.f, OBJID::PLAZA_UI);
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pEarthDrillFButton);
-	//dynamic_cast<CFAble*>(pEarthDrillCard)->Set_fButton(pEarthDrillFButton);
+	CObj* pEarthDrillCard = CAbstractFactory<CArcanaCard>::Create(2358.f, 2092.f, "EarthDrillCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pEarthDrillCard);
+	CObj* pEarthDrillFButton = CAbstractFactory<CFButton>::Create(2358.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pEarthDrillFButton);
+	dynamic_cast<CFAble*>(pEarthDrillCard)->Set_fButton(pEarthDrillFButton);
 
-	//CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(2268.f, 2092.f, "FrostFanCard");
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
-	//CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(2268.f, 2018.f, OBJID::PLAZA_UI);
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFrostFanFButton);
-	//dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
+	CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(2268.f, 2092.f, "FrostFanCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pFrostFanCard);
+	CObj* pFrostFanFButton = CAbstractFactory<CFButton>::Create(2268.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFrostFanFButton);
+	dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
 
-	//CObj* pWindFalconCard = CAbstractFactory<CArcanaCard>::Create(2178.f, 2092.f, "WindFalconCard");
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pWindFalconCard);
-	//CObj* pFalconFButton = CAbstractFactory<CFButton>::Create(2178.f, 2018.f, OBJID::PLAZA_UI);
-	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFalconFButton);
-	//dynamic_cast<CFAble*>(pWindFalconCard)->Set_fButton(pFalconFButton);
+	CObj* pWindFalconCard = CAbstractFactory<CArcanaCard>::Create(2178.f, 2092.f, "WindFalconCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pWindFalconCard);
+	CObj* pFalconFButton = CAbstractFactory<CFButton>::Create(2178.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFalconFButton);
+	dynamic_cast<CFAble*>(pWindFalconCard)->Set_fButton(pFalconFButton);
+
+	CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(2088.f, 2092.f, "GaiaShieldCard");
+	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);
+	CObj* pGaiaFButton = CAbstractFactory<CFButton>::Create(2088.f, 2018.f, OBJID::PLAZA_UI);
+	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pGaiaFButton);
+	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
+	////
 
 	//// 옷장 NPC 추가
 	CObjMgr::Get_Instance()->Add_Object(OBJID::NPC,

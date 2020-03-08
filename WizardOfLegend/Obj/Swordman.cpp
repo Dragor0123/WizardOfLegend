@@ -24,7 +24,7 @@ bool CSwordman::Initialize()
 	m_tHitInfo.iCX = 92;
 	m_tHitInfo.iCY = 136;
 	
-	m_iMaxHp = 360;
+	m_iMaxHp = 300;
 	m_iHp = m_iMaxHp;
 	m_eAttDir = CMeeleBullet::END;
 	

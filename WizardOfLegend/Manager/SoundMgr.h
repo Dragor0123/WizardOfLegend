@@ -22,7 +22,7 @@ public:
 		}
 	}
 public:
-	enum CHANNELID {BGM, PLAYER, MONSTER, EFFECT, UI, MAXCHANNEL};
+	enum CHANNELID {BGM, PLAYER, MONSTER, BOSS, EFFECT, MONSTER_EFFECT, UI, MAXCHANNEL};
 private:
 	CSoundMgr();
 	~CSoundMgr();
@@ -50,5 +50,8 @@ private:
 	FMOD_SYSTEM* m_pSystem; 
 
 };
+
+#define PLAY_SOUND(_pSoundKey, _eID) CSoundMgr::Get_Instance()->PlaySound(_pSoundKey, _eID)
+#define STOP_SOUND(_eID)	CSoundMgr::Get_Instance()->StopSound(_eID)
 
 #endif

@@ -24,6 +24,7 @@
 #include "../Obj/EarthDrill.h"
 #include "../Obj/WindFalcon.h"
 #include "DigitMgr.h"
+#include "SoundMgr.h"
 
 #define INC_MP 8
 
@@ -131,6 +132,11 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 								static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 								static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+								if (!dynamic_cast<CSummonerBall*>(srcObj))
+								{
+									STOP_SOUND(CSoundMgr::MONSTER);
+									Play_Enemy_Hit_Rand();
+								}
 								Add_MP_Logic(dstObj);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
@@ -153,6 +159,11 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 								static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 								static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+								if (!dynamic_cast<CSummonerBall*>(srcObj))
+								{
+									STOP_SOUND(CSoundMgr::MONSTER);
+									Play_Enemy_Hit_Rand();
+								}
 								Add_MP_Logic(dstObj);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
@@ -212,8 +223,9 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
 							MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 							static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-							
 							static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+							STOP_SOUND(CSoundMgr::PLAYER);
+							PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 							static_cast<CBullet*>(dstObj)->Set_Collision(true);
 						}
 					}
@@ -226,10 +238,11 @@ void CCollisionMgr::Collision_CircleRect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
 							MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 							static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-
 							static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
 							Collision_Obj_Tile(srcObj, &fX, &fY);
 							Collision_Obj_Obstacle(srcObj, &fX, &fY);
+							STOP_SOUND(CSoundMgr::PLAYER);
+							PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 							static_cast<CBullet*>(dstObj)->Set_Collision(true);
 						}
 					}
@@ -298,7 +311,7 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 							if (static_cast<CFireBoss*>(srcObj)->Get_bJump())
 								continue;
 						}
-
+						
 						if (CollisionRectPush(srcObj, dstObj, &fX, &fY))
 						{
 							if (Collision_Obj_Tile(srcObj, &fX, &fY))
@@ -409,6 +422,8 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 						 if (IntersectRect(&rc, &dstObj->Get_HitRect(), &srcObj->Get_HitRect()))
 						 {
 							 static_cast<CPlayer*>(dstObj)->Add_Gold(static_cast<CGold*>(srcObj)->Get_Gold());
+							 STOP_SOUND(CSoundMgr::EFFECT);
+							 CSoundMgr::Get_Instance()->PlaySound(L"Coin.wav", CSoundMgr::EFFECT);
 							 srcObj->Set_Dead();
 						 }
 					 }
@@ -618,8 +633,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
-										Add_MP_Logic(dstObj);
-										static_cast<CBullet*>(dstObj)->Set_Signiture(true);
+										if (iDamage != 0) {
+											STOP_SOUND(CSoundMgr::MONSTER);
+											Play_Enemy_Hit_Rand();
+											Add_MP_Logic(dstObj);
+										}
 										static_cast<CBullet*>(dstObj)->Set_Att(0);
 
 										if (Collision_Obj_Tile(srcObj, &fX, &fY))
@@ -644,6 +662,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 									static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 									static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+									if (!dynamic_cast<CSummonerBall*>(srcObj))
+									{
+										STOP_SOUND(CSoundMgr::MONSTER);
+										Play_Enemy_Hit_Rand();
+									}
 									Add_MP_Logic(dstObj);
 									static_cast<CBullet*>(dstObj)->Set_Collision(true);
 
@@ -672,6 +695,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 											MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 											static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 											static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+											if (!dynamic_cast<CSummonerBall*>(srcObj))
+											{
+												STOP_SOUND(CSoundMgr::MONSTER);
+												Play_Enemy_Hit_Rand();
+											}
 											Add_MP_Logic(dstObj);
 											static_cast<CWindFalcon*>(dstObj)->Inc_TargetChangeCnt();
 											
@@ -710,6 +738,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										if (!dynamic_cast<CSummonerBall*>(srcObj))
+										{
+											STOP_SOUND(CSoundMgr::MONSTER);
+											Play_Enemy_Hit_Rand();
+										}
 										Add_MP_Logic(dstObj);
 										if (dynamic_cast<CFrostFan*>(dstObj))
 										{
@@ -730,8 +763,12 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										static_cast<CMonster*>(srcObj)->Sub_Hp(iDamage);
 										MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 										static_cast<CMonster*>(srcObj)->Inc_HitDigitCnt();
-										
 										static_cast<CMonster*>(srcObj)->Set_Monster_State(CMonster::HIT);
+										if (!dynamic_cast<CSummonerBall*>(srcObj))
+										{
+											STOP_SOUND(CSoundMgr::MONSTER);
+											Play_Enemy_Hit_Rand();
+										}
 									}
 								}
 							}
@@ -808,6 +845,8 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
 							
 								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
+								STOP_SOUND(CSoundMgr::PLAYER);
+								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
@@ -819,10 +858,11 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 								static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
 								MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE)
 								static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
-								
 								static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
 								Collision_Obj_Tile(srcObj, &fX, &fY);
 								Collision_Obj_Obstacle(srcObj, &fX, &fY);
+								STOP_SOUND(CSoundMgr::PLAYER);
+								PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 								static_cast<CBullet*>(dstObj)->Set_Collision(true);
 							}
 						}
@@ -836,6 +876,8 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 									static_cast<CPlayer*>(srcObj)->Sub_Hp(iDamage);
 									MAKE_DIGIT(iDamage, srcObj, DIGIT::DC_WHITE);
 									static_cast<CPlayer*>(srcObj)->Inc_HitDigitCnt();
+									STOP_SOUND(CSoundMgr::PLAYER);
+									PLAY_SOUND(L"Player_Hit.wav", CSoundMgr::PLAYER);
 									static_cast<CPlayer*>(srcObj)->Set_PlayerState(CPlayer::HIT);
 								}
 							}
@@ -908,6 +950,23 @@ void CCollisionMgr::Collision_Circle(list<CObj*>& _Dst, list<CObj*>& _Src)
 				srcObj->Set_Dead();
 			}
 		}
+	}
+}
+
+void CCollisionMgr::Play_Enemy_Hit_Rand()
+{
+	int i = rand() % 3;
+	switch (i)
+	{
+	case 0:
+		PLAY_SOUND(L"EnemyHurt0.wav", CSoundMgr::MONSTER);
+		break;
+	case 1:
+		PLAY_SOUND(L"EnemyHurt1.wav", CSoundMgr::MONSTER);
+		break;
+	case 2:
+		PLAY_SOUND(L"EnemyHurt2.wav", CSoundMgr::MONSTER);
+		break;
 	}
 }
 

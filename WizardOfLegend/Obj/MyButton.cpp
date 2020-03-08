@@ -4,9 +4,10 @@
 #include "../Manager/SceneMgr.h"
 #include "../MyBitmap/BmpMgr.h"
 #include "../Manager/CtrlOwnerMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CMyButton::CMyButton()
-	: m_iDrawID(0)
+	: m_iDrawID(0), m_bMouseOn(false)
 {
 }
 
@@ -54,13 +55,25 @@ void CMyButton::Late_Update(float _fdTime)
 				//else if ("Developer" == m_strFrameKey)
 				else if ("Exit" == m_strFrameKey)
 					DestroyWindow(g_hWnd);
+				PLAY_SOUND(L"MenuClicked.wav", CSoundMgr::UI);
+
 				return;
 			}
+		}
+		if (!m_bMouseOn)
+		{
+			CSoundMgr::Get_Instance()->PlaySound(L"MenuMove.wav", CSoundMgr::UI);
+			m_bMouseOn = true;
 		}
 		m_iDrawID = 1;
 	}
 	else {
 		m_iDrawID = 0;
+		if (m_bMouseOn)
+		{
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
+			m_bMouseOn = false;
+		}
 	}
 }
 
@@ -78,6 +91,7 @@ void CMyButton::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 
 void CMyButton::Release()
 {
+	CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
 }
 
 void CMyButton::Key_Check(float _fdTime)

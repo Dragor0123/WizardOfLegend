@@ -17,6 +17,7 @@
 #include "../Obj/ArcanaCard.h"
 #include "../Obj/OverDeco.h"
 #include "../Obj/Potion.h"
+#include "../Manager/SoundMgr.h"
 
 CStage1::CStage1()
 	: m_bTeleCircleInserted(false)
@@ -38,6 +39,9 @@ bool CStage1::Initialize()
 	if (!CTileMgr::Get_Instance()->Initialize("FireTile"))
 		return false;
 	CTileMgr::Get_Instance()->Load_Tile("FireTile");
+	
+	if (g_bBGM_On)
+		CSoundMgr::Get_Instance()->PlayBGM(L"FireStage.wav");
 
 	auto& rPlayer = CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).front();
 	rPlayer->Set_Pos(2664.f, 1535.f);
@@ -59,7 +63,7 @@ bool CStage1::Initialize()
 	CObjMgr::Get_Instance()->Add_Object(OBJID::DECO,
 		CAbstractFactory<CUnderDeco>::Create(4064.f, 3608.f, "Carpet_0"));
 
-	// stage1에 넣을거 : FrostFanCard, FireBallCard, WindFalcon
+	// stage1에 넣을거 : FrostFanCard, FireBallCard, WindFalcon, GaiaShieldCard
 	CObj* pFrostFanCard = CAbstractFactory<CArcanaCard>::Create(3891.f, 3600.f, "FrostFanCard");
 	static_cast<CCard*>(pFrostFanCard)->Set_Price_Gold(150);
 	static_cast<CCard*>(pFrostFanCard)->Set_Target(pSpellSeller);
@@ -93,6 +97,7 @@ bool CStage1::Initialize()
 	dynamic_cast<CFAble*>(pGaiaCard)->Set_fButton(pGaiaFButton);
 
 	CObj* pPotion = CAbstractFactory<CPotion>::Create(4251.f, 3600.f, "HPPotion");
+	static_cast<CCard*>(pPotion)->Set_Price_Gold(100);
 	static_cast<CCard*>(pPotion)->Set_Target(pSpellSeller);
 	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pPotion);
 	CObj* pPotionFButton = CAbstractFactory<CFButton>::Create(4251.f, 3540.f, OBJID::STAGE1_UI);
@@ -165,6 +170,8 @@ int CStage1::Update(float _fdTime)
 
 			CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
 				CAbstractFactory<CSummonCard>::Create(297.f, 1649.f, "ARCHER_SCARD"));
+			CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+				CAbstractFactory<CSummonCard>::Create(840.f, 1649.f, "ARCHER_SCARD"));
 			CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
 				CAbstractFactory<CSummonCard>::Create(277.f, 2100.f, "ARCHER_SCARD"));
 			CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,

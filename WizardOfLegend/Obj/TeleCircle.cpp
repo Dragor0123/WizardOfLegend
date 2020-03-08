@@ -5,6 +5,7 @@
 #include "TeleEffect.h"
 #include "ObjMgr.h"
 #include "Player.h"
+#include "../Manager/SoundMgr.h"
 
 CTeleCircle::CTeleCircle()
 	: m_bEffectEnd(false)
@@ -74,6 +75,8 @@ void CTeleCircle::Do_FButton_Action(float _fdTime)
 {
 	CObjMgr::Get_Instance()->Add_Object(OBJID::EFFECT,
 		CAbstractFactory<CTeleEffect>::Create(this));
+	STOP_SOUND(CSoundMgr::EFFECT);
+	PLAY_SOUND(L"ExitPortal.wav", CSoundMgr::EFFECT);
 
 	if (!CObjMgr::Get_Instance()->Get_listObj(OBJID::PLAYER).empty())
 	{

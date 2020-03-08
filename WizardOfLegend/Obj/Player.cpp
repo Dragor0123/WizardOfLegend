@@ -8,8 +8,9 @@
 #include "../Manager/CardMgr.h"
 #include "Inventory.h"
 #include "ArcRel.h"
+#include "../Manager/SoundMgr.h"
+#include "SummonCard.h"
 // 아래 헤더 지워 줄것
-#include "WindFalcon.h"
 
 namespace PLAYER_Space
 {
@@ -28,7 +29,7 @@ using namespace PLAYER_Space;
 
 CPlayer::CPlayer()
 	: m_bDashInit(false), m_bDontDraw(false),
-	m_iSkillCode(-1), m_eRobeColor(ROBE::RED)
+	m_iSkillCode(-1), m_eRobeColor(ROBE::RED), m_bManaFullSound(false)
 {
 	ZeroMemory(&m_tBeforeDashPos, sizeof(LINEPOS));
 	ZeroMemory(m_tEffectLine, sizeof(m_tEffectLine));
@@ -114,11 +115,14 @@ void CPlayer::Key_Check(float _fdTime)
 	if (!CCtrlOwnerMgr::Get_Instance()->Is_Key_Available(KEYOWN::KS_PLAYER))
 		return;
 
+	//CSoundMgr::Get_Instance()->PlaySound(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
+
 	if (KEY_DOWN(VK_TAB))
 	{
 		m_eCurState = IDLE;
 		CCtrlOwnerMgr::Get_Instance()->GameObject_Off();
 		CCtrlOwnerMgr::Get_Instance()->Inventory_On();
+		CSoundMgr::Get_Instance()->PlaySound(L"InventoryOpen.wav", CSoundMgr::UI);
 	}
 
 	if (!m_bDashInit && KEY_PRESSING('A'))
@@ -133,11 +137,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveLeftTop(_fdTime);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 
 		}
@@ -150,11 +157,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveLeftBottom(_fdTime);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 		}
 		else { // 순수하게 왼쪽
@@ -165,11 +175,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveXFromSpeed(_fdTime, MOVEDIR::MD_BACK);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 		}
 	}
@@ -185,11 +198,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveRightTop(_fdTime);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 		}
 		else if (KEY_PRESSING('S')) { // 오른쪽 아래
@@ -201,11 +217,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveRightBottom(_fdTime);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 		}
 		else { // 순수 오른 쪽
@@ -216,11 +235,14 @@ void CPlayer::Key_Check(float _fdTime)
 				m_tFrame.iFrameEnd = 5;
 				m_tBeforeDashPos.fX = m_tInfo.fX;
 				m_tBeforeDashPos.fY = m_tInfo.fY;
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+				PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 			}
 			else if (!KEY_DOWN(VK_SPACE)) {
 				MoveXFromSpeed(_fdTime, MOVEDIR::MD_FRONT);
 				m_tFrame.iFrameEnd = 3;
 				m_eCurState = WALK;
+				PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 			}
 		}
 	}
@@ -233,11 +255,14 @@ void CPlayer::Key_Check(float _fdTime)
 			m_tFrame.iFrameEnd = 2;
 			m_tBeforeDashPos.fX = m_tInfo.fX;
 			m_tBeforeDashPos.fY = m_tInfo.fY;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+			PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 		}
 		else if (!KEY_DOWN(VK_SPACE)) {
 			MoveYFromSpeed(_fdTime, MOVEDIR::MD_BACK);
 			m_tFrame.iFrameEnd = 5;
 			m_eCurState = WALK;
+			PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 		}
 	}
 	else if (!m_bDashInit && KEY_PRESSING('S')) {
@@ -249,11 +274,14 @@ void CPlayer::Key_Check(float _fdTime)
 			m_tFrame.iFrameEnd = 3;
 			m_tBeforeDashPos.fX = m_tInfo.fX;
 			m_tBeforeDashPos.fY = m_tInfo.fY;
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
+			PLAY_SOUND(L"PlayerDash.wav", CSoundMgr::PLAYER);
 		}
 		else if (!KEY_DOWN(VK_SPACE)) {
 			MoveYFromSpeed(_fdTime, MOVEDIR::MD_FRONT);
 			m_tFrame.iFrameEnd = 5;
 			m_eCurState = WALK;
+			PLAY_SOUND(L"PlayerFootstep.wav", CSoundMgr::PLAYER);
 		}
 	}
 	else if (!m_bDashInit && m_eCurState != HIT && m_eCurState != ATTACK && m_eCurState != STAMP) {
@@ -268,6 +296,8 @@ void CPlayer::Key_Check(float _fdTime)
 	if (KEY_DOWN('8'))
 	{
 		Add_Gold(200);
+		STOP_SOUND(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"Coin.wav", CSoundMgr::EFFECT);
 	}
 	if (KEY_DOWN('9'))
 	{
@@ -280,6 +310,19 @@ void CPlayer::Key_Check(float _fdTime)
 	if (KEY_DOWN(VK_OEM_PERIOD))
 	{
 		Reset_Hp();
+	}
+	if (KEY_DOWN('L'))
+	{
+		POINT pt = {};
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
+		pt.x -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollX());
+		pt.y -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollY());
+		CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
+			CAbstractFactory<CSummonCard>::Create(pt.x, pt.y, "ARCHER_SCARD"));
+		// SWORDMAN_SCARD
+		// SUMMONERBALL_SCARD
+		// SUMMONER_SCARD
 	}
 
 	Skill_Button_KeyCheck(VK_LBUTTON);
@@ -335,6 +378,13 @@ void CPlayer::Late_Update(float _fdTime)
 			m_eCurState = IDLE;
 		}
 	}
+
+	if (!m_bManaFullSound && m_iMaxMp == m_iMp)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::EFFECT);
+		PLAY_SOUND(L"Player_Ult_On.wav", CSoundMgr::EFFECT);
+		m_bManaFullSound = true;
+	}
 }
 
 void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
@@ -376,8 +426,13 @@ void CPlayer::Move_Frame()
 
 		m_tFrame.dwFrameTime = GetTickCount();
 
-		if (m_ePreState == STATE::IDLE || m_ePreState == STATE::WALK) {
-			m_tFrame.dwFrameSpeed = (m_ePreState == STATE::IDLE) ? IDLE_FRAME_SPEED : WALK_FRAME_SPEED;
+		if (m_ePreState == STATE::IDLE) {
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
+				m_tFrame.iFrameStart = 0;
+			}
+		}
+		if (m_ePreState == STATE::WALK)
+		{
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd) {
 				m_tFrame.iFrameStart = 0;
 			}
@@ -452,6 +507,7 @@ void CPlayer::Move_Frame()
 				{
 					if (m_bSigniture)
 					{
+						m_bManaFullSound = false;
 						m_tFrame.iFrameStart = 0;
 					}
 					else
@@ -747,6 +803,7 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = 0;
 			m_tFrame.dwFrameSpeed = IDLE_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER);
 			break;
 		case CPlayer::WALK:
 			m_tFrame.iFrameStart = 0;
@@ -819,6 +876,8 @@ void CPlayer::Scene_Change()
 			m_tFrame.iFrameScene = 8;
 			m_tFrame.dwFrameSpeed = DEAD_FRAME_SPEED;
 			m_tFrame.dwFrameTime = GetTickCount();
+			STOP_SOUND(CSoundMgr::PLAYER);
+			PLAY_SOUND(L"Player_Die.wav", CSoundMgr::PLAYER);
 			break;
 		default:
 			break;

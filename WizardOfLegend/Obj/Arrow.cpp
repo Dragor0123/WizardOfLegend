@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "Arrow.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SoundMgr.h"
 
 CArrow::CArrow()
 {
