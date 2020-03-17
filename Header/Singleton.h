@@ -21,9 +21,11 @@ public:
 
 	static void Destroy_Instance()
 	{
-		if (m_pInstance)
+		if (nullptr != m_pInstance)
+		{
 			delete m_pInstance;
-		m_pInstance = nullptr;
+			m_pInstance = nullptr;
+		}
 	}
 
 protected:

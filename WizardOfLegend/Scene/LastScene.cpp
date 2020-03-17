@@ -42,19 +42,19 @@ void CLastScene::Late_Update(float _fdTime)
 {
 	if (m_iKeyCnt == 1)
 	{
-		if (m_tBF.SourceConstantAlpha < 254)
-			m_tBF.SourceConstantAlpha += 2;
-		if (m_tBF.SourceConstantAlpha >= 254 && m_tBF.SourceConstantAlpha < 256)
+		if (m_tBF.SourceConstantAlpha < 252)
+			m_tBF.SourceConstantAlpha += 4;
+		if (m_tBF.SourceConstantAlpha >= 252 && m_tBF.SourceConstantAlpha < 256)
 		{
 			m_tBF.SourceConstantAlpha = 255;
 			m_iKeyCnt = 2;
 		}
 	}
 
-	if (m_iKeyCnt == 2 && m_fTime > 1.5f)
+	if (m_iKeyCnt == 2 && m_fTime > 1.70f)
 	{
-		m_tBF.SourceConstantAlpha -= 2;
-		if (m_tBF.SourceConstantAlpha >= 0 && m_tBF.SourceConstantAlpha < 2)
+		m_tBF.SourceConstantAlpha -= 4;
+		if (m_tBF.SourceConstantAlpha >= 0 && m_tBF.SourceConstantAlpha < 5)
 		{
 			m_tBF.SourceConstantAlpha = 0;
 			m_iKeyCnt = 3;
@@ -71,6 +71,7 @@ void CLastScene::Late_Update(float _fdTime)
 			m_iKeyCnt = 4;
 		}
 	}
+
 }
 
 bool CLastScene::Key_Check()
@@ -99,8 +100,8 @@ void CLastScene::Render(HDC _DC, float _fdTime)
 		0, 0, SRCCOPY);
 	if (m_iKeyCnt < 3)
 		hMemDC = CBmpMgr::Get_Instance()->Find_Image("GameOver");
-	else
-		hMemDC = CBmpMgr::Get_Instance()->Find_Image("Thankyou"); 
+	//else
+	//	hMemDC = CBmpMgr::Get_Instance()->Find_Image("Thankyou"); 
 
 	GdiAlphaBlend(
 		_DC,

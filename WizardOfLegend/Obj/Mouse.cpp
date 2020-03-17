@@ -2,6 +2,8 @@
 #include "Mouse.h"
 #include "../Manager/ScrollMgr.h"
 #include "../MyBitmap/BmpMgr.h"
+#include "../Manager/SceneMgr.h"
+
 CMouse::CMouse()
 {
 }
@@ -53,6 +55,7 @@ void CMouse::Late_Update(float _fdTime)
 
 void CMouse::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
+
 	HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("MouseIcon");
 
 	GdiTransparentBlt(_DC

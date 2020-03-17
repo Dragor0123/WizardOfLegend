@@ -84,7 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <ReferencePath>$(VC_ReferencesPath_x86);</ReferencePath>
     <OutDir>../Bin/</OutDir>
     <IncludePath>../Header;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>

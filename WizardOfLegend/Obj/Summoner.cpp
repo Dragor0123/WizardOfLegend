@@ -34,7 +34,7 @@ bool CSummoner::Initialize()
 	m_tHitInfo.iCY = 128;
 
 	// m_fSpeed
-	m_iMaxHp = 350;
+	m_iMaxHp = 300;
 	m_iHp = m_iMaxHp;
 	m_fBulletTick = 0.1125f;
 	m_iBulletCount = 4;

@@ -19,8 +19,6 @@
 #include "../Obj/ArcanaCard.h"
 #include "../Manager/SoundMgr.h"
 // 나중에 없애줄것
-#include "../Obj/FireBoss.h"
-#include "../Obj/EarthLoad.h"
 
 CPlaza::CPlaza()
 {
@@ -120,11 +118,11 @@ bool CPlaza::Initialize()
 	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFrostFanFButton);
 	//dynamic_cast<CFAble*>(pFrostFanCard)->Set_fButton(pFrostFanFButton);
 
-	CObj* pWindFalconCard = CAbstractFactory<CArcanaCard>::Create(2178.f, 2092.f, "WindFalconCard");
-	CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pWindFalconCard);
-	CObj* pFalconFButton = CAbstractFactory<CFButton>::Create(2178.f, 2018.f, OBJID::PLAZA_UI);
-	CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFalconFButton);
-	dynamic_cast<CFAble*>(pWindFalconCard)->Set_fButton(pFalconFButton);
+	//CObj* pWindFalconCard = CAbstractFactory<CArcanaCard>::Create(2178.f, 2092.f, "WindFalconCard");
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pWindFalconCard);
+	//CObj* pFalconFButton = CAbstractFactory<CFButton>::Create(2178.f, 2018.f, OBJID::PLAZA_UI);
+	//CObjMgr::Get_Instance()->Add_Object(OBJID::PLAZA_UI, pFalconFButton);
+	//dynamic_cast<CFAble*>(pWindFalconCard)->Set_fButton(pFalconFButton);
 
 	//CObj* pGaiaCard = CAbstractFactory<CArcanaCard>::Create(2088.f, 2092.f, "GaiaShieldCard");
 	//CObjMgr::Get_Instance()->Add_Object(OBJID::CARD, pGaiaCard);

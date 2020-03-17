@@ -19,7 +19,6 @@ CObjMgr::~CObjMgr()
 
 bool CObjMgr::Initialize()
 {
-	//Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
 	return true;
 }
 
@@ -41,22 +40,13 @@ void CObjMgr::Update(float _fdTime)
 				++iter;
 		}
 	}
-	/*
-	UNDERDECO, TELECIR,
-	SUMMONCARD, PLAYER,
-	MONSTER, BOSS,
-	P_RECTBULLET, P_CIRBULLET,
-	M_RECTBULLET, M_CIRBULLET,
-	P_SHIELD, M_SHIELD,
-	NPC, CARD, OBSTACLE,
-	ORB, PORTAL, GOODS,
-	EFFECT,
-	MENU_UI, STAGE_UI,
-	INVENTORY, MOUSE,
-	*/
 
-	for (int i = OBJID::PLAYER; i < OBJID::NPC; ++i) {
-		CCollisionMgr::Collision_Obj_Tile(m_listObj[i]);
+	if (CSceneMgr::SCENE_MENU != CSceneMgr::Get_Instance()->Get_Scene_ID())
+	{
+		for (int i = OBJID::PLAYER; i < OBJID::NPC; ++i)
+		{
+			CCollisionMgr::Collision_Obj_Tile(m_listObj[i]);
+		}
 	}
 }
 
@@ -113,7 +103,10 @@ void CObjMgr::Render(HDC _DC, float _fdTime)
 	// 대표적: UI 스크롤 먹이면 안 됨. 고정임.
 	// OBJID::UI이면 예외처리 해주자
 
-	if (CSceneMgr::SCENE_EDIT == CSceneMgr::Get_Instance()->Get_Scene_ID())
+	if (CSceneMgr::SCENE_EDIT == CSceneMgr::Get_Instance()->Get_Scene_ID() ||
+		CSceneMgr::SCENE_LOGO == CSceneMgr::Get_Instance()->Get_Scene_ID() ||
+		CSceneMgr::SCENE_MENU == CSceneMgr::Get_Instance()->Get_Scene_ID() ||
+		CSceneMgr::SCENE_LAST == CSceneMgr::Get_Instance()->Get_Scene_ID())
 	{
 		for (int i = 0; i < OBJID::END; ++i)
 		{

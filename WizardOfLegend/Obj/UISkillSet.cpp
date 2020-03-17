@@ -75,7 +75,7 @@ void CUISkillSet::Release()
 void CUISkillSet::Render_Skill_Sets(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 {
 	HDC hMemDC_35;
-	HFONT hMyFont, hOldFont;
+	HFONT hMyFont, hOldFont = NULL;
 	COLORREF oldFontColor = NULL;
 	TCHAR szBuff[16] = L"";
 

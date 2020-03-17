@@ -29,6 +29,7 @@ bool CTileEdit::Initialize()
 		return false;
 	CTileMgr::Get_Instance()->Initialize("FireTile");
 	m_pTileForPick = CAbstractFactory<CFireTile>::Create(float(1120 - (TILECX >> 1)), float(80 - (TILECY >> 1)));
+	
 	return true;
 }
 
@@ -47,6 +48,11 @@ void CTileEdit::Late_Update(float _fdTime)
 {
 	CTileMgr::Get_Instance()->Late_Update(_fdTime);
 	CObjMgr::Get_Instance()->Late_Update(_fdTime);
+
+	if (KEY_DOWN(VK_ESCAPE))
+	{
+		CSceneMgr::Get_Instance()->Scene_Change(CSceneMgr::SCENE_MENU);
+	}
 }
 
 void CTileEdit::Collision(float _fdTime)
@@ -75,10 +81,6 @@ void CTileEdit::Release()
 
 bool CTileEdit::Key_Check()
 {
-	if (KEY_DOWN(VK_ESCAPE)) {
-		// 메인메뉴로 돌아가는거...;
-	}
-
 	if (KEY_DOWN(VK_TAB)) {
 		m_bCursorEnable = (m_bCursorEnable) ? false : true;
 	}

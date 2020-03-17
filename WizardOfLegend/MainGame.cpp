@@ -122,7 +122,11 @@ void CMainGame::Render(float _fdTime)
 	BitBlt(m_hDC, 0, 0, WINCX, WINCY, hBackBuffer, 0, 0, SRCCOPY);
 
 	if (!g_FPS_ON)
-		Render_Mouse_Pt();
+	{
+		TCHAR szBuff[64] = L"";
+		swprintf_s(szBuff, L"Wizard Of Legend 모작 - 105A 이희태   |   무적모드: %s", g_bPlayerNoDie ? L"On" : L"Off");
+		SetWindowText(g_hWnd, szBuff);
+	}
 	else
 		Render_FPS();
 }

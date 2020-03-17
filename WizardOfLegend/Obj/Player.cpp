@@ -319,7 +319,7 @@ void CPlayer::Key_Check(float _fdTime)
 		pt.x -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollX());
 		pt.y -= (LONG)(CScrollMgr::Get_Instance()->Get_ScrollY());
 		CObjMgr::Get_Instance()->Add_Object(OBJID::SUMMONCARD,
-			CAbstractFactory<CSummonCard>::Create(pt.x, pt.y, "ARCHER_SCARD"));
+			CAbstractFactory<CSummonCard>::Create(float(pt.x), float(pt.y), "ARCHER_SCARD"));
 		// ARCHER_SCARD
 		// SWORDMAN_SCARD
 		// SUMMONERBALL_SCARD
@@ -409,7 +409,8 @@ void CPlayer::Render(HDC _DC, float _fdTime, float _fScrollX, float _fScrollY)
 			Render_Sig_Effect(_DC, _fdTime, _fScrollX, _fScrollY);
 		}
 
-		Draw_HitBox(_DC, _fScrollX, _fScrollY);
+		if (!g_bPlayerNoDie)
+			Draw_HitBox(_DC, _fScrollX, _fScrollY);
 	}
 
 	TCHAR szText[64] = L"";

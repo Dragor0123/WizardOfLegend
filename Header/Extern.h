@@ -9,5 +9,5 @@ extern bool g_FPS_ON;
 extern bool g_HitBox_On;
 extern bool g_bBGM_On;
 extern bool g_bPlayerNoDie;
-
+extern HINSTANCE hInst;
 #endif // !__EXTERN_H__

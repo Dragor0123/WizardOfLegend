@@ -177,7 +177,7 @@ CObj * CArcDragonarc::Create_SigBullet(bool _bClockwise, float _fAngle)
 		_fAngle, "DragonArc");
 	static_cast<CBullet*>(pBullet)->Set_Signiture(true);
 	static_cast<CScrewBullet*>(pBullet)->Set_Rotation_Dir(_bClockwise);
-	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 2.f));
+	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 3.5f));
 	CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, pBullet);
 	return pBullet;
 }

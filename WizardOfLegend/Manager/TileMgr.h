@@ -7,11 +7,26 @@
 #include "../Manager/CollisionMgr.h"
 
 class CObj;
-class CTileMgr : public Singleton<CTileMgr>
+class CTileMgr
 {
-	friend class Singleton<CTileMgr>;
 	friend void CCollisionMgr::Collision_Obj_Tile(list<CObj*>& _Dst);
 	friend bool CCollisionMgr::Collision_Obj_Tile(CObj * _pObj, float * _fPushedX, float * _fPushedY);
+
+public:
+	static CTileMgr* Get_Instance() {
+		if (nullptr == m_pInstance)
+			m_pInstance = new CTileMgr;
+		return m_pInstance;
+	}
+
+	static void Destroy_Instance()
+	{
+		if (nullptr != m_pInstance)
+		{
+			delete m_pInstance;
+			m_pInstance = nullptr;
+		}
+	}
 
 public:
 	bool Initialize(const string& _strKey);
@@ -43,7 +58,9 @@ private:
 
 private:
 	vector<CObj*>		m_vecTile;
-	unordered_map<string, wstring> m_mapFile;
+	static unordered_map<string, wstring> m_mapFile;
+
+	static CTileMgr* m_pInstance;
 };
 
 #endif

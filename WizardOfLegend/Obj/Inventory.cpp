@@ -452,10 +452,8 @@ int CInventory::Push_Item_In_OuterArr(int _code)
 				return 0;
 		}
 	}
-	else
-	{
-		return Push_Item_In_InnerArr(_code);
-	}
+
+	return Push_Item_In_InnerArr(_code);
 }
 
 // 0 리턴시 : 내부 배열 인벤토리가 가득 차서 집어 넣을 수 없음..

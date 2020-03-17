@@ -190,7 +190,7 @@ CObj * CArcFrostFan::Create_SigBullet(float _fAngle, bool _bMakingIce)
 		m_pTarget->Get_PosX(), m_pTarget->Get_PosY(), _fAngle, "FrostFan");
 
 	static_cast<CBullet*>(pBullet)->Set_Signiture(true);
-	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 3.0f));
+	static_cast<CBullet*>(pBullet)->Set_Att(int(static_cast<CBullet*>(pBullet)->Get_Att() * 1.5f));
 	static_cast<CFrostFan*>(pBullet)->Set_bMaking_Ice(_bMakingIce);
 	if (pBullet)
 		CObjMgr::Get_Instance()->Add_Object(OBJID::P_RECTBULLET, pBullet);

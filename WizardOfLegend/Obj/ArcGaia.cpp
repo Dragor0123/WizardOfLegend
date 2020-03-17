@@ -23,7 +23,7 @@ bool CArcGaia::Initialize()
 
 
 	//m_fCoolTLimit = 1.0f;
-	m_fCoolTLimit = 8.0f;
+	m_fCoolTLimit = 7.0f;
 	return true;
 }
 

@@ -7,6 +7,7 @@
 #include "../Obj/MyButton.h"
 #include "../Manager/CtrlOwnerMgr.h"
 #include "../Manager/SoundMgr.h"
+#include "../Obj/Mouse.h"
 
 const int CTitleMenu::iLogoX = 141;
 int CTitleMenu::iLogoY = 340;
@@ -43,6 +44,8 @@ bool CTitleMenu::Initialize()
 	if (g_bBGM_On)
 		CSoundMgr::Get_Instance()->PlayBGM(L"TitleScreen.wav");
 
+	CObjMgr::Get_Instance()->Add_Object(OBJID::MOUSE, CAbstractFactory<CMouse>::Create());
+
 	return true;
 }
 
@@ -56,7 +59,9 @@ int CTitleMenu::Update(float _fdTime)
 			CCtrlOwnerMgr::Get_Instance()->TitleMenu_On();
 		}
 	}
+
 	CObjMgr::Get_Instance()->Update(_fdTime);
+
 	return OBJ_NOEVENT;
 }
 

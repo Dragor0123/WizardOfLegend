@@ -7,6 +7,10 @@
 #include "../Obj/FireTile.h"
 #include "../Obj/PlazaTile.h"
 
+unordered_map<string, wstring> CTileMgr::m_mapFile;
+
+CTileMgr* CTileMgr::m_pInstance = nullptr;
+
 CTileMgr::CTileMgr()
 {
 }
@@ -14,7 +18,8 @@ CTileMgr::CTileMgr()
 CTileMgr::~CTileMgr()
 {
 	Release();
-	m_mapFile.clear();
+	//m_mapFile.clear();
+	//m_mapFile.swap(unordered_map<string, wstring>());
 }
 
 

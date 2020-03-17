@@ -37,8 +37,6 @@ bool CLogo::Initialize()
 	m_tBF.SourceConstantAlpha = 255;
 	m_tBF.AlphaFormat = AC_SRC_OVER;
 
-	//
-	m_iKeyCnt = 3;
 	return true;
 }
 
@@ -97,10 +95,6 @@ void CLogo::Collision(float _fdTime)
 
 void CLogo::Render(HDC _DC, float _fdTime)
 {
-	//"BackBuffer"
-	// HDC hMemDC = CBmpMgr::Get_Instance()->Find_Image("Logo");
-	// BitBlt(_DC, 0, 0, WINCX, WINCY, hMemDC, 0, 0, SRCCOPY);
-
 	HDC hBackDC = CBmpMgr::Get_Instance()->Find_Image("Back_black");
 	HDC hMemDC = NULL;
 	if (m_iKeyCnt == 0 || m_iKeyCnt == 1)

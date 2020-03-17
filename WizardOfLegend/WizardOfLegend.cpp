@@ -67,8 +67,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			CMainGame::Get_Instance()->Logic();
 		}
 	}
-
-    return (int) msg.wParam;
+	return (int) msg.wParam;
 }
 
 //
@@ -116,7 +115,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, 0, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
+		100, 60, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance, nullptr);
 
 	if (!hWnd)
 	{
