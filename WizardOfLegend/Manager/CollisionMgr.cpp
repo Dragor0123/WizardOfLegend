@@ -678,14 +678,14 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										{
 											if (dstObj->Get_HitInfo().fY < srcObj->Get_HitInfo().fY)
 											{ // 총알이 대상보다 더 위에 있다면
-												fDiagonal = abs((1.f / sinf(fRadian)) * fY);
+												fDiagonal = abs((1.f / sinf(fRadian)) * fY);  // | cosec(fRadian) * fY |
 												fX = fDiagonal * cosf(fRadian);
 												srcObj->Set_PosX(fX);
 												srcObj->Set_PosY(fY);
 											}
 											else 
 											{ // 총알이 대상보다 더 아래에 있다면
-												fDiagonal = abs((1.f / sinf(fRadian)) * fY);
+												fDiagonal = abs((1.f / sinf(fRadian)) * fY); // | cosec(fRadian) * fY |
 												fX = fDiagonal * cosf(fRadian);
 												srcObj->Set_PosX(fX);
 												srcObj->Set_PosY(-fY);
@@ -695,14 +695,14 @@ void CCollisionMgr::Collision_Rect(list<CObj*>& _Dst, list<CObj*>& _Src)
 										{
 											if (dstObj->Get_HitInfo().fX < srcObj->Get_HitInfo().fX)
 											{	// 총알이 대상보다 더 왼쪽에 있다.
-												fDiagonal = abs((1.f / cosf(fRadian)) * fX);
+												fDiagonal = abs((1.f / cosf(fRadian)) * fX); // | sec(fRadian) * fX |
 												fY = fDiagonal * sinf(fRadian);
 												srcObj->Set_PosX(fX);
 												srcObj->Set_PosY(-fY);
 											}
 											else
 											{	// 총알이 대상보다 더 오른쪽에 있다.
-												fDiagonal = abs((1.f / cosf(fRadian)) * fX);
+												fDiagonal = abs((1.f / cosf(fRadian)) * fX); // | sec(fRadian) * fX |
 												fY = fDiagonal * sinf(fRadian);
 												srcObj->Set_PosX(-fX);
 												srcObj->Set_PosY(-fY);
